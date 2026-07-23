@@ -1,0 +1,314 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  STAFF
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String
+
+  role         UserRole @default(ADMIN)
+
+  isActive     Boolean  @default(true)
+
+  lastLogin    DateTime?
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FleetCategory {
+  id               String   @id @default(cuid())
+
+  name             String
+  slug             String   @unique
+
+  eyebrow          String?
+
+  shortDescription String   @db.Text
+  description      String   @db.Text
+
+  featuredImage    String?
+  featuredImagePublicId String?
+
+
+  isFeatured       Boolean  @default(false)
+  isActive         Boolean  @default(true)
+
+  sortOrder        Int      @default(0)
+
+  seoTitle         String?
+  seoDescription   String?  @db.Text
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  vehicles         Vehicle[]
+}
+
+model Vehicle {
+
+  id                 String @id @default(cuid())
+
+  categoryId         String
+  category           FleetCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  name               String
+  slug               String @unique
+
+  tagline            String?
+
+  shortDescription   String @db.Text
+
+  description        String @db.Text
+
+  featuredImage         String?
+  featuredImagePublicId String?
+
+  heroImage             String?
+  heroImagePublicId     String?
+
+  seatingCapacity    String
+
+  luggageCapacity    String
+
+  airConditioning    String?
+
+  transmission       String?
+
+  fuelType           String?
+
+  chauffeurDriven    Boolean @default(true)
+
+  whatsappMessage    String?
+
+  isFeatured         Boolean @default(false)
+
+  isActive           Boolean @default(true)
+
+  sortOrder          Int @default(0)
+
+  seoTitle           String?
+
+  seoDescription     String? @db.Text
+
+  createdAt          DateTime @default(now())
+
+  updatedAt          DateTime @updatedAt
+
+  features           VehicleFeature[]
+
+  specifications     VehicleSpecification[]
+
+  gallery            VehicleImage[]
+}
+
+model VehicleFeature{
+
+  id          String @id @default(cuid())
+
+  vehicleId   String
+
+  vehicle     Vehicle @relation(fields:[vehicleId], references:[id], onDelete:Cascade)
+
+  title       String
+
+  sortOrder   Int @default(0)
+}
+
+model VehicleSpecification{
+
+  id          String @id @default(cuid())
+
+  vehicleId   String
+
+  vehicle     Vehicle @relation(fields:[vehicleId], references:[id], onDelete:Cascade)
+
+  label       String
+
+  value       String
+
+  sortOrder   Int @default(0)
+}
+
+model VehicleImage{
+
+  id          String @id @default(cuid())
+
+  vehicleId   String
+
+  vehicle     Vehicle @relation(fields:[vehicleId], references:[id], onDelete:Cascade)
+
+  image      String
+  publicId   String
+
+  alt         String?
+
+  sortOrder   Int @default(0)
+}
+
+model TourismGuide {
+    id String @id @default(cuid())
+
+    title String
+    slug String @unique
+
+    categoryId String
+    category TourismCategory @relation(fields: [categoryId], references: [id])
+
+    district KeralaDistrict?
+
+    excerpt String @db.Text
+    content String @db.Text
+
+    featuredImage String?
+    featuredImagePublicId String?
+
+    gallery TourismGuideImage[]
+
+    latitude Decimal?
+    longitude Decimal?
+
+    address String?
+
+    bestTimeToVisit String?
+
+    openingHours String?
+
+    entryFee String?
+
+    duration String?
+
+    mapUrl String?
+
+    tags String[]
+
+    isFeatured Boolean @default(false)
+    isPublished Boolean @default(true)
+
+    sortOrder Int @default(0)
+
+    seoTitle String?
+    seoDescription String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model TourismCategory {
+
+    id String @id @default(cuid())
+
+    name String
+    slug String @unique
+
+    description String?
+
+    icon String?
+
+    featuredImage String?
+    featuredImagePublicId String?
+
+    guides TourismGuide[]
+
+    sortOrder Int @default(0)
+
+    isActive Boolean @default(true)
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model TourismGuideImage {
+
+    id String @id @default(cuid())
+
+    image String
+    imagePublicId String
+
+    alt String?
+
+    sortOrder Int @default(0)
+
+    guideId String
+
+    guide TourismGuide @relation(fields: [guideId], references: [id], onDelete: Cascade)
+}
+
+enum KeralaDistrict {
+  THIRUVANANTHAPURAM
+  KOLLAM
+  PATHANAMTHITTA
+  ALAPPUZHA
+  KOTTAYAM
+  IDUKKI
+  ERNAKULAM
+  THRISSUR
+  PALAKKAD
+  MALAPPURAM
+  KOZHIKODE
+  WAYANAD
+  KANNUR
+  KASARAGOD
+}
+
+model RentalService {
+    id String @id @default(cuid())
+
+    title String
+    slug String @unique
+
+    shortDescription String? @db.Text
+    description String @db.Text
+
+    featuredImage String?
+    featuredImagePublicId String?
+
+    gallery RentalServiceImage[]
+
+    icon String?
+
+    priceLabel String?          // From ₹2500/day
+    duration String?            // Half Day, Full Day
+    maxPassengers Int?
+    luggageCapacity Int?
+
+    features String[]
+
+    sortOrder Int @default(0)
+
+    isFeatured Boolean @default(false)
+    isPublished Boolean @default(true)
+
+    seoTitle String?
+    seoDescription String?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model RentalServiceImage {
+    id String @id @default(cuid())
+
+    image String
+    imagePublicId String
+
+    alt String?
+
+    sortOrder Int @default(0)
+
+    serviceId String
+
+    service RentalService
+        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+}
