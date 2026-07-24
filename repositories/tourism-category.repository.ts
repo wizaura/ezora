@@ -123,7 +123,6 @@ class TourismCategoryRepository {
                 name: dto.name,
                 slug: dto.slug,
                 description: dto.description,
-                icon: dto.icon,
 
                 featuredImage: dto.featuredImage,
                 featuredImagePublicId:
@@ -147,7 +146,6 @@ class TourismCategoryRepository {
                 name: dto.name,
                 slug: dto.slug,
                 description: dto.description,
-                icon: dto.icon,
 
                 featuredImage: dto.featuredImage,
                 featuredImagePublicId:

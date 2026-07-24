@@ -4,6 +4,7 @@ import { tourismService } from "@/services/tourism.service";
 import { TourismSchema } from "@/validators/tourism.validator";
 
 import { ApiResponse } from "@/lib/api-response";
+import { KeralaDistrict } from "@prisma/client";
 
 export async function GET(req: NextRequest) {
     try {
@@ -16,8 +17,16 @@ export async function GET(req: NextRequest) {
         const categoryId =
             searchParams.get("categoryId") ?? undefined;
 
+        const districtParam =
+            searchParams.get("district");
+
         const district =
-            searchParams.get("district") ?? undefined;
+            districtParam &&
+                Object.values(KeralaDistrict).includes(
+                    districtParam as KeralaDistrict
+                )
+                ? (districtParam as KeralaDistrict)
+                : undefined;
 
         const featured =
             searchParams.get("featured") === null
