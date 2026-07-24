@@ -26,11 +26,6 @@ export const adminMenu = [
     icon: Package,
   },
   {
-    title: "Rental Services",
-    href: "/admin/rental-services",
-    icon: CarFront,
-  },
-  {
     title: "Kerala Tourism",
     href: "/admin/tourism",
     icon: MapPinned,

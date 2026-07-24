@@ -6,15 +6,15 @@ export default function RentalServices() {
     return (
         <div>
             <PageHero
-                eyebrow="Our Rental Services"
-                title="Premium vehicles."
-                highlightedTitle="Exceptional journeys."
-                description="Discover our chauffeur-driven fleet of luxury passenger vans, premium Force Travellers and executive sedans, selected for comfort, reliability and seamless travel across Kerala."
+                eyebrow="Rental Services"
+                title="Reliable rides."
+                highlightedTitle="Every destination."
+                description="Travel across Kerala with Ezora's chauffeur-driven rental services. From airport transfers and city rides to corporate travel, outstation trips, and customised itineraries, enjoy comfortable vehicles, professional drivers, and transparent pricing with instant online quotations."
                 image="/images/fleet/hero-1.jpg"
-                imageAlt="Premium chauffeur-driven vehicle fleet in Kerala by Ezora Tours and Travels"
+                imageAlt="Chauffeur-driven rental services across Kerala by Ezora Tours and Travels"
                 breadcrumbs={[
                     {
-                        label: "Our Fleet",
+                        label: "Rental Services",
                     },
                 ]}
             />

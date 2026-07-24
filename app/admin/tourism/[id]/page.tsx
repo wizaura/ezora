@@ -1,4 +1,4 @@
-// import EditTourism from "@/components/admin/tourism/EditMain";
+import EditTourism from "@/components/admin/tourism/EditMain";
 
 interface Props {
     params: Promise<{
@@ -11,5 +11,5 @@ export default async function EditTourismPage({
 }: Props) {
     const { id } = await params;
 
-    // return <EditTourism id={id} />;
+    return <EditTourism id={id} />;
 }

@@ -1,22 +1,126 @@
 "use client";
 
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
     ArrowRight,
     Calendar,
     CarFront,
     Clock3,
+    Loader2,
     Mail,
     MapPin,
     Phone,
     User,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 
+import {
+    RentalQuotationInput,
+    RentalQuotationValidator,
+} from "@/validators/rental.validator";
+
+type QuotePreview = {
+    distance: string;
+    duration: string;
+    total: number;
+} | null;
+
 export default function RentalForm() {
+    const [loading, setLoading] = useState(false);
+
+    const [quotation, setQuotation] =
+        useState<QuotePreview>(null);
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<RentalQuotationInput>({
+        resolver: zodResolver(
+            RentalQuotationValidator
+        ),
+
+        defaultValues: {
+            pickupLocation: "",
+            dropLocation: "",
+
+            pickupDate: "",
+            pickupTime: "",
+
+            returnDate: "",
+
+            vehicleType: "",
+
+            name: "",
+            phone: "",
+            email: "",
+        },
+    });
+
+    const onSubmit = async (
+        values: RentalQuotationInput
+    ) => {
+        try {
+            setLoading(true);
+
+            const response = await fetch(
+                "/api/rental/quotation",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                    },
+
+                    body: JSON.stringify(values),
+                }
+            );
+
+            const result =
+                await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    result.message ??
+                        "Something went wrong."
+                );
+            }
+
+            setQuotation({
+                distance:
+                    result.data.quotation.distance,
+
+                duration:
+                    result.data.quotation.duration,
+
+                total:
+                    result.data.quotation.total,
+            });
+
+            toast.success(
+                "Quotation sent successfully."
+            );
+
+            reset();
+        } catch (error) {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Unable to generate quotation."
+            );
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="overflow-hidden rounded-[32px] border border-border bg-white shadow-[0_30px_80px_rgba(7,48,66,0.08)]">
-            {/* Header */}
             <div className="border-b border-border bg-dark-cerulean px-8 py-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-light-sea-green">
                     Rental Calculator
@@ -26,14 +130,19 @@ export default function RentalForm() {
                     Request Your Quote
                 </h3>
 
-                <p className="mt-3 max-w-lg text-sm leading-6 text-white/70">
-                    Fill in your journey details and we'll calculate the
-                    distance, estimated travel time and rental quotation.
+                <p className="mt-3 text-sm leading-6 text-white/70">
+                    Fill in your travel details to
+                    receive an instant rental
+                    quotation.
                 </p>
             </div>
 
-            <div className="space-y-7 p-8">
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-7 p-8"
+            >
                 {/* Pickup */}
+
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-dark-cerulean">
                         Pickup Location
@@ -41,19 +150,32 @@ export default function RentalForm() {
 
                     <div className="relative">
                         <MapPin
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             size={20}
+                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                         />
 
                         <input
-                            type="text"
+                            {...register(
+                                "pickupLocation"
+                            )}
                             placeholder="Enter pickup location"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean placeholder:text-muted outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                         />
                     </div>
+
+                    {errors.pickupLocation && (
+                        <p className="text-sm text-red-500">
+                            {
+                                errors
+                                    .pickupLocation
+                                    .message
+                            }
+                        </p>
+                    )}
                 </div>
 
                 {/* Drop */}
+
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-dark-cerulean">
                         Drop Location
@@ -61,19 +183,32 @@ export default function RentalForm() {
 
                     <div className="relative">
                         <MapPin
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             size={20}
+                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                         />
 
                         <input
-                            type="text"
+                            {...register(
+                                "dropLocation"
+                            )}
                             placeholder="Enter destination"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean placeholder:text-muted outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                         />
                     </div>
+
+                    {errors.dropLocation && (
+                        <p className="text-sm text-red-500">
+                            {
+                                errors
+                                    .dropLocation
+                                    .message
+                            }
+                        </p>
+                    )}
                 </div>
 
                 {/* Date & Time */}
+
                 <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-dark-cerulean">
@@ -82,15 +217,28 @@ export default function RentalForm() {
 
                         <div className="relative">
                             <Calendar
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
                             <input
                                 type="date"
-                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                                {...register(
+                                    "pickupDate"
+                                )}
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5"
                             />
                         </div>
+
+                        {errors.pickupDate && (
+                            <p className="text-sm text-red-500">
+                                {
+                                    errors
+                                        .pickupDate
+                                        .message
+                                }
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -100,34 +248,48 @@ export default function RentalForm() {
 
                         <div className="relative">
                             <Clock3
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
                             <input
                                 type="time"
-                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                                {...register(
+                                    "pickupTime"
+                                )}
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5"
                             />
                         </div>
+
+                        {errors.pickupTime && (
+                            <p className="text-sm text-red-500">
+                                {
+                                    errors
+                                        .pickupTime
+                                        .message
+                                }
+                            </p>
+                        )}
                     </div>
                 </div>
+                                {/* Return Date & Vehicle */}
 
-                {/* Return + Vehicle */}
                 <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-dark-cerulean">
-                            Return Date
+                            Return Date (Optional)
                         </label>
 
                         <div className="relative">
                             <Calendar
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
                             <input
                                 type="date"
-                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                                {...register("returnDate")}
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                             />
                         </div>
                     </div>
@@ -139,24 +301,54 @@ export default function RentalForm() {
 
                         <div className="relative">
                             <CarFront
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
-                            <select className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10">
-                                <option>Select Vehicle</option>
-                                <option>Sedan</option>
-                                <option>SUV</option>
-                                <option>Luxury</option>
-                                <option>Tempo Traveller</option>
-                                <option>Mini Bus</option>
-                                <option>Bus</option>
+                            <select
+                                {...register("vehicleType")}
+                                className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            >
+                                <option value="">
+                                    Select Vehicle
+                                </option>
+
+                                <option value="Sedan">
+                                    Sedan
+                                </option>
+
+                                <option value="SUV">
+                                    SUV
+                                </option>
+
+                                <option value="Luxury">
+                                    Luxury
+                                </option>
+
+                                <option value="Traveller">
+                                    Tempo Traveller
+                                </option>
+
+                                <option value="Minibus">
+                                    Mini Bus
+                                </option>
+
+                                <option value="Bus">
+                                    Bus
+                                </option>
                             </select>
                         </div>
+
+                        {errors.vehicleType && (
+                            <p className="text-sm text-red-500">
+                                {errors.vehicleType.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
                 {/* Name & Phone */}
+
                 <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-dark-cerulean">
@@ -165,16 +357,22 @@ export default function RentalForm() {
 
                         <div className="relative">
                             <User
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
                             <input
-                                type="text"
+                                {...register("name")}
                                 placeholder="John Doe"
-                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean placeholder:text-muted outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                             />
                         </div>
+
+                        {errors.name && (
+                            <p className="text-sm text-red-500">
+                                {errors.name.message}
+                            </p>
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -184,20 +382,27 @@ export default function RentalForm() {
 
                         <div className="relative">
                             <Phone
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                                 size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             />
 
                             <input
-                                type="tel"
+                                {...register("phone")}
                                 placeholder="+91 XXXXX XXXXX"
-                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean placeholder:text-muted outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                             />
                         </div>
+
+                        {errors.phone && (
+                            <p className="text-sm text-red-500">
+                                {errors.phone.message}
+                            </p>
+                        )}
                     </div>
                 </div>
 
                 {/* Email */}
+
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-dark-cerulean">
                         Email Address
@@ -205,19 +410,26 @@ export default function RentalForm() {
 
                     <div className="relative">
                         <Mail
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                             size={20}
+                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
                         />
 
                         <input
-                            type="email"
+                            {...register("email")}
                             placeholder="john@example.com"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 text-dark-cerulean placeholder:text-muted outline-none transition-all duration-300 focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
                         />
                     </div>
+
+                    {errors.email && (
+                        <p className="text-sm text-red-500">
+                            {errors.email.message}
+                        </p>
+                    )}
                 </div>
 
                 {/* Quote Preview */}
+
                 <div className="rounded-3xl bg-dark-cerulean p-6 text-white">
                     <div className="flex items-center justify-between border-b border-white/10 pb-4">
                         <h4 className="font-semibold">
@@ -236,7 +448,7 @@ export default function RentalForm() {
                             </p>
 
                             <p className="mt-2 text-xl font-semibold">
-                                —
+                                {quotation?.distance ?? "—"}
                             </p>
                         </div>
 
@@ -246,32 +458,46 @@ export default function RentalForm() {
                             </p>
 
                             <p className="mt-2 text-xl font-semibold">
-                                —
+                                {quotation?.duration ?? "—"}
                             </p>
                         </div>
 
                         <div>
                             <p className="text-xs uppercase tracking-wider text-white/60">
-                                Fare
+                                Estimated Fare
                             </p>
 
                             <p className="mt-2 text-xl font-semibold text-light-sea-green">
-                                —
+                                {quotation
+                                    ? `₹ ${quotation.total.toLocaleString()}`
+                                    : "—"}
                             </p>
                         </div>
                     </div>
                 </div>
 
-                {/* CTA */}
-                <Button className="group h-14 w-full rounded-full bg-dark-cerulean text-base font-semibold text-white transition-all duration-300 hover:bg-greenish-blue">
-                    Calculate My Quote
+                <Button
+                    type="submit"
+                    disabled={loading}
+                    className="group h-14 w-full rounded-full bg-dark-cerulean text-base font-semibold text-white transition-all duration-300 hover:bg-greenish-blue disabled:pointer-events-none disabled:opacity-70"
+                >
+                    {loading ? (
+                        <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Generating Quote...
+                        </>
+                    ) : (
+                        <>
+                            Calculate My Quote
 
-                    <ArrowRight
-                        size={18}
-                        className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
-                    />
+                            <ArrowRight
+                                size={18}
+                                className="ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                            />
+                        </>
+                    )}
                 </Button>
-            </div>
+            </form>
         </div>
     );
 }

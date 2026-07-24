@@ -1,12 +1,47 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { TourismDto } from "@/validators/tourism.validator";
+import { KeralaDistrict } from "@prisma/client";
+
+type TourismCategory = {
+    id: string;
+    name: string;
+};
 
 export default function GeneralSection() {
     const { register, watch } =
         useFormContext<TourismDto>();
+
+    const [categories, setCategories] = useState<TourismCategory[]>([]);
+    const [loadingCategories, setLoadingCategories] =
+        useState(true);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetch(
+                    "/api/admin/tourism/categories"
+                );
+
+                const result = await response.json();
+
+                console.log(result, 'res')
+
+                if (response.ok) {
+                    setCategories(result.data.items);
+                }
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoadingCategories(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const title = watch("title") ?? "";
 
@@ -56,8 +91,19 @@ export default function GeneralSection() {
                     className="w-full rounded-lg border px-4 py-3 focus:border-primary outline-none"
                 >
                     <option value="">
-                        Select Category
+                        {loadingCategories
+                            ? "Loading categories..."
+                            : "Select Category"}
                     </option>
+
+                    {categories.map((category) => (
+                        <option
+                            key={category.id}
+                            value={category.id}
+                        >
+                            {category.name}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -66,11 +112,28 @@ export default function GeneralSection() {
                     District
                 </label>
 
-                <input
+                <select
                     {...register("district")}
-                    placeholder="Idukki"
                     className="w-full rounded-lg border px-4 py-3 focus:border-primary outline-none"
-                />
+                >
+                    <option value="">
+                        Select District
+                    </option>
+
+                    {Object.values(KeralaDistrict).map((district) => (
+                        <option
+                            key={district}
+                            value={district}
+                        >
+                            {district
+                                .replace(/_/g, " ")
+                                .toLowerCase()
+                                .replace(/\b\w/g, (char) =>
+                                    char.toUpperCase()
+                                )}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="space-y-2">

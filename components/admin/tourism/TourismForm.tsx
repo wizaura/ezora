@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 interface TourismFormProps {
-    initialData?: TourismDto;
+    defaultValues?: TourismDto;
     onSubmit: (
         values: TourismDto
     ) => Promise<void>;
@@ -25,7 +25,7 @@ interface TourismFormProps {
 }
 
 export default function TourismForm({
-    initialData,
+    defaultValues,
     onSubmit,
     loading = false,
 }: TourismFormProps) {
@@ -82,10 +82,10 @@ export default function TourismForm({
     });
 
     useEffect(() => {
-        if (initialData) {
-            methods.reset(initialData);
+        if (defaultValues) {
+            methods.reset(defaultValues);
         }
-    }, [initialData, methods]);
+    }, [defaultValues, methods]);
 
     return (
         <FormProvider {...methods}>
