@@ -59,8 +59,8 @@ export interface Vehicle {
     seoTitle: string | null;
     seoDescription: string | null;
 
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 
     features: VehicleFeature[];
     specifications: VehicleSpecification[];
@@ -89,8 +89,8 @@ export interface FleetCategory {
     seoTitle: string | null;
     seoDescription: string | null;
 
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 
     vehicles: Vehicle[];
 }

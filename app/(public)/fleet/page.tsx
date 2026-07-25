@@ -11,20 +11,10 @@ import { FleetCategoryService } from "@/services/fleet-category.service";
 export default async function FleetPage() {
 
 
-    const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/fleet`;
+    const activeCategories =
+        await FleetCategoryService.getPublicCategories();
 
-    console.log("URL:", url);
-
-    const res = await fetch(url);
-
-    console.log("Status:", res.status);
-    console.log("Content-Type:", res.headers.get("content-type"));
-
-    const body = await res.text();
-
-    console.log(body.substring(0, 300));
-
-    throw new Error("Stop here");
+    console.log(activeCategories,'act')
 
     return (
         <>
@@ -42,11 +32,11 @@ export default async function FleetPage() {
                 ]}
             />
 
-            {/* <FleetIntroductionSection categories={activeCategories} />
+            <FleetIntroductionSection categories={activeCategories} />
             <FleetVehiclesSection categories={activeCategories} />
             <FleetRecommendationSection categories={activeCategories} />
             <WhyChooseFleetSection />
-            <FleetFAQSection faqs={fleetFAQs} /> */}
+            <FleetFAQSection faqs={fleetFAQs} />
         </>
     );
 }
