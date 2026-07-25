@@ -112,7 +112,7 @@ class PackageRepository {
                 shortDescription: dto.shortDescription,
                 description: dto.description,
                 location: dto.location,
-                duration: dto.duration,
+                duration: dto.duration as string,
                 days: dto.days,
                 nights: dto.nights,
                 startingPrice: dto.startingPrice,
@@ -212,7 +212,7 @@ class PackageRepository {
 
     async updateStatus(
         id: string,
-        status: Prisma.PackageStatus
+        status: any
     ) {
         return prisma.package.update({
             where: {
