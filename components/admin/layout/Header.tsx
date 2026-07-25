@@ -120,13 +120,13 @@ export default function Header() {
                     >
 
                         <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark-cerulean font-semibold text-white">
-                            M
+                            E
                         </div>
 
                         <div className="hidden text-left lg:block">
 
                             <p className="font-medium">
-                                Melbin
+                                Ezora Admin
                             </p>
 
                             <p className="text-xs text-slate-500">

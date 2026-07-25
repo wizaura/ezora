@@ -42,7 +42,7 @@ export default function Sidebar() {
         <div className="rounded-2xl bg-slate-100 p-4">
 
           <p className="font-semibold">
-            Melbin Mathew
+            Ezora Admin
           </p>
 
           <p className="text-sm text-slate-500">
