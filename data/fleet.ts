@@ -2,35 +2,7 @@ export type FleetFeature = {
   label: string;
 };
 
-export type Vehicle = {
-  id: string;
-  name: string;
-  slug: string;
-  shortDescription: string;
-  featuredImage: string;
-  seatingCapacity: string;
-  luggageCapacity?: string;
-  features: FleetFeature[];
-  idealFor: string[];
-  isFeatured: boolean;
-  isActive: boolean;
-  sortOrder: number;
-};
-
-export type FleetCategory = {
-  id: string;
-  name: string;
-  slug: string;
-  eyebrow: string;
-  shortDescription: string;
-  description: string;
-  image: string;
-  isActive: boolean;
-  sortOrder: number;
-  vehicles: Vehicle[];
-};
-
-export const fleetCategories: FleetCategory[] = [
+export const fleetCategories = [
   {
     id: "category-urbania",
     name: "Force Urbania",

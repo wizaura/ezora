@@ -11,7 +11,7 @@ import {
   Users,
 } from "lucide-react";
 
-import type { FleetCategory, Vehicle } from "@/data/fleet";
+import type { FleetCategory, Vehicle } from "@/types/fleet.type";
 
 type FleetVehiclesSectionProps = {
   categories: FleetCategory[];
@@ -64,26 +64,23 @@ function FleetCategorySection({
   return (
     <section
       id={category.slug}
-      className={`scroll-mt-24 overflow-hidden py-16 ${
-        isDark ? "bg-dark-cerulean" : "bg-white"
-      }`}
+      className={`scroll-mt-24 overflow-hidden py-16 ${isDark ? "bg-dark-cerulean" : "bg-white"
+        }`}
     >
       <div className="mx-auto max-w-[1440px] px-5 lg:px-8">
         {/* Category Header */}
         <div className={`grid gap-8 border-b ${isDark ? "border-white/15" : "border-border"} pb-12 lg:grid-cols-12 lg:items-end lg:pb-16`}>
           <div
-            className={`lg:col-span-8 ${
-              isDark ? "border-white/15" : "border-border"
-            }`}
+            className={`lg:col-span-8 ${isDark ? "border-white/15" : "border-border"
+              }`}
           >
             {/* Eyebrow */}
             <div className="mb-5 flex items-center gap-3">
               <span className="h-px w-10 bg-sea" />
 
               <p
-                className={`text-xs font-semibold uppercase tracking-[0.22em] ${
-                  isDark ? "text-light-sea-green" : "text-greenish-blue"
-                }`}
+                className={`text-xs font-semibold uppercase tracking-[0.22em] ${isDark ? "text-light-sea-green" : "text-greenish-blue"
+                  }`}
               >
                 {String(categoryIndex + 1).padStart(2, "0")} ·{" "}
                 {category.eyebrow}
@@ -92,9 +89,8 @@ function FleetCategorySection({
 
             {/* Heading */}
             <h2
-              className={`max-w-[850px] text-[clamp(2.8rem,5vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] ${
-                isDark ? "text-white" : "text-dark-cerulean"
-              }`}
+              className={`max-w-[850px] text-[clamp(2.8rem,5vw,5.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] ${isDark ? "text-white" : "text-dark-cerulean"
+                }`}
             >
               {category.name}
             </h2>
@@ -102,17 +98,15 @@ function FleetCategorySection({
 
           <div className="lg:col-span-4 lg:pb-1">
             <p
-              className={`max-w-md text-base leading-7 lg:ml-auto ${
-                isDark ? "text-white/60" : "text-muted"
-              }`}
+              className={`max-w-md text-base leading-7 lg:ml-auto ${isDark ? "text-white/60" : "text-muted"
+                }`}
             >
               {category.description}
             </p>
 
             <div
-              className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] ${
-                isDark ? "text-light-sea-green" : "text-greenish-blue"
-              }`}
+              className={`mt-5 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] ${isDark ? "text-light-sea-green" : "text-greenish-blue"
+                }`}
             >
               <CarFront size={16} strokeWidth={1.7} />
 
@@ -154,20 +148,18 @@ function VehicleCard({
 }: VehicleCardProps) {
   return (
     <article
-      className={`group grid overflow-hidden rounded-[28px] borde lg:min-h-[500px] lg:grid-cols-2 ${
-        isDarkSection
+      className={`group grid overflow-hidden rounded-[28px] borde lg:min-h-[500px] lg:grid-cols-2 ${isDarkSection
           ? "border-white/10 bg-white/[0.055]"
           : "border-border bg-background"
-      }`}
+        }`}
     >
       {/* Vehicle Image */}
       <div
-        className={`relative min-h-[320px] overflow-hidden sm:min-h-[400px] lg:min-h-full ${
-          imageRight ? "lg:order-2" : ""
-        }`}
+        className={`relative min-h-[320px] overflow-hidden sm:min-h-[400px] lg:min-h-full ${imageRight ? "lg:order-2" : ""
+          }`}
       >
         <Image
-          src={vehicle.featuredImage}
+          src={vehicle.featuredImage ?? "/images/placeholders/fleet-category.jpg"}
           alt={`${vehicle.name} chauffeur-driven rental in Kerala by Ezora Tours and Travels`}
           fill
           className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.035]"
@@ -209,20 +201,18 @@ function VehicleCard({
 
       {/* Vehicle Content */}
       <div
-        className={`flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12 ${
-          imageRight ? "lg:order-1" : ""
-        }`}
+        className={`flex flex-col justify-center p-6 sm:p-8 lg:p-10 xl:p-12 ${imageRight ? "lg:order-1" : ""
+          }`}
       >
         {/* Desktop Eyebrow */}
         <div className="hidden items-center gap-3 lg:flex">
           <span className="h-px w-8 bg-sea" />
 
           <p
-            className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${
-              isDarkSection
+            className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${isDarkSection
                 ? "text-light-sea-green"
                 : "text-greenish-blue"
-            }`}
+              }`}
           >
             Chauffeur Driven
           </p>
@@ -230,29 +220,26 @@ function VehicleCard({
 
         {/* Desktop Title */}
         <h3
-          className={`hidden text-[clamp(2.2rem,3.5vw,4rem)] font-semibold leading-[0.98] tracking-[-0.05em] lg:mt-5 lg:block ${
-            isDarkSection ? "text-white" : "text-dark-cerulean"
-          }`}
+          className={`hidden text-[clamp(2.2rem,3.5vw,4rem)] font-semibold leading-[0.98] tracking-[-0.05em] lg:mt-5 lg:block ${isDarkSection ? "text-white" : "text-dark-cerulean"
+            }`}
         >
           {vehicle.name}
         </h3>
 
         {/* Description */}
         <p
-          className={`max-w-xl text-sm leading-7 sm:text-base ${
-            isDarkSection ? "text-white/65" : "text-muted"
-          } lg:mt-6`}
+          className={`max-w-xl text-sm leading-7 sm:text-base ${isDarkSection ? "text-white/65" : "text-muted"
+            } lg:mt-6`}
         >
           {vehicle.shortDescription}
         </p>
 
         {/* Main Specifications */}
         <div
-          className={`mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border ${
-            isDarkSection
+          className={`mt-7 grid grid-cols-2 gap-px overflow-hidden rounded-[18px] border ${isDarkSection
               ? "border-white/10 bg-white/10"
               : "border-border bg-border"
-          }`}
+            }`}
         >
           <SpecificationItem
             icon={Users}
@@ -273,9 +260,8 @@ function VehicleCard({
         {vehicle.features.length > 0 && (
           <div className="mt-7">
             <p
-              className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${
-                isDarkSection ? "text-white/40" : "text-muted"
-              }`}
+              className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${isDarkSection ? "text-white/40" : "text-muted"
+                }`}
             >
               Vehicle Features
             </p>
@@ -283,51 +269,21 @@ function VehicleCard({
             <div className="mt-4 flex flex-wrap gap-x-5 gap-y-3">
               {vehicle.features.slice(0, 4).map((feature) => (
                 <div
-                  key={feature.label}
-                  className={`flex items-center gap-2 text-sm font-medium ${
-                    isDarkSection ? "text-white/70" : "text-dark-grey-blue"
-                  }`}
+                  key={feature.id}
+                  className={`flex items-center gap-2 text-sm font-medium ${isDarkSection ? "text-white/70" : "text-dark-grey-blue"
+                    }`}
                 >
                   <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
-                      isDarkSection
+                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${isDarkSection
                         ? "bg-sea/20 text-light-sea-green"
                         : "bg-sea/10 text-sea"
-                    }`}
+                      }`}
                   >
                     <Check size={11} strokeWidth={2.5} />
                   </span>
 
-                  {feature.label}
+                  {feature.title}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Ideal For */}
-        {vehicle.idealFor.length > 0 && (
-          <div className="mt-7">
-            <p
-              className={`text-[10px] font-semibold uppercase tracking-[0.16em] ${
-                isDarkSection ? "text-white/40" : "text-muted"
-              }`}
-            >
-              Ideal For
-            </p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {vehicle.idealFor.map((item) => (
-                <span
-                  key={item}
-                  className={`rounded-full border px-3.5 py-2 text-xs font-medium ${
-                    isDarkSection
-                      ? "border-white/10 bg-white/5 text-white/65"
-                      : "border-border bg-white text-dark-grey-blue"
-                  }`}
-                >
-                  {item}
-                </span>
               ))}
             </div>
           </div>
@@ -337,11 +293,10 @@ function VehicleCard({
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
             href={`/fleet/${vehicle.slug}`}
-            className={`group/link inline-flex h-13 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors duration-300 ${
-              isDarkSection
+            className={`group/link inline-flex h-13 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors duration-300 ${isDarkSection
                 ? "bg-white text-dark-cerulean hover:bg-light-sea-green hover:text-white"
                 : "bg-dark-cerulean text-white hover:bg-greenish-blue"
-            }`}
+              }`}
           >
             View Vehicle
 
@@ -353,11 +308,10 @@ function VehicleCard({
 
           <Link
             href={`/quick-quote?vehicle=${vehicle.slug}`}
-            className={`group/quote inline-flex h-13 items-center justify-center gap-2 rounded-full border px-6 text-sm font-semibold transition-all duration-300 ${
-              isDarkSection
+            className={`group/quote inline-flex h-13 items-center justify-center gap-2 rounded-full border px-6 text-sm font-semibold transition-all duration-300 ${isDarkSection
                 ? "border-white/15 bg-white/5 text-white hover:border-sea hover:bg-sea"
                 : "border-border bg-white text-dark-cerulean hover:border-sea hover:text-sea"
-            }`}
+              }`}
           >
             Get Quote
 
@@ -387,33 +341,29 @@ function SpecificationItem({
 }: SpecificationItemProps) {
   return (
     <div
-      className={`flex items-center gap-3 p-4 sm:p-5 ${
-        isDark ? "bg-dark-cerulean" : "bg-white"
-      }`}
+      className={`flex items-center gap-3 p-4 sm:p-5 ${isDark ? "bg-dark-cerulean" : "bg-white"
+        }`}
     >
       <div
-        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-          isDark
+        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${isDark
             ? "bg-sea/20 text-light-sea-green"
             : "bg-sea/10 text-sea"
-        }`}
+          }`}
       >
         <Icon size={18} strokeWidth={1.7} />
       </div>
 
       <div className="min-w-0">
         <p
-          className={`text-[9px] font-semibold uppercase tracking-[0.13em] ${
-            isDark ? "text-white/40" : "text-muted"
-          }`}
+          className={`text-[9px] font-semibold uppercase tracking-[0.13em] ${isDark ? "text-white/40" : "text-muted"
+            }`}
         >
           {label}
         </p>
 
         <p
-          className={`mt-1 truncate text-sm font-semibold ${
-            isDark ? "text-white" : "text-dark-cerulean"
-          }`}
+          className={`mt-1 truncate text-sm font-semibold ${isDark ? "text-white" : "text-dark-cerulean"
+            }`}
         >
           {value}
         </p>

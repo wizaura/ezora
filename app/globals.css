@@ -45,6 +45,14 @@ body {
   margin: 0;
 }
 
+@layer base {
+  .admin-theme *,
+  .admin-theme *::before,
+  .admin-theme *::after {
+    @apply border-gray-300;
+  }
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;

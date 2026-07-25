@@ -46,6 +46,21 @@ export class FleetCategoryService {
         return FleetCategoryRepository.update(id, dto);
     }
 
+    static async getPublicCategories() {
+        return FleetCategoryRepository.findPublicCategories();
+    }
+
+    static async getPublicCategoryBySlug(slug: string) {
+        const category =
+            await FleetCategoryRepository.findPublicCategoryBySlug(slug);
+
+        if (!category) {
+            throw new Error("Category not found");
+        }
+
+        return category;
+    }
+
     static async delete(id: string) {
         const category =
             await FleetCategoryRepository.findById(id);

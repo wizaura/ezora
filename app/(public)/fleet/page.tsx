@@ -6,12 +6,24 @@ import FleetVehiclesSection from "@/components/fleet/FleetVehiclesSection";
 import WhyChooseFleetSection from "@/components/fleet/WhyChooseFleetSection";
 import { fleetCategories } from "@/data/fleet";
 import { fleetFAQs } from "@/data/fleet-faqs";
+import { FleetCategoryService } from "@/services/fleet-category.service";
 
-export default function FleetPage() {
+export default async function FleetPage() {
 
-    const activeCategories = fleetCategories
-        .filter((category) => category.isActive)
-        .sort((a, b) => a.sortOrder - b.sortOrder);
+
+    const res = await fetch(
+        `${process.env.NEXT_PUBLIC_APP_URL}/api/fleet`,
+        // {
+        //     next: {
+        //         revalidate: 300,
+        //     },
+        // }
+    );
+
+    const { data: activeCategories } = await res.json();
+
+    console.log(activeCategories,'ss')
+
     return (
         <>
             <PageHero

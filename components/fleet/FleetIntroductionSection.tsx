@@ -7,7 +7,7 @@ import {
   Users,
 } from "lucide-react";
 
-import type { FleetCategory } from "@/data/fleet";
+import type { FleetCategory } from "@/types/fleet.type";
 
 type FleetIntroductionSectionProps = {
   categories: FleetCategory[];
@@ -149,7 +149,7 @@ function FleetCategoryCard({
     <article className="group relative min-h-[520px] overflow-hidden rounded-[28px] bg-dark-cerulean">
       {/* Background Image */}
       <Image
-        src={category.image}
+        src={category.featuredImage ?? "/images/placeholders/fleet-category.jpg"}
         alt={`${category.name} chauffeur-driven rental fleet in Kerala`}
         fill
         className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"

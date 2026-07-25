@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
 
   const { pathname } = req.nextUrl;
@@ -11,9 +11,9 @@ export function middleware(req: NextRequest) {
   const isAuthPage = pathname.startsWith("/login");
   const isAdminPage = pathname.startsWith("/admin");
 
-//   if (!token && isAdminPage) {
-//     return NextResponse.redirect(new URL("/login", req.url));
-//   }
+  if (!token && isAdminPage) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
 
   if (token) {
     try {
@@ -25,11 +25,11 @@ export function middleware(req: NextRequest) {
         );
       }
     } catch {
-    //   if (isAdminPage) {
-    //     return NextResponse.redirect(
-    //       new URL("/login", req.url)
-    //     );
-    //   }
+      if (isAdminPage) {
+        return NextResponse.redirect(
+          new URL("/login", req.url)
+        );
+      }
     }
   }
 

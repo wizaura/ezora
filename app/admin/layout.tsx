@@ -15,10 +15,10 @@ export default async function AdminLayout({
     }
 
     return (
-        <div className="flex min-h-screen bg-slate-50">
+        <div className="admin-theme flex min-h-screen bg-slate-50">
             <Sidebar />
 
-            <div className="flex flex-1 flex-col">
+            <div className="flex flex-1 flex-col md:ml-72">
                 <Header />
 
                 <main className="flex-1 p-8">

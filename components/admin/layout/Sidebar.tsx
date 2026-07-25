@@ -6,7 +6,7 @@ import { adminMenu } from "./menu";
 
 export default function Sidebar() {
   return (
-    <aside className="hidden h-screen w-72 shrink-0 border-r bg-white lg:flex lg:flex-col">
+    <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r bg-white lg:flex lg:flex-col">
 
       {/* Logo */}
 

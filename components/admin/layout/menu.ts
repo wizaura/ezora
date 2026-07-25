@@ -4,8 +4,6 @@ import {
   MapPinned,
   Newspaper,
   Mail,
-  Settings,
-  Image,
   Package,
 } from "lucide-react";
 
@@ -39,15 +37,5 @@ export const adminMenu = [
     title: "Enquiries",
     href: "/admin/enquiries",
     icon: Mail,
-  },
-  {
-    title: "Media",
-    href: "/admin/media",
-    icon: Image,
-  },
-  {
-    title: "Settings",
-    href: "/admin/settings",
-    icon: Settings,
   },
 ];

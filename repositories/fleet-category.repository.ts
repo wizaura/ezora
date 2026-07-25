@@ -93,6 +93,80 @@ export class FleetCategoryRepository {
         });
     }
 
+    static findPublicCategories() {
+        return prisma.fleetCategory.findMany({
+            where: {
+                isActive: true,
+            },
+            orderBy: {
+                sortOrder: "asc",
+            },
+            include: {
+                vehicles: {
+                    where: {
+                        isActive: true,
+                    },
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                    include: {
+                        features: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                        specifications: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                        gallery: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    }
+
+    static async findPublicCategoryBySlug(slug: string) {
+        return prisma.fleetCategory.findFirst({
+            where: {
+                slug,
+                isActive: true,
+            },
+            include: {
+                vehicles: {
+                    where: {
+                        isActive: true,
+                    },
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                    include: {
+                        features: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                        specifications: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                        gallery: {
+                            orderBy: {
+                                sortOrder: "asc",
+                            },
+                        },
+                    },
+                },
+            },
+        });
+    }
+
     static findBySlug(slug: string) {
         return prisma.fleetCategory.findUnique({
             where: {

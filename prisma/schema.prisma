@@ -245,6 +245,66 @@ model TourismGuideImage {
     guide TourismGuide @relation(fields: [guideId], references: [id], onDelete: Cascade)
 }
 
+model Package {
+  id          String   @id @default(cuid())
+
+  title       String
+  slug        String   @unique
+
+  shortDescription String
+  description String
+
+  location    String
+
+  duration    String
+  days        Int
+  nights      Int
+
+  startingPrice Decimal @db.Decimal(10,2)
+
+  featured    Boolean @default(false)
+  status      PackageStatus @default(DRAFT)
+
+  images      PackageImage[]
+
+  details     PackageDetail?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PackageImage {
+  id          String @id @default(cuid())
+
+  packageId   String
+  package     Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  imageUrl    String
+  publicId    String?
+
+  alt         String?
+
+  order       Int @default(0)
+}
+
+model PackageDetail {
+
+  id          String @id @default(cuid())
+
+  packageId   String @unique
+  package     Package @relation(fields:[packageId], references:[id], onDelete: Cascade)
+
+  itinerary   Json
+
+  inclusions  Json
+
+  exclusions  Json
+
+  highlights  Json
+
+  faqs        Json
+}
+
 enum KeralaDistrict {
   THIRUVANANTHAPURAM
   KOLLAM
@@ -260,4 +320,10 @@ enum KeralaDistrict {
   WAYANAD
   KANNUR
   KASARAGOD
+}
+
+enum PackageStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

@@ -16,7 +16,7 @@ import {
   Users,
 } from "lucide-react";
 
-import type { FleetCategory } from "@/data/fleet";
+import type { FleetCategory } from "@/types/fleet.type";
 
 type FleetRecommendationSectionProps = {
   categories: FleetCategory[];
@@ -194,11 +194,10 @@ export default function FleetRecommendationSection({
                       key={option.id}
                       type="button"
                       onClick={() => setSelectedPassengers(option.id)}
-                      className={`group rounded-[18px] border p-4 text-left transition-all duration-300 ${
-                        isActive
+                      className={`group rounded-[18px] border p-4 text-left transition-all duration-300 ${isActive
                           ? "border-sea bg-sea text-white shadow-[0_10px_30px_rgba(11,126,134,0.18)]"
                           : "border-border bg-background hover:border-sea/40 hover:bg-sea/[0.04]"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <Users
@@ -217,17 +216,15 @@ export default function FleetRecommendationSection({
                       </div>
 
                       <p
-                        className={`mt-5 text-xl font-semibold tracking-[-0.04em] ${
-                          isActive ? "text-white" : "text-dark-cerulean"
-                        }`}
+                        className={`mt-5 text-xl font-semibold tracking-[-0.04em] ${isActive ? "text-white" : "text-dark-cerulean"
+                          }`}
                       >
                         {option.label}
                       </p>
 
                       <p
-                        className={`mt-1 text-[11px] ${
-                          isActive ? "text-white/70" : "text-muted"
-                        }`}
+                        className={`mt-1 text-[11px] ${isActive ? "text-white/70" : "text-muted"
+                          }`}
                       >
                         {option.description}
                       </p>
@@ -262,28 +259,25 @@ export default function FleetRecommendationSection({
                       key={journey.id}
                       type="button"
                       onClick={() => setSelectedJourney(journey.id)}
-                      className={`flex min-h-16 items-center gap-4 rounded-[18px] border px-4 text-left transition-all duration-300 ${
-                        isActive
+                      className={`flex min-h-16 items-center gap-4 rounded-[18px] border px-4 text-left transition-all duration-300 ${isActive
                           ? "border-sea bg-sea/[0.07]"
                           : "border-border bg-background hover:border-sea/40"
-                      }`}
+                        }`}
                     >
                       <span
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
-                          isActive
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${isActive
                             ? "bg-sea text-white"
                             : "bg-sea/10 text-sea"
-                        }`}
+                          }`}
                       >
                         <Icon size={18} strokeWidth={1.7} />
                       </span>
 
                       <span
-                        className={`text-sm font-semibold ${
-                          isActive
+                        className={`text-sm font-semibold ${isActive
                             ? "text-sea"
                             : "text-dark-cerulean"
-                        }`}
+                          }`}
                       >
                         {journey.label}
                       </span>
@@ -321,8 +315,7 @@ export default function FleetRecommendationSection({
           <div className="relative min-h-[600px] overflow-hidden bg-dark-cerulean lg:min-h-full">
             {/* Background Image */}
             <Image
-              key={recommendation.id}
-              src={recommendation.image}
+              src={recommendation.featuredImage ?? "/images/placeholders/fleet-category.jpg"}
               alt={`${recommendation.name} recommended chauffeur-driven fleet in Kerala`}
               fill
               className="object-cover transition-transform duration-1000"
