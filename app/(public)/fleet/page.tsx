@@ -20,12 +20,6 @@ export default async function FleetPage() {
         // }
     );
 
-    console.log(res.status);
-    console.log(res.url);
-
-    const text = await res.text();
-    console.log(text);
-
     const { data: activeCategories } = await res.json();
 
     console.log(activeCategories, 'ss')
