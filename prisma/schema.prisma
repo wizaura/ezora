@@ -305,6 +305,27 @@ model PackageDetail {
   faqs        Json
 }
 
+model Blog {
+  id                 String   @id @default(cuid())
+  title              String
+  slug               String   @unique
+  excerpt            String
+  content            String
+
+  category           String
+
+  featuredImage      String?
+  featuredImagePublicId String?
+
+  seoTitle           String?
+  seoDescription     String?
+
+  isPublished        Boolean @default(false)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
 enum KeralaDistrict {
   THIRUVANANTHAPURAM
   KOLLAM

@@ -292,7 +292,7 @@ function VehicleCard({
         {/* Actions */}
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <Link
-            href={`/fleet/${vehicle.slug}`}
+            href={`/fleet/vehicle/${vehicle.slug}`}
             className={`group/link inline-flex h-13 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors duration-300 ${isDarkSection
                 ? "bg-white text-dark-cerulean hover:bg-light-sea-green hover:text-white"
                 : "bg-dark-cerulean text-white hover:bg-greenish-blue"

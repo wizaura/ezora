@@ -33,9 +33,9 @@ export const adminMenu = [
     href: "/admin/blogs",
     icon: Newspaper,
   },
-  {
-    title: "Enquiries",
-    href: "/admin/enquiries",
-    icon: Mail,
-  },
+  // {
+  //   title: "Enquiries",
+  //   href: "/admin/enquiries",
+  //   icon: Mail,
+  // },
 ];

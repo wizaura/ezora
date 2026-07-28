@@ -228,7 +228,7 @@ function FleetCategoryCard({
 
         {/* Explore Link */}
         <a
-          href={`#${category.slug}`}
+          href={`/fleet/${category.slug}`}
           className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
         >
           Explore {category.name}

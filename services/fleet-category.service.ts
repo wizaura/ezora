@@ -61,6 +61,17 @@ export class FleetCategoryService {
         return category;
     }
 
+    static async findBySlug(slug: string) {
+        const category =
+            await FleetCategoryRepository.findPublicCategoryBySlug(slug);
+
+        if (!category) {
+            throw new Error("Category not found");
+        }
+
+        return category;
+    }
+
     static async delete(id: string) {
         const category =
             await FleetCategoryRepository.findById(id);

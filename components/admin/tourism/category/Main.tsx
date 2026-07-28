@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { FolderTree, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import CategoryTable from "./CategoryTable";
+import { FaBackward } from "react-icons/fa";
 
 export default function Main() {
     return (
@@ -20,12 +21,20 @@ export default function Main() {
                     </p>
                 </div>
 
-                <Link href="/admin/tourism/categories/new">
-                    <Button>
-                        <Plus className="mr-2 h-4 w-4" />
-                        Add Category
-                    </Button>
-                </Link>
+                <div className="flex items-center gap-3">
+                    <Link href="/admin/tourism">
+                        <Button variant="outline">
+                            <FaBackward className="mr-2 h-4 w-4" />
+                            Back
+                        </Button>
+                    </Link>
+                    <Link href="/admin/tourism/categories/new">
+                        <Button>
+                            <Plus className="mr-2 h-4 w-4" />
+                            Add Category
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             <CategoryTable />

@@ -95,15 +95,6 @@ export default function FleetRecommendationSection({
       .filter((category) => category.isActive)
       .sort((a, b) => a.sortOrder - b.sortOrder);
 
-    /*
-      Recommendation logic for the current dummy fleet:
-
-      1–4 passengers   -> Executive Sedans
-      5–17 passengers -> Force Urbania
-      18+ passengers  -> Force Traveller
-
-      Later, this logic can come from your database/admin panel.
-    */
 
     let preferredSlug: string;
 
