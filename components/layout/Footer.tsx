@@ -3,13 +3,13 @@ import {
     ArrowUpRight,
     Mail,
     MapPin,
-    MessageCircle,
     Phone,
 } from "lucide-react";
 
 import {
     FaFacebookF,
     FaInstagram,
+    FaWhatsapp,
 } from "react-icons/fa";
 import Image from "next/image";
 
@@ -156,7 +156,7 @@ export default function Footer() {
                             href="#"
                             className="group inline-flex h-14 items-center justify-center gap-3 rounded-full border border-white/20 bg-white/5 px-7 text-sm font-semibold text-white transition-all duration-300 hover:border-white/35 hover:bg-white/10"
                         >
-                            <MessageCircle
+                            <FaWhatsapp
                                 size={18}
                                 strokeWidth={1.8}
                                 className="text-light-sea-green"

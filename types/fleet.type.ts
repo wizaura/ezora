@@ -21,6 +21,19 @@ export interface VehicleImage {
     sortOrder: number;
 }
 
+export interface RelatedVehicle {
+    id: string;
+    name: string;
+    slug: string;
+
+    shortDescription: string;
+
+    featuredImage: string | null;
+
+    seatingCapacity: string;
+    luggageCapacity: string;
+}
+
 export interface Vehicle {
     id: string;
 

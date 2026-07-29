@@ -117,10 +117,150 @@ export class TourismRepository {
         });
     }
 
+    async findPublished() {
+        return prisma.tourismGuide.findMany({
+            where: {
+                isPublished: true,
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                excerpt: true,
+                featuredImage: true,
+                district: true,
+                bestTimeToVisit: true,
+                duration: true,
+                isFeatured: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+            },
+            orderBy: [
+                { isFeatured: "desc" },
+                { sortOrder: "asc" },
+            ],
+        });
+    }
+
     async findBySlug(slug: string) {
         return prisma.tourismGuide.findUnique({
             where: {
                 slug,
+            },
+            include: {
+                category: true,
+                gallery: {
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                },
+            }
+        });
+    }
+
+    async findRelated(categoryId: string, guideId: string) {
+        return prisma.tourismGuide.findMany({
+            where: {
+                categoryId,
+                isPublished: true,
+                NOT: {
+                    id: guideId,
+                },
+            },
+            take: 3,
+            orderBy: [
+                {
+                    isFeatured: "desc",
+                },
+                {
+                    sortOrder: "asc",
+                },
+            ],
+            select: {
+                id: true,
+                slug: true,
+                title: true,
+                excerpt: true,
+                featuredImage: true,
+                district: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+            },
+        })
+    }
+
+    async findByCategorySlug(slug: string) {
+        return prisma.tourismGuide.findMany({
+            where: {
+                isPublished: true,
+                category: {
+                    slug,
+                },
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                excerpt: true,
+                featuredImage: true,
+                district: true,
+                bestTimeToVisit: true,
+                duration: true,
+                isFeatured: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
+            },
+            orderBy: [
+                {
+                    isFeatured: "desc",
+                },
+                {
+                    sortOrder: "asc",
+                },
+            ],
+        });
+    }
+
+    async findByDistrict(district: KeralaDistrict) {
+        return prisma.tourismGuide.findMany({
+            where: {
+                district,
+                isPublished: true,
+            },
+            orderBy: {
+                sortOrder: "asc",
+            },
+            select: {
+                id: true,
+                title: true,
+                slug: true,
+                excerpt: true,
+                featuredImage: true,
+                address: true,
+                duration: true,
+                district: true,
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
             },
         });
     }

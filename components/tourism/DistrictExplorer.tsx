@@ -1,15 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
-import { KeralaDistrict } from "@/data/kerala-districts";
+import { KeralaDistricts } from "@/data/kerala-districts";
 import { ArrowUpRight } from "lucide-react";
 
 type DistrictExplorerProps = {
-  districts: KeralaDistrict[];
+  districts: KeralaDistricts[];
 };
 
 export default function DistrictExplorer({ districts }: DistrictExplorerProps) {
   return (
-    <section className="bg-surface-soft py-16 lg:py-24">
+    <section className="bg-surface-soft py-16">
       <div className="mx-auto max-w-[1440px] px-5 lg:px-8">
         <div className="mb-10 text-center lg:mb-16">
           <div className="mb-5 flex items-center justify-center gap-3">
@@ -28,7 +28,7 @@ export default function DistrictExplorer({ districts }: DistrictExplorerProps) {
           {districts.map((district) => (
             <Link
               key={district.slug}
-              href={`/kerala-tour-packages/districts/${district.slug}`}
+              href={`/tourism/districts/${district.slug}`}
               className="group relative flex h-72 w-[280px] shrink-0 snap-center flex-col justify-end overflow-hidden rounded-[24px] lg:h-80 lg:w-auto"
             >
               <Image

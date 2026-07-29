@@ -29,6 +29,46 @@ class TourismService {
         return guide;
     }
 
+    async findPublished() {
+        return tourismRepository.findPublished();
+    }
+
+    async findBySlug(slug: string) {
+        const guide = await tourismRepository.findBySlug(slug);
+
+        if (!guide || !guide.isPublished) {
+            throw new Error("Tourism guide not found.");
+        }
+
+        return {
+            ...guide,
+            latitude: guide.latitude ? guide.latitude.toNumber() : null,
+            longitude: guide.longitude ? guide.longitude.toNumber() : null,
+        };
+    }
+
+    async findByCategorySlug(slug: string) {
+        const category = await tourismCategoryRepository.findBySlug(slug);
+
+        if (!category || !category.isActive) {
+            throw new Error("Tourism category not found.");
+        }
+
+        const guides = await tourismRepository.findByCategorySlug(slug);
+
+        return guides;
+    }
+
+    async findByDistrict(district: KeralaDistrict) {
+        const attractions = await tourismRepository.findByDistrict(district);
+
+        return attractions;
+    }
+
+    async findRelated(categoryId: string, guideId: string) {
+        return tourismRepository.findRelated(categoryId, guideId);
+    }
+
     async create(dto: TourismDto) {
         const existingSlug = await tourismRepository.findBySlug(dto.slug);
 

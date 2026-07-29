@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, MessageCircle, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { FaWhatsapp } from "react-icons/fa";
 
 const navLinks = [
     {
@@ -24,8 +25,12 @@ const navLinks = [
         href: "/corporate-leases",
     },
     {
-        label: "Kerala Tours",
-        href: "/kerala-tour-packages",
+        label: "Packages",
+        href: "/packages",
+    },
+    {
+        label: "Kerala Tourism",
+        href: "/tourism",
     },
     {
         label: "Contact",
@@ -143,7 +148,7 @@ export default function Navbar() {
                                 }`}
                             aria-label="Chat on WhatsApp"
                         >
-                            <MessageCircle size={18} strokeWidth={1.8} />
+                            <FaWhatsapp size={18} strokeWidth={1.8} />
                         </a>
 
                         <Link

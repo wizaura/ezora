@@ -126,8 +126,45 @@ export class VehicleRepository {
         return prisma.vehicle.findUnique({
             where: {
                 slug,
+                isActive: true,
             },
+            include: {
+                category: {
+                    select: {
+                        name: true,
+                        slug: true,
+                    }
+                },
+                features: {
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                },
+                specifications: {
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                },
+                gallery: {
+                    orderBy: {
+                        sortOrder: "asc",
+                    },
+                },
+            }
         });
+    }
+
+    static async findRelated(categoryId: string, vehicleId: string) {
+        return prisma.vehicle.findMany({
+            where: {
+                categoryId: categoryId,
+                isActive: true,
+                NOT: {
+                    id: vehicleId,
+                },
+            },
+            take: 3,
+        })
     }
 
     static async create(data: Prisma.VehicleCreateInput) {

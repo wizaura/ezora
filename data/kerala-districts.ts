@@ -1,3 +1,5 @@
+import { KeralaDistrict } from "@prisma/client";
+
 export type TouristAttraction = {
   name: string;
   description: string;
@@ -10,9 +12,10 @@ export type TravelInfo = {
   nearestAirport: string;
 };
 
-export type KeralaDistrict = {
+export type KeralaDistricts = {
   slug: string;
   name: string;
+  enum: KeralaDistrict;
   description: string;
   heroImage: string;
   gallery: string[];
@@ -20,10 +23,11 @@ export type KeralaDistrict = {
   travelInfo: TravelInfo;
 };
 
-export const keralaDistricts: KeralaDistrict[] = [
+export const keralaDistricts: KeralaDistricts[] = [
   {
     slug: "kasaragod",
     name: "Kasaragod",
+    enum: KeralaDistrict.KASARAGOD,
     description: "Known as the land of gods, forts, rivers, hills, and beautiful beaches. Kasaragod offers a unique blend of cultures and landscapes in the northernmost part of Kerala.",
     heroImage: "/images/home/why-1.png",
     gallery: ["/images/home/why-1.png", "/images/home/why-2.png"],
@@ -39,6 +43,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "kannur",
     name: "Kannur",
+    enum: KeralaDistrict.KANNUR,
     description: "Famous for its pristine beaches, Theyyam performances, and rich handloom industry. Kannur is a vibrant coastal district with deep historical roots.",
     heroImage: "/images/home/why-2.png",
     gallery: ["/images/home/why-2.png", "/images/home/why-3.png"],
@@ -54,6 +59,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "wayanad",
     name: "Wayanad",
+    enum: KeralaDistrict.WAYANAD,
     description: "A lush, green paradise nestled among the mountains of the Western Ghats. It's renowned for its spice plantations, wildlife, and waterfalls.",
     heroImage: "/images/home/why-3.png",
     gallery: ["/images/home/why-3.png", "/images/home/why-4.svg"],
@@ -69,6 +75,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "kozhikode",
     name: "Kozhikode",
+    enum: KeralaDistrict.KOZHIKODE,
     description: "Historically known as Calicut, this city is famous for its historical significance, culinary excellence, and beautiful beaches.",
     heroImage: "/images/home/why-1.png",
     gallery: ["/images/home/why-1.png", "/images/home/why-2.png"],
@@ -84,6 +91,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "malappuram",
     name: "Malappuram",
+    enum: KeralaDistrict.MALAPPURAM,
     description: "A district with a rich cultural heritage, known for its historic monuments, rolling hills, and meandering rivers.",
     heroImage: "/images/home/why-2.png",
     gallery: ["/images/home/why-2.png", "/images/home/why-3.png"],
@@ -99,6 +107,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "palakkad",
     name: "Palakkad",
+    enum: KeralaDistrict.PALAKKAD,
     description: "Known as the granary of Kerala, Palakkad features a mix of Tamil and Malayalam cultures, scenic landscapes, and historic forts.",
     heroImage: "/images/home/why-3.png",
     gallery: ["/images/home/why-3.png", "/images/home/why-1.png"],
@@ -114,6 +123,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "thrissur",
     name: "Thrissur",
+    enum: KeralaDistrict.THRISSUR,
     description: "The cultural capital of Kerala, known for its vibrant festivals, especially the spectacular Thrissur Pooram.",
     heroImage: "/images/home/why-1.png",
     gallery: ["/images/home/why-1.png", "/images/home/why-2.png"],
@@ -129,6 +139,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "ernakulam",
     name: "Ernakulam",
+    enum: KeralaDistrict.ERNAKULAM,
     description: "The commercial hub of Kerala, blending cosmopolitan culture with historical heritage in areas like Fort Kochi.",
     heroImage: "/images/home/why-2.png",
     gallery: ["/images/home/why-2.png", "/images/home/why-3.png"],
@@ -144,6 +155,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "idukki",
     name: "Idukki",
+    enum: KeralaDistrict.IDUKKI,
     description: "A district of dense forests and rugged mountains. Home to Munnar, it is a haven for nature lovers and wildlife enthusiasts.",
     heroImage: "/images/home/why-3.png",
     gallery: ["/images/home/why-3.png", "/images/home/why-1.png"],
@@ -159,6 +171,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "kottayam",
     name: "Kottayam",
+    enum: KeralaDistrict.KOTTAYAM,
     description: "An important commercial center framed by the Western Ghats on the east and Vembanad Lake on the west. Famous for its letters, latex, and lakes.",
     heroImage: "/images/home/why-1.png",
     gallery: ["/images/home/why-1.png", "/images/home/why-2.png"],
@@ -174,6 +187,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "alappuzha",
     name: "Alappuzha",
+    enum: KeralaDistrict.ALAPPUZHA,
     description: "Known as the Venice of the East, famous for its picturesque canals, backwaters, beaches, and lagoons.",
     heroImage: "/images/home/why-2.png",
     gallery: ["/images/home/why-2.png", "/images/home/why-3.png"],
@@ -189,6 +203,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "pathanamthitta",
     name: "Pathanamthitta",
+    enum: KeralaDistrict.PATHANAMTHITTA,
     description: "The headquarters of pilgrimage tourism in Kerala, surrounded by unspoiled natural surroundings and majestic hills.",
     heroImage: "/images/home/why-3.png",
     gallery: ["/images/home/why-3.png", "/images/home/why-1.png"],
@@ -204,6 +219,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "kollam",
     name: "Kollam",
+    enum: KeralaDistrict.KOLLAM,
     description: "An old sea port and town on the Arabian coast. It's the southern gateway to the backwaters of Kerala.",
     heroImage: "/images/home/why-1.png",
     gallery: ["/images/home/why-1.png", "/images/home/why-2.png"],
@@ -219,6 +235,7 @@ export const keralaDistricts: KeralaDistrict[] = [
   {
     slug: "thiruvananthapuram",
     name: "Thiruvananthapuram",
+    enum: KeralaDistrict.THIRUVANANTHAPURAM,
     description: "The capital city of Kerala, blending rich heritage with modern infrastructure. Home to historic temples, museums, and renowned beaches.",
     heroImage: "/images/home/why-2.png",
     gallery: ["/images/home/why-2.png", "/images/home/why-3.png"],

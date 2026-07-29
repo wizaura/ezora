@@ -32,6 +32,17 @@ class TourismCategoryService {
         return tourismCategoryRepository.findAllActive();
     }
 
+    async findBySlug(slug: string) {
+        const category =
+            await tourismCategoryRepository.findBySlug(slug);
+
+        if (!category || !category.isActive) {
+            throw new Error("Tourism category not found.");
+        }
+
+        return category;
+    }
+
     async create(dto: TourismCategoryDto) {
         const existing = await tourismCategoryRepository.findBySlug(
             dto.slug
@@ -79,7 +90,7 @@ class TourismCategoryService {
         if (
             category.featuredImagePublicId &&
             category.featuredImagePublicId !==
-                dto.featuredImagePublicId
+            dto.featuredImagePublicId
         ) {
             await cloudinary.uploader.destroy(
                 category.featuredImagePublicId

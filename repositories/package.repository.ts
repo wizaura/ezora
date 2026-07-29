@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
 import { PackageDto } from "@/validators/package.validator";
+import { PackageCard, PackageFaq, PackageItineraryItem } from "@/types/package.type";
 
 interface FindManyOptions {
     page?: number;
@@ -97,11 +98,56 @@ class PackageRepository {
     }
 
     async findBySlug(slug: string) {
-        return prisma.package.findUnique({
+        const pkg = await prisma.package.findFirst({
             where: {
                 slug,
+                status: "PUBLISHED",
+            },
+            include: {
+                images: {
+                    orderBy: {
+                        order: "asc",
+                    },
+                },
+                details: true,
             },
         });
+
+        if (!pkg) return null;
+
+        return {
+            ...pkg,
+            startingPrice: pkg.startingPrice.toNumber(),
+            details: pkg.details
+                ? {
+                    itinerary: pkg.details.itinerary as unknown as PackageItineraryItem[],
+                    inclusions: pkg.details.inclusions as unknown as string[],
+                    exclusions: pkg.details.exclusions as unknown as string[],
+                    highlights: pkg.details.highlights as unknown as string[],
+                    faqs: pkg.details.faqs as unknown as PackageFaq[],
+                }
+                : null,
+        };
+    }
+
+    async findPublished(): Promise<PackageCard[]> {
+        const packages = await prisma.package.findMany({
+            where: {
+                status: "PUBLISHED",
+            },
+            include: {
+                images: {
+                    orderBy: {
+                        order: "asc",
+                    },
+                },
+            },
+        });
+
+        return packages.map((pkg) => ({
+            ...pkg,
+            startingPrice: Number(pkg.startingPrice),
+        }));
     }
 
     async create(dto: PackageDto) {

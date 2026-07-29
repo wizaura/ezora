@@ -26,6 +26,12 @@ export class PackageService {
         return pkg;
     }
 
+    async findPublished() {
+        const packages = await packageRepository.findPublished();
+
+        return packages;
+    }
+
     async findBySlug(slug: string) {
         return packageRepository.findBySlug(slug);
     }

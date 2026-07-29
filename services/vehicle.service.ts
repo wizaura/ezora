@@ -26,6 +26,25 @@ export class VehicleService {
         return vehicle;
     }
 
+    static async findBySlug(slug: string) {
+        const vehicle = await VehicleRepository.findBySlug(slug);
+
+        if (!vehicle) {
+            throw new Error("Vehicle not found");
+        }
+
+        return vehicle;
+    }
+
+    static async findRelated(vehicle: any) {
+        const relatedVehicles = await VehicleRepository.findRelated(
+            vehicle.categoryId,
+            vehicle.id
+        );
+
+        return relatedVehicles;
+    }
+
     static async create(dto: VehicleDto) {
         const slugExists = await VehicleRepository.findBySlug(dto.slug);
 
