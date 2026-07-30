@@ -152,7 +152,7 @@ export default function Navbar() {
                         </a>
 
                         <Link
-                            href="/quick-quote"
+                            href="/contact"
                             className="group flex h-12 items-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-white transition-all duration-300 hover:bg-light-sea-green"
                         >
                             Get Quick Quote

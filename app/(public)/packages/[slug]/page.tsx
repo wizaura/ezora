@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import PageHero from "@/components/common/PageHero";
 import PackageDetailView from "@/components/packages/details/PackageDetailsView";
 import { packageService } from "@/services/package.service";
-import TourEnquiryForm from "@/components/packages/details/TourEnquiryForm";
 
 type Props = {
   params: Promise<{
@@ -74,7 +73,6 @@ export default async function PackagePage({
       />
 
       <PackageDetailView package={pkg} />
-      <TourEnquiryForm />
     </>
   );
 }

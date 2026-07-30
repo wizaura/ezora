@@ -48,6 +48,8 @@ export class RentalService {
                 route.distanceMeters
             );
 
+        console.log(pricing,'pr')
+
         /**
          * Generate PDF
          */
@@ -70,6 +72,8 @@ export class RentalService {
 
                 estimatedFare: pricing.total,
             });
+
+        console.log(pdf,'[dr')
 
         /**
          * Send Emails

@@ -61,7 +61,7 @@ export class PdfRepository {
             ["Pickup Time", data.pickupTime],
             ["Distance", data.distance],
             ["Duration", data.duration],
-            ["Estimated Fare", `₹ ${data.estimatedFare.toFixed(2)}`],
+            ["Estimated Fare", `Rs. ${data.estimatedFare.toFixed(2)}`],
         ];
 
         rows.forEach(([label, value]) => {

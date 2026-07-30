@@ -12,38 +12,62 @@ export class GoogleMapRepository {
         origin: string,
         destination: string
     ): Promise<RouteResult> {
-        const params = new URLSearchParams({
-            origins: origin,
-            destinations: destination,
-            units: "metric",
-            key: this.apiKey,
-        });
-
         const response = await fetch(
-            `https://maps.googleapis.com/maps/api/distancematrix/json?${params.toString()}`
+            "https://routes.googleapis.com/directions/v2:computeRoutes",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Goog-Api-Key": this.apiKey,
+                    "X-Goog-FieldMask":
+                        "routes.distanceMeters,routes.duration",
+                },
+                body: JSON.stringify({
+                    origin: {
+                        address: origin,
+                    },
+                    destination: {
+                        address: destination,
+                    },
+                    travelMode: "DRIVE",
+                    routingPreference: "TRAFFIC_UNAWARE",
+                }),
+            }
         );
 
         if (!response.ok) {
-            throw new Error(
-                "Unable to connect to Google Maps."
-            );
+            throw new Error("Unable to connect to Google Routes API.");
         }
 
         const json = await response.json();
 
-        const element = json.rows?.[0]?.elements?.[0];
+        const route = json.routes?.[0];
 
-        if (!element || element.status !== "OK") {
-            throw new Error(
-                "Unable to calculate distance"
-            );
+        if (!route) {
+            throw new Error("Unable to calculate distance.");
         }
 
+        const distanceMeters = route.distanceMeters;
+        const durationSeconds = Number(
+            route.duration.replace("s", "")
+        );
+
         return {
-            distanceMeters: element.distance.value,
-            distanceText: element.distance.text,
-            durationSeconds: element.duration.value,
-            durationText: element.duration.text,
+            distanceMeters,
+            distanceText: `${(distanceMeters / 1000).toFixed(1)} km`,
+            durationSeconds,
+            durationText: formatDuration(durationSeconds),
         };
     }
+}
+
+function formatDuration(seconds: number) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.round((seconds % 3600) / 60);
+
+    if (hours === 0) {
+        return `${minutes} mins`;
+    }
+
+    return `${hours} hr ${minutes} mins`;
 }

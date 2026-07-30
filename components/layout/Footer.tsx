@@ -141,7 +141,7 @@ export default function Footer() {
 
                     <div className="flex flex-col gap-3 sm:flex-row lg:col-span-5 lg:justify-end">
                         <Link
-                            href="/quick-quote"
+                            href="/contact"
                             className="group inline-flex h-14 items-center justify-center gap-3 rounded-full bg-sea px-7 text-sm font-semibold text-white transition-colors duration-300 hover:bg-light-sea-green"
                         >
                             Get a Quick Quote
