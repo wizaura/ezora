@@ -1,3 +1,5 @@
+import RentalAdminEmail from "@/emails/RentalAdminEmail";
+import RentalCustomerEmail from "@/emails/RentalCustomerEmail";
 import { Resend } from "resend";
 
 export interface RentalMailData {
@@ -8,6 +10,7 @@ export interface RentalMailData {
     pickupLocation: string;
     dropLocation: string;
 
+    vehicleCategory: string;
     vehicleType: string;
 
     pickupDate: string;
@@ -15,6 +18,13 @@ export interface RentalMailData {
 
     distance: string;
     duration: string;
+
+    quotationNo: string;
+
+    ratePerKm: number;
+    baseFare: number;
+    driverAllowance: number;
+    tax: number;
 
     estimatedFare: number;
 }
@@ -31,48 +41,8 @@ export class MailRepository {
         await this.resend.emails.send({
             from: process.env.EMAIL_FROM!,
             to: data.email,
-
-            subject: "Your Ezora Rental Quotation",
-
-            html: `
-                <h2>Hello ${data.customerName},</h2>
-
-                <p>Thank you for choosing Ezora Tours & Travels.</p>
-
-                <p>Your quotation has been generated successfully.</p>
-
-                <table cellpadding="8">
-                    <tr>
-                        <td><strong>Pickup</strong></td>
-                        <td>${data.pickupLocation}</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>Destination</strong></td>
-                        <td>${data.dropLocation}</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>Distance</strong></td>
-                        <td>${data.distance}</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>Duration</strong></td>
-                        <td>${data.duration}</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>Estimated Fare</strong></td>
-                        <td>₹ ${data.estimatedFare.toFixed(2)}</td>
-                    </tr>
-                </table>
-
-                <p>Please find your quotation attached.</p>
-
-                <p>Regards,<br/>Ezora Tours & Travels</p>
-            `,
-
+            subject: "Your Rental Quotation | Ezora Tours",
+            react: RentalCustomerEmail(data),
             attachments: [
                 {
                     filename: "RentalQuotation.pdf",
@@ -88,62 +58,9 @@ export class MailRepository {
     ) {
         await this.resend.emails.send({
             from: process.env.EMAIL_FROM!,
-
             to: process.env.ADMIN_EMAIL!,
-
             subject: "New Rental Enquiry",
-
-            html: `
-                <h2>New Rental Enquiry</h2>
-
-                <table cellpadding="8">
-                    <tr>
-                        <td>Name</td>
-                        <td>${data.customerName}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Email</td>
-                        <td>${data.email}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Phone</td>
-                        <td>${data.phone}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Pickup</td>
-                        <td>${data.pickupLocation}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Destination</td>
-                        <td>${data.dropLocation}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Vehicle</td>
-                        <td>${data.vehicleType}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Distance</td>
-                        <td>${data.distance}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Duration</td>
-                        <td>${data.duration}</td>
-                    </tr>
-
-                    <tr>
-                        <td>Estimated Fare</td>
-                        <td>₹ ${data.estimatedFare.toFixed(2)}</td>
-                    </tr>
-                </table>
-            `,
-
+            react: RentalAdminEmail(data),
             attachments: [
                 {
                     filename: "RentalQuotation.pdf",

@@ -83,11 +83,58 @@ export class BlogRepository {
         });
     }
 
-    static async findPublished() {
+    static async findPublished(params?: {
+        page?: number;
+        limit?: number;
+    }) {
+        const page = params?.page ?? 1;
+        const limit = params?.limit ?? 9;
+
+        const [blogs, total] = await Promise.all([
+            prisma.blog.findMany({
+                where: {
+                    isPublished: true,
+                },
+                orderBy: {
+                    createdAt: "desc",
+                },
+                skip: (page - 1) * limit,
+                take: limit,
+            }),
+
+            prisma.blog.count({
+                where: {
+                    isPublished: true,
+                },
+            }),
+        ]);
+
+        return {
+            blogs,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.ceil(total / limit),
+                hasNext: page < Math.ceil(total / limit),
+                hasPrevious: page > 1,
+            },
+        };
+    }
+
+    static async findRelated(
+        category: string,
+        blogId: string
+    ) {
         return prisma.blog.findMany({
             where: {
                 isPublished: true,
+                category,
+                NOT: {
+                    id: blogId,
+                },
             },
+            take: 3,
             orderBy: {
                 createdAt: "desc",
             },

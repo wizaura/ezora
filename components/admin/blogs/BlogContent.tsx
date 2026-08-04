@@ -1,8 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import { Upload, X } from "lucide-react";
 import type { BlogFormData } from "./BlogForm";
 import FeaturedImageUploader from "./FeaturedImageUploader";
 

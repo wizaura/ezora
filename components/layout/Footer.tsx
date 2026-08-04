@@ -177,7 +177,7 @@ export default function Footer() {
                                 alt="Ezora Tours & Travels"
                                 width={200}
                                 height={80}
-                                className="h-auto w-[200px] sm:w-[240px]"
+                                className="h-auto w-[140px] sm:w-[180px]"
                             />
                         </Link>
 

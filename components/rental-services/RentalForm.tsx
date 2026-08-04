@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -22,6 +22,7 @@ import {
     RentalQuotationInput,
     RentalQuotationValidator,
 } from "@/validators/rental.validator";
+import { VehicleCategoryOption, VehicleOption } from "@/types/fleet.type";
 
 type QuotePreview = {
     distance: string;
@@ -32,13 +33,39 @@ type QuotePreview = {
 export default function RentalForm() {
     const [loading, setLoading] = useState(false);
 
+    const [categories, setCategories] = useState<
+        VehicleCategoryOption[]
+    >([]);
+
+    const [selectedCategory, setSelectedCategory] =
+        useState("");
+
+    const [vehicles, setVehicles] = useState<
+        VehicleOption[]
+    >([]);
+
     const [quotation, setQuotation] =
         useState<QuotePreview>(null);
+
+    useEffect(() => {
+        async function load() {
+            const res = await fetch(
+                "/api/fleet/options"
+            );
+
+            const data = await res.json();
+
+            setCategories(data);
+        }
+
+        load();
+    }, []);
 
     const {
         register,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors },
     } = useForm<RentalQuotationInput>({
         resolver: zodResolver(
@@ -54,6 +81,7 @@ export default function RentalForm() {
 
             returnDate: "",
 
+            categoryType: "",
             vehicleType: "",
 
             name: "",
@@ -88,7 +116,7 @@ export default function RentalForm() {
             if (!response.ok) {
                 throw new Error(
                     result.message ??
-                        "Something went wrong."
+                    "Something went wrong."
                 );
             }
 
@@ -272,7 +300,107 @@ export default function RentalForm() {
                         )}
                     </div>
                 </div>
-                                {/* Return Date & Vehicle */}
+
+                <div className="grid gap-5 md:grid-cols-2">
+
+                    {/* Vehicle Category */}
+
+                    <div className="space-y-2">
+
+                        <label className="text-sm font-semibold text-dark-cerulean">
+                            Vehicle Category
+                        </label>
+
+                        <div className="relative">
+
+                            <CarFront
+                                size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
+                            />
+
+                            <select
+                                value={selectedCategory}
+                                onChange={(e) => {
+                                    const categoryId = e.target.value;
+
+                                    setSelectedCategory(categoryId);
+
+                                    const category = categories.find(
+                                        (c) => c.id === categoryId
+                                    );
+
+                                    setVehicles(category?.vehicles ?? []);
+
+                                    setValue("categoryType", category?.slug ?? "");
+
+                                    setValue("vehicleType", "");
+                                }}
+                                className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            >
+                                <option value="">
+                                    Select Category
+                                </option>
+
+                                {categories.map((category) => (
+                                    <option
+                                        key={category.id}
+                                        value={category.id}
+                                    >
+                                        {category.name}
+                                    </option>
+                                ))}
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    {/* Vehicle */}
+
+                    <div className="space-y-2">
+
+                        <label className="text-sm font-semibold text-dark-cerulean">
+                            Vehicle
+                        </label>
+
+                        <div className="relative">
+
+                            <CarFront
+                                size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
+                            />
+
+                            <select
+                                {...register("vehicleType")}
+                                disabled={!selectedCategory}
+                                className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10 disabled:cursor-not-allowed disabled:opacity-60"
+                            >
+                                <option value="">
+                                    Select Vehicle
+                                </option>
+
+                                {vehicles.map((vehicle) => (
+                                    <option
+                                        key={vehicle.id}
+                                        value={vehicle.slug}
+                                    >
+                                        {vehicle.name}
+                                    </option>
+                                ))}
+                            </select>
+
+                        </div>
+
+                        {errors.vehicleType && (
+                            <p className="text-sm text-red-500">
+                                {errors.vehicleType.message}
+                            </p>
+                        )}
+
+                    </div>
+
+                </div>
+                {/* Return Date & Vehicle */}
 
                 <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
@@ -293,63 +421,6 @@ export default function RentalForm() {
                             />
                         </div>
                     </div>
-
-                    <div className="space-y-2">
-                        <label className="text-sm font-semibold text-dark-cerulean">
-                            Vehicle Type
-                        </label>
-
-                        <div className="relative">
-                            <CarFront
-                                size={20}
-                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
-                            />
-
-                            <select
-                                {...register("vehicleType")}
-                                className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
-                            >
-                                <option value="">
-                                    Select Vehicle
-                                </option>
-
-                                <option value="Sedan">
-                                    Sedan
-                                </option>
-
-                                <option value="SUV">
-                                    SUV
-                                </option>
-
-                                <option value="Luxury">
-                                    Luxury
-                                </option>
-
-                                <option value="Traveller">
-                                    Tempo Traveller
-                                </option>
-
-                                <option value="Minibus">
-                                    Mini Bus
-                                </option>
-
-                                <option value="Bus">
-                                    Bus
-                                </option>
-                            </select>
-                        </div>
-
-                        {errors.vehicleType && (
-                            <p className="text-sm text-red-500">
-                                {errors.vehicleType.message}
-                            </p>
-                        )}
-                    </div>
-                </div>
-
-                {/* Name & Phone */}
-
-                <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-dark-cerulean">
                             Full Name
@@ -374,7 +445,11 @@ export default function RentalForm() {
                             </p>
                         )}
                     </div>
+                </div>
 
+                {/* Name & Phone */}
+
+                <div className="grid gap-5 md:grid-cols-2">
                     <div className="space-y-2">
                         <label className="text-sm font-semibold text-dark-cerulean">
                             Phone Number
@@ -399,33 +474,30 @@ export default function RentalForm() {
                             </p>
                         )}
                     </div>
-                </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-dark-cerulean">
+                            Email Address
+                        </label>
 
-                {/* Email */}
+                        <div className="relative">
+                            <Mail
+                                size={20}
+                                className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
+                            />
 
-                <div className="space-y-2">
-                    <label className="text-sm font-semibold text-dark-cerulean">
-                        Email Address
-                    </label>
+                            <input
+                                {...register("email")}
+                                placeholder="john@example.com"
+                                className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                            />
+                        </div>
 
-                    <div className="relative">
-                        <Mail
-                            size={20}
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
-                        />
-
-                        <input
-                            {...register("email")}
-                            placeholder="john@example.com"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
-                        />
+                        {errors.email && (
+                            <p className="text-sm text-red-500">
+                                {errors.email.message}
+                            </p>
+                        )}
                     </div>
-
-                    {errors.email && (
-                        <p className="text-sm text-red-500">
-                            {errors.email.message}
-                        </p>
-                    )}
                 </div>
 
                 {/* Quote Preview */}

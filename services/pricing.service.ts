@@ -8,27 +8,17 @@ export interface PricingResult {
 }
 
 export class PricingService {
-    private readonly vehicleRates: Record<string, number> = {
-        sedan: 18,
-        suv: 24,
-        luxury: 40,
-        traveller: 30,
-        minibus: 45,
-        bus: 60,
-    };
-
     calculate(
-        vehicleType: string,
+        ratePerKm: number,
         distanceMeters: number
     ): PricingResult {
         const distanceKm = Math.ceil(distanceMeters / 1000);
 
-        const ratePerKm =
-            this.vehicleRates[vehicleType.toLowerCase()] ?? 20;
+        const baseFare =
+            distanceKm * ratePerKm;
 
-        const baseFare = distanceKm * ratePerKm;
-
-        const driverAllowance = distanceKm > 120 ? 600 : 0;
+        const driverAllowance =
+            distanceKm > 120 ? 600 : 0;
 
         const tax = Math.round(baseFare * 0.05);
 

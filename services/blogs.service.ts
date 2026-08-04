@@ -67,6 +67,13 @@ export class BlogService {
         return blog;
     }
 
+    static async findPublished(params?: {
+        page?: number;
+        limit?: number;
+    }) {
+        return BlogRepository.findPublished(params);
+    }
+
     static async getBySlug(slug: string) {
 
         const blog =
@@ -85,6 +92,16 @@ export class BlogService {
 
     static async getAll() {
         return BlogRepository.findAll();
+    }
+
+    static async findRelated(
+        category: string,
+        blogId: string
+    ) {
+        return BlogRepository.findRelated(
+            category,
+            blogId
+        );
     }
 
     static async getPublished() {

@@ -167,6 +167,27 @@ export class VehicleRepository {
         })
     }
 
+    static async findPricing(
+        categorySlug: string,
+        vehicleSlug: string
+    ) {
+        return prisma.vehicle.findFirst({
+            where: {
+                isActive: true,
+                slug: vehicleSlug,
+                category: {
+                    slug: categorySlug,
+                },
+            },
+            select: {
+                id: true,
+                name: true,
+                standardRate: true,
+                corporateRate: true,
+            },
+        });
+    }
+
     static async create(data: Prisma.VehicleCreateInput) {
         return prisma.vehicle.create({
             data,

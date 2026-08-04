@@ -7,10 +7,11 @@ import {
 } from "../repositories/mail.repository";
 import {
     PdfRepository,
-} from "../repositories/pdf.repository";
+} from "../repositories/pdf/pdfRepository";
 import {
     PricingService,
 } from "./pricing.service";
+import { VehicleService } from "./vehicle.service";
 
 export class RentalService {
     constructor(
@@ -20,106 +21,94 @@ export class RentalService {
         private readonly pricingService =
             new PricingService(),
 
+        private readonly vehicleService =
+            new VehicleService(),
+
         private readonly pdfRepository =
             new PdfRepository(),
 
         private readonly mailRepository =
             new MailRepository()
-    ) {}
+    ) { }
 
     async generateQuotation(
         data: RentalQuotationInput
     ) {
-        /**
-         * Google Maps
-         */
+
         const route =
             await this.googleRepository.calculateRoute(
                 data.pickupLocation,
                 data.dropLocation
             );
 
-        /**
-         * Pricing
-         */
-        const pricing =
-            this.pricingService.calculate(
-                data.vehicleType,
-                route.distanceMeters
+        const vehicle =
+            await this.vehicleService.getPricing(
+                data.categoryType,
+                data.vehicleType
             );
 
-        console.log(pricing,'pr')
+        const rate =
+            Number(vehicle.standardRate);
 
-        /**
-         * Generate PDF
-         */
+        const pricing =
+            this.pricingService.calculate(
+                rate,
+                route.distanceMeters
+            );
+            
+        const quotationNo = `EZQ-${Date.now()}`;
+        
+        const mailData = {
+            quotationNo,
+            customerName: data.name,
+            email: data.email,
+            phone: data.phone,
+
+            pickupLocation: data.pickupLocation,
+            dropLocation: data.dropLocation,
+
+            vehicleCategory: data.categoryType,
+            vehicleType: data.vehicleType,
+
+            pickupDate: data.pickupDate,
+            pickupTime: data.pickupTime,
+
+            distance: route.distanceText,
+            duration: route.durationText,
+
+            ratePerKm: pricing.ratePerKm,
+            baseFare: pricing.baseFare,
+            driverAllowance: pricing.driverAllowance,
+            tax: pricing.tax,
+
+            estimatedFare: pricing.total,
+        };
+
         const pdf =
             await this.pdfRepository.generateQuotation({
-                customerName: data.name,
-                email: data.email,
-                phone: data.phone,
+                ...mailData,
 
-                pickupLocation: data.pickupLocation,
-                dropLocation: data.dropLocation,
-
-                vehicleType: data.vehicleType,
-
-                pickupDate: data.pickupDate,
-                pickupTime: data.pickupTime,
-
-                distance: route.distanceText,
-                duration: route.durationText,
-
-                estimatedFare: pricing.total,
+                quotationDate: new Date().toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                    }
+                ),
             });
-
-        console.log(pdf,'[dr')
 
         /**
          * Send Emails
          */
         await Promise.all([
             this.mailRepository.sendCustomerQuotation(
-                {
-                    customerName: data.name,
-                    email: data.email,
-                    phone: data.phone,
-
-                    pickupLocation: data.pickupLocation,
-                    dropLocation: data.dropLocation,
-
-                    vehicleType: data.vehicleType,
-
-                    pickupDate: data.pickupDate,
-                    pickupTime: data.pickupTime,
-
-                    distance: route.distanceText,
-                    duration: route.durationText,
-
-                    estimatedFare: pricing.total,
-                },
+                mailData,
                 pdf
             ),
 
             this.mailRepository.sendAdminNotification(
-                {
-                    customerName: data.name,
-                    email: data.email,
-                    phone: data.phone,
-
-                    pickupLocation: data.pickupLocation,
-                    dropLocation: data.dropLocation,
-
-                    vehicleType: data.vehicleType,
-
-                    pickupDate: data.pickupDate,
-                    pickupTime: data.pickupTime,
-
-                    distance: route.distanceText,
-                    duration: route.durationText,
-
-                    estimatedFare: pricing.total,
-                },
+                mailData,
                 pdf
             ),
         ]);

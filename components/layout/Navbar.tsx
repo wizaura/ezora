@@ -33,6 +33,10 @@ const navLinks = [
         href: "/tourism",
     },
     {
+        label: "Blogs",
+        href: "/blogs",
+    },
+    {
         label: "Contact",
         href: "/contact",
     },
@@ -77,7 +81,7 @@ export default function Navbar() {
     return (
         <header
             className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${isScrolled
-                ? "bg-white/95 shadow-[0_8px_30px_rgba(6,47,76,0.08)] backdrop-blur-xl"
+                ? "bg-white shadow-[0_8px_30px_rgba(6,47,76,0.08)]"
                 : "bg-transparent"
                 }`}
         >
@@ -88,7 +92,7 @@ export default function Navbar() {
                 >
                     {/* Logo */}
                     <Link href="/" className="relative z-50 inline-flex items-center">
-                        <div className="relative h-[180px] w-[200px]">
+                        <div className="relative h-[50px] w-[150px]">
                             <Image
                                 src="/images/logos/logo-2.png"
                                 alt="Ezora Tours & Travels"
@@ -139,7 +143,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Desktop Actions */}
-                    <div className="hidden items-center gap-3 lg:flex">
+                    <div className="flex flex-row gap-4">
                         <a
                             href="#"
                             className={`flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 ${isScrolled
@@ -150,36 +154,38 @@ export default function Navbar() {
                         >
                             <FaWhatsapp size={18} strokeWidth={1.8} />
                         </a>
+                        <div className="hidden items-center gap-3 lg:flex">
 
-                        <Link
-                            href="/contact"
-                            className="group flex h-12 items-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-white transition-all duration-300 hover:bg-light-sea-green"
+                            <Link
+                                href="/contact"
+                                className="group flex h-12 items-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-white transition-all duration-300 hover:bg-light-sea-green"
+                            >
+                                Get Quick Quote
+
+                                <ArrowUpRight
+                                    size={16}
+                                    strokeWidth={2}
+                                    className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                                />
+                            </Link>
+                        </div>
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            type="button"
+                            onClick={() => setIsOpen((prev) => !prev)}
+                            className={`relative z-50 flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 lg:hidden ${isOpen
+                                ? "border-white/20 text-white hover:bg-white/10"
+                                : isScrolled
+                                    ? "border-border text-dark-cerulean hover:border-sea hover:bg-sea/10"
+                                    : "border-white/20 text-white hover:bg-white/10"
+                                }`}
+                            aria-label={isOpen ? "Close menu" : "Open menu"}
+                            aria-expanded={isOpen}
                         >
-                            Get Quick Quote
-
-                            <ArrowUpRight
-                                size={16}
-                                strokeWidth={2}
-                                className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                            />
-                        </Link>
+                            {isOpen ? <X size={20} /> : <Menu size={20} />}
+                        </button>
                     </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        type="button"
-                        onClick={() => setIsOpen((prev) => !prev)}
-                        className={`relative z-50 flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 lg:hidden ${isOpen
-                            ? "border-white/20 text-white hover:bg-white/10"
-                            : isScrolled
-                                ? "border-border text-dark-cerulean hover:border-sea hover:bg-sea/10"
-                                : "border-white/20 text-white hover:bg-white/10"
-                            }`}
-                        aria-label={isOpen ? "Close menu" : "Open menu"}
-                        aria-expanded={isOpen}
-                    >
-                        {isOpen ? <X size={20} /> : <Menu size={20} />}
-                    </button>
                 </nav>
             </div>
 
@@ -193,7 +199,7 @@ export default function Navbar() {
                 {/* Decorative glow */}
                 <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-sea/20 blur-[100px]" />
 
-                <div className="relative flex h-full flex-col px-5 pb-8 pt-32">
+                <div className="relative flex h-full flex-col px-5 pb-8 pt-20">
                     <nav className="flex flex-col">
                         {navLinks.map((link, index) => {
                             const active = isActive(link.href);
@@ -203,7 +209,7 @@ export default function Navbar() {
                                     key={link.href}
                                     href={link.href}
                                     onClick={() => setIsOpen(false)}
-                                    className={`group flex items-center justify-between border-b border-white/10 py-5 text-2xl font-medium tracking-[-0.03em] transition-colors ${active
+                                    className={`group flex items-center justify-between border-b border-white/10 py-4 text-xl font-medium tracking-[-0.03em] transition-colors ${active
                                         ? "text-light-sea-green"
                                         : "text-white hover:text-light-sea-green"
                                         }`}
@@ -227,7 +233,7 @@ export default function Navbar() {
 
                     <div className="mt-auto">
                         <Link
-                            href="/quick-quote"
+                            href="/contact"
                             onClick={() => setIsOpen(false)}
                             className="flex h-14 items-center justify-center gap-2 rounded-full bg-accent px-6 font-semibold text-white transition-colors hover:bg-light-sea-green"
                         >

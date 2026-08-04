@@ -40,6 +40,14 @@ export const VehicleSchema = z.object({
 
     luggageCapacity: z.string(),
 
+    standardRate: z
+        .number()
+        .min(0, "Standard price must be 0 or greater"),
+
+    corporateRate: z
+        .number()
+        .min(0, "Corporate price must be 0 or greater"),
+
     airConditioning: z.string().optional(),
 
     transmission: z.string().optional(),

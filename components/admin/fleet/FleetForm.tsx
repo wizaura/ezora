@@ -53,6 +53,10 @@ export default function FleetForm({
 
             luggageCapacity: "",
 
+            standardRate: 0,
+
+            corporateRate: 0,
+
             airConditioning: "",
 
             transmission: "",

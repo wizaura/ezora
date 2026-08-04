@@ -107,3 +107,16 @@ export interface FleetCategory {
 
     vehicles: Vehicle[];
 }
+
+export type VehicleOption = {
+    id: string;
+    name: string;
+    slug: string;
+};
+
+export type VehicleCategoryOption = {
+    id: string;
+    name: string;
+    slug: string;
+    vehicles: VehicleOption[];
+};

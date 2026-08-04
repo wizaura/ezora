@@ -21,6 +21,10 @@ export class FleetCategoryService {
         return category;
     }
 
+    static async getRentalOptions() {
+        return FleetCategoryRepository.getRentalOptions();
+    }
+
     static async create(dto: FleetCategoryDto) {
         const exists =
             await FleetCategoryRepository.findBySlug(dto.slug);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   BadgeCheck,
@@ -10,10 +10,11 @@ import {
   CarFront,
   CheckCircle2,
   Headset,
-  MessageCircle,
   ShieldCheck,
   Users,
 } from "lucide-react";
+import { VehicleCategoryOption, VehicleOption } from "@/types/fleet.type";
+import { FaWhatsapp } from "react-icons/fa";
 
 export default function CorporateLeaseEnquirySection() {
   const [formData, setFormData] = useState({
@@ -21,12 +22,38 @@ export default function CorporateLeaseEnquirySection() {
     contactPerson: "",
     phone: "",
     email: "",
+
     term: "Monthly",
-    fleetClass: "Force Urbania",
+
+    categoryId: "",
+    categorySlug: "",
+    vehicleId: "",
+
     vehiclesCount: "1",
     startDate: "",
     message: "",
   });
+
+  const [categories, setCategories] =
+    useState<VehicleCategoryOption[]>([]);
+
+  const [selectedCategory, setSelectedCategory] =
+    useState("");
+
+  const [vehicles, setVehicles] =
+    useState<VehicleOption[]>([]);
+
+  useEffect(() => {
+    async function load() {
+      const res = await fetch("/api/fleet/options");
+
+      const data = await res.json();
+
+      setCategories(data);
+    }
+
+    load();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -42,34 +69,50 @@ export default function CorporateLeaseEnquirySection() {
   };
 
   const handleWhatsApp = () => {
-    const text = `Hi Ezora Tours!
+    const text = `
+      Hi Ezora Tours!
 
-I'm interested in a corporate leasing proposal.
+      I'm interested in a corporate leasing proposal.
 
-Company: ${formData.companyName}
+      Company: ${formData.companyName}
 
-Contact Person: ${formData.contactPerson}
+      Contact Person: ${formData.contactPerson}
 
-Phone: ${formData.phone}
+      Phone: ${formData.phone}
 
-Email: ${formData.email}
+      Email: ${formData.email}
 
-Lease Term: ${formData.term}
+      Lease Term: ${formData.term}
 
-Vehicle: ${formData.fleetClass}
+      Category:
+        ${categories.find(
+      c => c.id === formData.categoryId
+    )?.name ?? "-"
+      }
 
-Vehicles Required: ${formData.vehiclesCount}
+      Vehicle:
+        ${vehicles.find(
+        v => v.slug === formData.vehicleId
+      )?.name ?? "-"
+      }
 
-Expected Start Date: ${formData.startDate}
+      Vehicles Required: ${formData.vehiclesCount}
 
-Requirements:
-${formData.message}`;
+      Expected Start Date: ${formData.startDate}
 
-    const url = `https://wa.me/919876543210?text=${encodeURIComponent(
+      Requirements:
+        ${formData.message}
+    `;
+
+    const url = `https://wa.me/919747827371?text=${encodeURIComponent(
       text
     )}`;
 
     window.open(url, "_blank");
+
+    setTimeout(() => {
+      resetForm();
+    }, 1000);
   };
 
   const handleSubmit = (
@@ -77,6 +120,28 @@ ${formData.message}`;
   ) => {
     e.preventDefault();
     handleWhatsApp();
+  };
+
+  const resetForm = () => {
+    setFormData({
+      companyName: "",
+      contactPerson: "",
+      phone: "",
+      email: "",
+
+      term: "Monthly",
+
+      categoryId: "",
+      categorySlug: "",
+      vehicleId: "",
+
+      vehiclesCount: "1",
+      startDate: "",
+      message: "",
+    });
+
+    setSelectedCategory("");
+    setVehicles([]);
   };
 
   return (
@@ -386,24 +451,108 @@ ${formData.message}`;
 
                 </div>
 
-                <div>
+              </div>
 
-                  <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-greenish-blue">
-                    Vehicle Type
+              <div className="grid gap-5 md:grid-cols-2">
+
+                {/* Vehicle Category */}
+
+                <div className="space-y-2">
+
+                  <label className="text-sm font-semibold text-dark-cerulean">
+                    Vehicle Category
                   </label>
 
-                  <select
-                    name="fleetClass"
-                    value={formData.fleetClass}
-                    onChange={handleChange}
-                    className="h-14 w-full rounded-2xl border border-border bg-surface-soft px-5 outline-none transition-all focus:border-sea focus:bg-white"
-                  >
-                    <option>Force Urbania</option>
-                    <option>Force Traveller</option>
-                    <option>Toyota Innova Hycross</option>
-                    <option>Executive Sedan</option>
-                    <option>Luxury SUV</option>
-                  </select>
+                  <div className="relative">
+
+                    <CarFront
+                      size={20}
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
+                    />
+
+                    <select
+                      value={selectedCategory}
+                      required
+                      onChange={(e) => {
+                        const categoryId = e.target.value;
+
+                        setSelectedCategory(categoryId);
+
+                        const category = categories.find(
+                          (c) => c.id === categoryId
+                        );
+
+                        setVehicles(category?.vehicles ?? []);
+
+                        setFormData((prev) => ({
+                          ...prev,
+                          categoryId,
+                          categorySlug: category?.slug ?? "",
+                          vehicleId: "",
+                        }));
+                      }}
+                      className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
+                    >
+                      <option value="">
+                        Select Category
+                      </option>
+
+                      {categories.map((category) => (
+                        <option
+                          key={category.id}
+                          value={category.id}
+                        >
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+
+                  </div>
+
+                </div>
+
+                {/* Vehicle */}
+
+                <div className="space-y-2">
+
+                  <label className="text-sm font-semibold text-dark-cerulean">
+                    Vehicle
+                  </label>
+
+                  <div className="relative">
+
+                    <CarFront
+                      size={20}
+                      className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
+                    />
+
+                    <select
+                      value={formData.vehicleId}
+                      required
+                      disabled={!selectedCategory}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          vehicleId: e.target.value,
+                        }))
+                      }
+                      className="h-14 w-full appearance-none rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      <option value="">
+                        Select Vehicle
+                      </option>
+
+                      {vehicles.map((vehicle) => (
+                        <option
+                          key={vehicle.id}
+                          value={vehicle.slug}
+                        >
+                          {vehicle.name}
+                        </option>
+                      ))}
+                    </select>
+
+                  </div>
 
                 </div>
 
@@ -446,6 +595,7 @@ ${formData.message}`;
                     <input
                       type="date"
                       name="startDate"
+                      required
                       value={formData.startDate}
                       onChange={handleChange}
                       className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-12 pr-4 outline-none transition-all focus:border-sea focus:bg-white"
@@ -531,7 +681,7 @@ ${formData.message}`;
                   className="group flex h-16 items-center justify-center gap-3 rounded-full border border-[#25D366]/25 bg-[#25D366]/10 px-8 text-base font-semibold text-[#1DA851] transition-all duration-300 hover:-translate-y-1 hover:bg-[#25D366]/20"
                 >
 
-                  <MessageCircle size={22} />
+                  <FaWhatsapp size={22} />
 
                   Continue on WhatsApp
 

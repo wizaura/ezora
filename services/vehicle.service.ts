@@ -45,6 +45,23 @@ export class VehicleService {
         return relatedVehicles;
     }
 
+    async getPricing(
+        categorySlug: string,
+        vehicleSlug: string
+    ) {
+        const vehicle =
+            await VehicleRepository.findPricing(
+                categorySlug,
+                vehicleSlug
+            );
+
+        if (!vehicle) {
+            throw new Error("Vehicle not found.");
+        }
+
+        return vehicle;
+    }
+
     static async create(dto: VehicleDto) {
         const slugExists = await VehicleRepository.findBySlug(dto.slug);
 
@@ -75,6 +92,9 @@ export class VehicleService {
 
             seatingCapacity: dto.seatingCapacity,
             luggageCapacity: dto.luggageCapacity,
+
+            standardRate: dto.standardRate,
+            corporateRate: dto.corporateRate,
 
             airConditioning: dto.airConditioning,
             transmission: dto.transmission,
@@ -161,6 +181,9 @@ export class VehicleService {
 
             seatingCapacity: dto.seatingCapacity,
             luggageCapacity: dto.luggageCapacity,
+
+            standardRate: dto.standardRate,
+            corporateRate: dto.corporateRate,
 
             airConditioning: dto.airConditioning,
             transmission: dto.transmission,

@@ -82,6 +82,9 @@ model Vehicle {
 
   luggageCapacity    String
 
+  standardRate       Decimal? @db.Decimal(10,2)
+  corporateRate      Decimal? @db.Decimal(10,2)
+
   airConditioning    String?
 
   transmission       String?

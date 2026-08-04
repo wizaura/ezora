@@ -24,6 +24,11 @@ export const RentalQuotationValidator = z.object({
         .optional()
         .or(z.literal("")),
 
+    categoryType: z
+        .string()
+        .trim()
+        .min(1, "Category type is required"),
+
     vehicleType: z
         .string()
         .trim()
