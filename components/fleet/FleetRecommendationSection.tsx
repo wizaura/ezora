@@ -6,72 +6,92 @@ import { useMemo, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  BriefcaseBusiness,
-  Building2,
   Check,
-  MapPinned,
   Plane,
   Route,
   Sparkles,
   Users,
 } from "lucide-react";
 
-import type { FleetCategory } from "@/types/fleet.type";
+type FleetVehicleRecommendation = {
+  id: string;
+  name: string;
+  seatingCapacity: string;
+  isActive: boolean;
+  sortOrder: number;
+};
+
+export type FleetRecommendationCategory = {
+  id: string;
+  name: string;
+  slug: string;
+
+  // These are nullable in the database
+  eyebrow: string | null;
+  shortDescription: string | null;
+
+  featuredImage: string | null;
+
+  isActive: boolean;
+  sortOrder: number;
+
+  vehicles: FleetVehicleRecommendation[];
+};
 
 type FleetRecommendationSectionProps = {
-  categories: FleetCategory[];
+  categories: FleetRecommendationCategory[];
 };
 
 const passengerOptions = [
   {
     id: "small",
     label: "1–4",
-    description: "Private travel",
+    description: "Couples & small groups",
     min: 1,
     max: 4,
   },
   {
     id: "medium",
-    label: "5–10",
-    description: "Small groups",
+    label: "5–8",
+    description: "Families & small groups",
     min: 5,
-    max: 10,
+    max: 8,
   },
   {
     id: "large",
-    label: "11–17",
-    description: "Large groups",
-    min: 11,
+    label: "9–17",
+    description: "Larger groups",
+    min: 9,
     max: 17,
   },
   {
-    id: "extra-large",
+    id: "group",
     label: "18+",
-    description: "Group travel",
+    description: "Large groups",
     min: 18,
-    max: 50,
+    max: Infinity,
   },
 ];
 
 const journeyTypes = [
+  {
+    id: "tour",
+    label: "Kerala Tour",
+    icon: Route,
+  },
   {
     id: "airport",
     label: "Airport Transfer",
     icon: Plane,
   },
   {
-    id: "tour",
-    label: "Kerala Tour",
-    icon: MapPinned,
-  },
-  {
     id: "corporate",
-    label: "Corporate",
-    icon: Building2,
+    label: "Corporate Travel",
+    icon: Users,
   },
   {
-    id: "intercity",
-    label: "Intercity",
+    id: "outstation",
+    label: "Outstation Travel",
     icon: Route,
   },
 ];
@@ -79,8 +99,11 @@ const journeyTypes = [
 export default function FleetRecommendationSection({
   categories,
 }: FleetRecommendationSectionProps) {
-  const [selectedPassengers, setSelectedPassengers] = useState("medium");
-  const [selectedJourney, setSelectedJourney] = useState("tour");
+  const [selectedPassengers, setSelectedPassengers] =
+    useState("medium");
+
+  const [selectedJourney, setSelectedJourney] =
+    useState("tour");
 
   const recommendation = useMemo(() => {
     const passengerGroup = passengerOptions.find(
@@ -95,31 +118,38 @@ export default function FleetRecommendationSection({
       .filter((category) => category.isActive)
       .sort((a, b) => a.sortOrder - b.sortOrder);
 
-
-    let preferredSlug: string;
-
-    if (passengerGroup.max <= 4) {
-      preferredSlug = "executive-sedans";
-    } else if (passengerGroup.max <= 17) {
-      preferredSlug = "force-urbania";
-    } else {
-      preferredSlug = "force-traveller";
+    if (!activeCategories.length) {
+      return null;
     }
 
-    return (
-      activeCategories.find(
-        (category) => category.slug === preferredSlug,
-      ) || activeCategories[0]
+    /*
+     * Category recommendation is based on seating requirements.
+     *
+     * Keep the slug mapping here because the admin-managed categories
+     * still use stable slugs.
+     */
+    let preferredSlugs: string[];
+
+    if (passengerGroup.max <= 4) {
+      preferredSlugs = ["executive-sedans"];
+    } else if (passengerGroup.max <= 17) {
+      preferredSlugs = [
+        "force-urbania",
+        "luxury-vans",
+      ];
+    } else {
+      preferredSlugs = [
+        "force-traveller",
+        "luxury-vans",
+      ];
+    }
+
+    const preferredCategory = activeCategories.find(
+      (category) => preferredSlugs.includes(category.slug),
     );
+
+    return preferredCategory ?? activeCategories[0];
   }, [categories, selectedPassengers]);
-
-  const selectedPassengerOption = passengerOptions.find(
-    (option) => option.id === selectedPassengers,
-  );
-
-  const selectedJourneyOption = journeyTypes.find(
-    (journey) => journey.id === selectedJourney,
-  );
 
   if (!recommendation) {
     return null;
@@ -129,8 +159,16 @@ export default function FleetRecommendationSection({
     .filter((vehicle) => vehicle.isActive)
     .sort((a, b) => a.sortOrder - b.sortOrder);
 
+  const selectedPassengerOption = passengerOptions.find(
+    (option) => option.id === selectedPassengers,
+  );
+
+  const selectedJourneyOption = journeyTypes.find(
+    (journey) => journey.id === selectedJourney,
+  );
+
   return (
-    <section className="overflow-hidden bg-background py-16">
+    <section className="overflow-hidden bg-background py-16 lg:py-20">
       <div className="mx-auto max-w-[1440px] px-5 lg:px-8">
         {/* Section Header */}
         <div className="grid gap-8 pb-12 lg:grid-cols-12 lg:items-end lg:pb-16">
@@ -153,9 +191,9 @@ export default function FleetRecommendationSection({
 
           <div className="lg:col-span-4 lg:pb-1">
             <p className="max-w-md text-base leading-7 text-muted lg:ml-auto">
-              Select your group size and journey type. We&apos;ll help you
-              identify the fleet category best suited to your comfort, space
-              and travel requirements.
+              Select your group size and journey type. We&apos;ll help
+              you identify the fleet category best suited to your
+              comfort, space and travel requirements.
             </p>
           </div>
         </div>
@@ -178,44 +216,59 @@ export default function FleetRecommendationSection({
 
               <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                 {passengerOptions.map((option) => {
-                  const isActive = selectedPassengers === option.id;
+                  const isActive =
+                    selectedPassengers === option.id;
 
                   return (
                     <button
                       key={option.id}
                       type="button"
-                      onClick={() => setSelectedPassengers(option.id)}
-                      className={`group rounded-[18px] border p-4 text-left transition-all duration-300 ${isActive
+                      onClick={() =>
+                        setSelectedPassengers(option.id)
+                      }
+                      className={`group rounded-[18px] border p-4 text-left transition-all duration-300 ${
+                        isActive
                           ? "border-sea bg-sea text-white shadow-[0_10px_30px_rgba(11,126,134,0.18)]"
                           : "border-border bg-background hover:border-sea/40 hover:bg-sea/[0.04]"
-                        }`}
+                      }`}
                     >
                       <div className="flex items-center justify-between">
                         <Users
                           size={17}
                           strokeWidth={1.7}
                           className={
-                            isActive ? "text-white" : "text-sea"
+                            isActive
+                              ? "text-white"
+                              : "text-sea"
                           }
                         />
 
                         {isActive && (
                           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/20">
-                            <Check size={11} strokeWidth={2.5} />
+                            <Check
+                              size={11}
+                              strokeWidth={2.5}
+                            />
                           </span>
                         )}
                       </div>
 
                       <p
-                        className={`mt-5 text-xl font-semibold tracking-[-0.04em] ${isActive ? "text-white" : "text-dark-cerulean"
-                          }`}
+                        className={`mt-5 text-xl font-semibold tracking-[-0.04em] ${
+                          isActive
+                            ? "text-white"
+                            : "text-dark-cerulean"
+                        }`}
                       >
                         {option.label}
                       </p>
 
                       <p
-                        className={`mt-1 text-[11px] ${isActive ? "text-white/70" : "text-muted"
-                          }`}
+                        className={`mt-1 text-[11px] ${
+                          isActive
+                            ? "text-white/70"
+                            : "text-muted"
+                        }`}
                       >
                         {option.description}
                       </p>
@@ -243,32 +296,42 @@ export default function FleetRecommendationSection({
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 {journeyTypes.map((journey) => {
                   const Icon = journey.icon;
-                  const isActive = selectedJourney === journey.id;
+
+                  const isActive =
+                    selectedJourney === journey.id;
 
                   return (
                     <button
                       key={journey.id}
                       type="button"
-                      onClick={() => setSelectedJourney(journey.id)}
-                      className={`flex min-h-16 items-center gap-4 rounded-[18px] border px-4 text-left transition-all duration-300 ${isActive
+                      onClick={() =>
+                        setSelectedJourney(journey.id)
+                      }
+                      className={`flex min-h-16 items-center gap-4 rounded-[18px] border px-4 text-left transition-all duration-300 ${
+                        isActive
                           ? "border-sea bg-sea/[0.07]"
                           : "border-border bg-background hover:border-sea/40"
-                        }`}
+                      }`}
                     >
                       <span
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${isActive
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
+                          isActive
                             ? "bg-sea text-white"
                             : "bg-sea/10 text-sea"
-                          }`}
+                        }`}
                       >
-                        <Icon size={18} strokeWidth={1.7} />
+                        <Icon
+                          size={18}
+                          strokeWidth={1.7}
+                        />
                       </span>
 
                       <span
-                        className={`text-sm font-semibold ${isActive
+                        className={`text-sm font-semibold ${
+                          isActive
                             ? "text-sea"
                             : "text-dark-cerulean"
-                          }`}
+                        }`}
                       >
                         {journey.label}
                       </span>
@@ -295,18 +358,20 @@ export default function FleetRecommendationSection({
               />
 
               <p className="text-xs leading-5 text-muted">
-                This is a general recommendation based on your group size.
-                Luggage requirements, route and trip duration may affect the
-                ideal vehicle choice.
+                This is a general recommendation based on your
+                group size. Luggage requirements, route and trip
+                duration may affect the ideal vehicle choice.
               </p>
             </div>
           </div>
 
           {/* Right: Recommendation */}
           <div className="relative min-h-[600px] overflow-hidden bg-dark-cerulean lg:min-h-full">
-            {/* Background Image */}
             <Image
-              src={recommendation.featuredImage ?? "/images/placeholders/fleet-category.jpg"}
+              src={
+                recommendation.featuredImage ??
+                "/images/placeholders/fleet-category.jpg"
+              }
               alt={`${recommendation.name} recommended chauffeur-driven fleet in Kerala`}
               fill
               className="object-cover transition-transform duration-1000"
@@ -379,6 +444,7 @@ export default function FleetRecommendationSection({
                           className="text-light-sea-green"
                         />
 
+                        {vehicle.name} ·{" "}
                         {vehicle.seatingCapacity} seats
                       </span>
                     ))}
@@ -388,8 +454,8 @@ export default function FleetRecommendationSection({
 
               {/* Actions */}
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-                <a
-                  href={`#${recommendation.slug}`}
+                <Link
+                  href={`/fleet/${recommendation.slug}`}
                   className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-sea px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-light-sea-green"
                 >
                   Explore {recommendation.name}
@@ -398,10 +464,10 @@ export default function FleetRecommendationSection({
                     size={16}
                     className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                   />
-                </a>
+                </Link>
 
                 <Link
-                  href={`/quick-quote?fleet=${recommendation.slug}&journey=${selectedJourney}`}
+                  href={`/contact`}
                   className="group inline-flex h-14 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-white/35 hover:bg-white/15"
                 >
                   Get Quick Quote
@@ -424,8 +490,9 @@ export default function FleetRecommendationSection({
             </p>
 
             <p className="mt-1 text-sm leading-6 text-muted">
-              Share your group size, luggage requirements and travel plans. Our
-              team can recommend the most suitable vehicle for your journey.
+              Share your group size, luggage requirements and travel
+              plans. Our team can recommend the most suitable vehicle
+              for your journey.
             </p>
           </div>
 

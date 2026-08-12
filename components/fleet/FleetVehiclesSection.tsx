@@ -307,7 +307,7 @@ function VehicleCard({
           </Link>
 
           <Link
-            href={`/quick-quote?vehicle=${vehicle.slug}`}
+            href={`/contact`}
             className={`group/quote inline-flex h-13 items-center justify-center gap-2 rounded-full border px-6 text-sm font-semibold transition-all duration-300 ${isDarkSection
                 ? "border-white/15 bg-white/5 text-white hover:border-sea hover:bg-sea"
                 : "border-border bg-white text-dark-cerulean hover:border-sea hover:text-sea"

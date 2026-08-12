@@ -19,7 +19,7 @@ const fleetCategories = [
         title: "Force Urbania",
         description:
             "Premium chauffeur-driven travel with spacious interiors, reclining seating and exceptional comfort for families, groups and corporate journeys.",
-        image: "/images/home/fleet-1.jpg",
+        image: "/images/home/urbania.avif",
         href: "/fleet/force-urbania",
         seating: "10 · 12 · 17 seats",
         features: [
@@ -43,7 +43,7 @@ const fleetCategories = [
         title: "Force Traveller",
         description:
             "Reliable and comfortable group mobility for family tours, corporate outings, events and long-distance journeys throughout Kerala.",
-        image: "/images/home/fleet-2.jpg",
+        image: "/images/home/tempo.webp",
         href: "/fleet/force-traveller",
         seating: "12 · 17 · 26 seats",
         features: [
@@ -67,7 +67,7 @@ const fleetCategories = [
         title: "Executive Sedans",
         description:
             "Refined private mobility for airport transfers, corporate delegates, couples and comfortable intercity travel.",
-        image: "/images/home/fleet-3.jpg",
+        image: "/images/home/executive-sedan.webp",
         href: "/fleet/executive-sedans",
         seating: "Up to 4+1 seats",
         features: [
@@ -175,7 +175,8 @@ function FleetCard({
     onMouseEnter,
 }: FleetCardProps) {
     return (
-        <article
+        <Link
+            href={fleet.href}
             onMouseEnter={onMouseEnter}
             className={`group relative min-h-[400px] md:min-h-[560px] overflow-hidden rounded-[28px] bg-dark-cerulean transition-[flex] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] lg:min-h-0 ${!hasHoveredCard
                 ? "lg:flex-[1]"
@@ -227,13 +228,11 @@ function FleetCard({
                     </p>
                 </div>
 
-                <Link
-                    href={fleet.href}
-                    aria-label={`Explore ${fleet.title}`}
+                <span
                     className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:border-sea group-hover:bg-sea"
                 >
                     <ArrowUpRight size={18} />
-                </Link>
+                </span>
             </div>
 
             {/* Bottom Content */}
@@ -286,6 +285,6 @@ function FleetCard({
                     </div>
                 </div>
             </div>
-        </article>
+        </Link>
     );
 }

@@ -21,8 +21,8 @@ const services = [
     shortTitle: "Hourly & Daily",
     description:
       "Flexible chauffeur-driven rentals for local journeys, weddings, events, business meetings and full-day travel across Kerala.",
-    image: "/images/home/rental-1.jpg",
-    href: "/rental-services/hourly-daily",
+    image: "/images/home/hourly.webp",
+    href: "/rental-services",
     meta: "Flexible duration",
   },
   {
@@ -33,8 +33,8 @@ const services = [
     shortTitle: "Intercity Travel",
     description:
       "Comfortable one-way and round-trip journeys across Kerala and neighbouring states, professionally driven from pickup to destination.",
-    image: "/images/home/rental-2.jpg",
-    href: "/rental-services/intercity",
+    image: "/images/home/intercity.webp",
+    href: "/rental-services",
     meta: "One-way · Round-trip",
   },
   {
@@ -45,8 +45,8 @@ const services = [
     shortTitle: "Airport Transfers",
     description:
       "Reliable chauffeur-driven airport pickups and drops connecting Cochin, Calicut and Trivandrum airports with destinations across Kerala.",
-    image: "/images/home/rental-3.jpg",
-    href: "/rental-services/airport-transfers",
+    image: "/images/home/airport.webp",
+    href: "/rental-services",
     meta: "COK · CCJ · TRV",
   },
   {
@@ -57,7 +57,7 @@ const services = [
     shortTitle: "Corporate Mobility",
     description:
       "Dedicated chauffeur-driven fleet solutions for companies, hotels and business teams through monthly, quarterly and yearly agreements.",
-    image: "/images/home/rental-4.jpg",
+    image: "/images/home/corporate.webp",
     href: "/corporate-leases",
     meta: "Monthly · Quarterly · Yearly",
   },

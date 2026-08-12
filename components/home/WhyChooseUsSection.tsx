@@ -21,7 +21,7 @@ const benefits = [
     title: "Professional Chauffeurs",
     description:
       "Travel with experienced, courteous drivers who know Kerala's roads, destinations and routes — ensuring every journey feels safe, comfortable and effortless.",
-    image: "/images/home/why-1.png",
+    image: "/images/home/why-choose-2.webp",
     icon: ShieldCheck,
   },
   {
@@ -31,7 +31,7 @@ const benefits = [
     title: "Premium, Well-Maintained Fleet",
     description:
       "From executive sedans to spacious Force Urbania and Traveller vehicles, every vehicle is carefully maintained for comfort, cleanliness and dependable travel.",
-    image: "/images/home/why-2.png",
+    image: "/images/home/why-choose-1.webp",
     icon: CarFront,
   },
   {
@@ -41,7 +41,7 @@ const benefits = [
     title: "Journeys Built Around You",
     description:
       "Airport transfers, intercity journeys, family holidays or corporate travel — every trip is planned around your schedule, group size and individual requirements.",
-    image: "/images/home/why-3.png",
+    image: "/images/home/why-choose-3.webp",
     icon: Map,
   },
   {
@@ -51,7 +51,7 @@ const benefits = [
     title: "24/7 On-Road Assistance",
     description:
       "From your first pickup to the final drop-off, our team remains available to help with route changes, travel coordination and unexpected requirements.",
-    image: "/images/home/why-4.svg",
+    image: "/images/home/why-choose-4.webp",
     icon: Clock3,
   },
 ];
@@ -121,7 +121,7 @@ export default function WhyChooseEzoraSection() {
             </p>
 
             <Link
-              href="/quick-quote"
+              href="/contact"
               className="group mt-5 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-dark-cerulean px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-greenish-blue sm:w-auto sm:self-start"
             >
               Get Quick Quote
@@ -235,7 +235,7 @@ export default function WhyChooseEzoraSection() {
                 </div>
 
                 <Link
-                  href="/quick-quote"
+                  href="/contact"
                   className="group flex h-12 shrink-0 items-center justify-center gap-2 rounded-full bg-dark-cerulean px-6 text-sm font-semibold text-white transition-colors duration-300 hover:bg-greenish-blue"
                 >
                   Get Quick Quote
@@ -328,7 +328,8 @@ function DesktopBenefitRow({
         </div>
 
         {/* Arrow */}
-        <div
+        <Link
+          href={`/packages`}
           className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-500 ${
             isActive
               ? "rotate-0 border-sea bg-sea text-white"
@@ -336,7 +337,7 @@ function DesktopBenefitRow({
           }`}
         >
           <ArrowUpRight size={17} />
-        </div>
+        </Link>
       </div>
     </button>
   );

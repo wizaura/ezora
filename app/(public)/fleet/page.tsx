@@ -4,17 +4,31 @@ import FleetIntroductionSection from "@/components/fleet/FleetIntroductionSectio
 import FleetRecommendationSection from "@/components/fleet/FleetRecommendationSection";
 import FleetVehiclesSection from "@/components/fleet/FleetVehiclesSection";
 import WhyChooseFleetSection from "@/components/fleet/WhyChooseFleetSection";
-import { fleetCategories } from "@/data/fleet";
+
 import { fleetFAQs } from "@/data/fleet-faqs";
 import { FleetCategoryService } from "@/services/fleet-category.service";
 
 export default async function FleetPage() {
-
-
     const activeCategories =
         await FleetCategoryService.getPublicCategories();
 
-    console.log(activeCategories,'act')
+    const serializedCategories = activeCategories.map((category) => ({
+        ...category,
+
+        vehicles: category.vehicles.map((vehicle) => ({
+            ...vehicle,
+
+            standardRate:
+                vehicle.standardRate != null
+                    ? Number(vehicle.standardRate)
+                    : null,
+
+            corporateRate:
+                vehicle.corporateRate != null
+                    ? Number(vehicle.corporateRate)
+                    : null,
+        })),
+    }));
 
     return (
         <>
@@ -32,11 +46,23 @@ export default async function FleetPage() {
                 ]}
             />
 
-            <FleetIntroductionSection categories={activeCategories} />
-            <FleetVehiclesSection categories={activeCategories} />
-            <FleetRecommendationSection categories={activeCategories} />
+            <FleetIntroductionSection
+                categories={serializedCategories}
+            />
+
+            <FleetVehiclesSection
+                categories={serializedCategories}
+            />
+
+            <FleetRecommendationSection
+                categories={serializedCategories}
+            />
+
             <WhyChooseFleetSection />
-            <FleetFAQSection faqs={fleetFAQs} />
+
+            <FleetFAQSection
+                faqs={fleetFAQs}
+            />
         </>
     );
 }

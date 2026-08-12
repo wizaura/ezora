@@ -104,7 +104,7 @@ export default function CorporateLeaseEnquirySection() {
         ${formData.message}
     `;
 
-    const url = `https://wa.me/919747827371?text=${encodeURIComponent(
+    const url = `https://wa.me/919037227941?text=${encodeURIComponent(
       text
     )}`;
 

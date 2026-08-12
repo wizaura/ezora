@@ -94,7 +94,7 @@ export default async function FleetCategoryPage({
                 vehicles={category.vehicles}
             />
 
-            <CategoryFAQ category={category} />
+            <CategoryFAQ categoryName={category.name} />
         </>
     );
 }

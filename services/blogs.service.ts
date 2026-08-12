@@ -104,6 +104,10 @@ export class BlogService {
         );
     }
 
+    static async getLatestPublished(limit = 3) {
+        return BlogRepository.findLatestPublished(limit);
+    }
+
     static async getPublished() {
         return BlogRepository.findPublished();
     }

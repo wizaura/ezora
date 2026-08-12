@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaWhatsapp } from "react-icons/fa";
+import WhatsAppButton from "../common/WhatsappButton";
 
 const navLinks = [
     {
@@ -144,16 +145,15 @@ export default function Navbar() {
 
                     {/* Desktop Actions */}
                     <div className="flex flex-row gap-4">
-                        <a
-                            href="#"
+                        <p
                             className={`flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 ${isScrolled
                                 ? "border-border text-dark-cerulean hover:border-sea hover:bg-sea/10"
                                 : "border-white/20 text-white hover:border-white/40 hover:bg-white/10"
                                 }`}
                             aria-label="Chat on WhatsApp"
                         >
-                            <FaWhatsapp size={18} strokeWidth={1.8} />
-                        </a>
+                            <WhatsAppButton size={20} className={`${isScrolled ? "text-dark-cerulean" : ""}`} />
+                        </p>
                         <div className="hidden items-center gap-3 lg:flex">
 
                             <Link

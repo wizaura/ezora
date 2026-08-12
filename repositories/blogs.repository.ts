@@ -122,6 +122,18 @@ export class BlogRepository {
         };
     }
 
+    static async findLatestPublished(limit = 3) {
+        return prisma.blog.findMany({
+            where: {
+                isPublished: true,
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+            take: limit,
+        });
+    }
+
     static async findRelated(
         category: string,
         blogId: string

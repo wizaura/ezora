@@ -1,53 +1,21 @@
-import Image from "next/image";
 import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Clock3,
-} from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, Clock3 } from "lucide-react";
+import { Blog } from "@/types/blogs.type";
 
-const blogs = [
-  {
-    id: "kerala-travel-guide",
-    title: "How to Plan the Perfect Kerala Trip: A Complete Travel Guide",
-    excerpt:
-      "From misty hill stations and wildlife escapes to tranquil backwaters and tropical beaches, discover how to plan a Kerala journey around your time, interests and travel style.",
-    category: "Kerala Travel Guide",
-    date: "July 12, 2026",
-    readingTime: "8 min read",
-    image: "/images/home/blog-2.jpg",
-    href: "/blog/how-to-plan-the-perfect-kerala-trip",
-    featured: true,
-  },
-  {
-    id: "best-time-kerala",
-    title: "Best Time to Visit Kerala: Weather, Seasons & Travel Tips",
-    excerpt:
-      "Understand Kerala's seasons and discover the ideal time to visit based on weather, destinations and the experiences you want to enjoy.",
-    category: "Travel Tips",
-    date: "July 8, 2026",
-    readingTime: "6 min read",
-    image: "/images/home/blog-1.jpg",
-    href: "/blog/best-time-to-visit-kerala",
-    featured: false,
-  },
-  {
-    id: "urbania-vs-traveller",
-    title: "Force Urbania vs Traveller: Which Is Better for Group Travel?",
-    excerpt:
-      "Compare seating, comfort, luggage capacity and journey type to choose the right chauffeur-driven vehicle for your Kerala group trip.",
-    category: "Fleet Guide",
-    date: "July 3, 2026",
-    readingTime: "5 min read",
-    image: "/images/home/blog-3.jpg",
-    href: "/blog/force-urbania-vs-traveller-kerala",
-    featured: false,
-  },
-];
+type LatestBlogsSectionProps = {
+  blogs: Blog[];
+};
 
-export default function LatestBlogsSection() {
-  const featuredBlog = blogs.find((blog) => blog.featured);
-  const secondaryBlogs = blogs.filter((blog) => !blog.featured);
+export default function LatestBlogsSection({
+  blogs,
+}: LatestBlogsSectionProps) {
+  if (!blogs.length) {
+    return null;
+  }
+
+  const featuredBlog = blogs[0];
+  const secondaryBlogs = blogs.slice(1);
 
   if (!featuredBlog) return null;
 
@@ -84,7 +52,7 @@ export default function LatestBlogsSection() {
             </p>
 
             <Link
-              href="/blog"
+              href="/blogs"
               className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-dark-cerulean"
             >
               View all articles
@@ -116,7 +84,7 @@ export default function LatestBlogsSection() {
         {/* Bottom Mobile CTA */}
         <div className="mt-8 flex justify-center lg:hidden">
           <Link
-            href="/blog"
+            href="/blogs"
             className="group inline-flex h-13 items-center justify-center gap-3 rounded-full bg-dark-cerulean px-7 text-sm font-semibold text-white transition-colors duration-300 hover:bg-greenish-blue"
           >
             Explore All Articles
@@ -132,14 +100,12 @@ export default function LatestBlogsSection() {
   );
 }
 
-type Blog = (typeof blogs)[number];
-
 function FeaturedBlogCard({ blog }: { blog: Blog }) {
   return (
-    <article className="group relative min-h-[560px] overflow-hidden rounded-[28px] bg-dark-cerulean lg:col-span-7 lg:min-h-[680px]">
+    <Link href={`/blogs/${blog.slug}`} className="group relative min-h-[560px] overflow-hidden rounded-[28px] bg-dark-cerulean lg:col-span-7 lg:min-h-[680px]">
       {/* Background Image */}
       <Image
-        src={blog.image}
+        src={blog.featuredImage || "/images/logos/logo-main-2.png"}
         alt={blog.title}
         fill
         className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
@@ -159,13 +125,12 @@ function FeaturedBlogCard({ blog }: { blog: Blog }) {
           Featured Article
         </span>
 
-        <Link
-          href={blog.href}
+        <span
           aria-label={`Read ${blog.title}`}
           className="flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur-md transition-all duration-300 group-hover:border-sea group-hover:bg-sea"
         >
           <ArrowUpRight size={19} />
-        </Link>
+        </span>
       </div>
 
       {/* Bottom Content */}
@@ -184,26 +149,8 @@ function FeaturedBlogCard({ blog }: { blog: Blog }) {
         <p className="mt-5 max-w-2xl text-sm leading-6 text-white/75 sm:text-base sm:leading-7">
           {blog.excerpt}
         </p>
-
-        {/* Bottom Meta */}
-        <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-          <span className="text-xs font-medium text-white/65">
-            {blog.date}
-          </span>
-
-          <span className="h-1 w-1 rounded-full bg-light-sea-green" />
-
-          <span className="flex items-center gap-2 text-xs font-medium text-white/65">
-            <Clock3
-              size={14}
-              className="text-light-sea-green"
-            />
-
-            {blog.readingTime}
-          </span>
-        </div>
       </div>
-    </article>
+    </Link>
   );
 }
 
@@ -212,12 +159,12 @@ function SecondaryBlogCard({ blog }: { blog: Blog }) {
     <article className="group grid min-h-[330px] overflow-hidden rounded-[28px] border border-border bg-surface-soft sm:grid-cols-[0.9fr_1.1fr] lg:min-h-0 lg:grid-cols-1 xl:grid-cols-[0.9fr_1.1fr]">
       {/* Image */}
       <Link
-        href={blog.href}
+        href={`/blogs/${blog.slug}`}
         className="relative min-h-[260px] overflow-hidden sm:min-h-0 lg:min-h-[220px] xl:min-h-0"
         aria-label={`Read ${blog.title}`}
       >
         <Image
-          src={blog.image}
+          src={blog.featuredImage || "/images/logos/logo-5.png"}
           alt={blog.title}
           fill
           className="object-cover transition-transform duration-[1000ms] ease-out group-hover:scale-105"
@@ -238,7 +185,7 @@ function SecondaryBlogCard({ blog }: { blog: Blog }) {
           {/* Title */}
           <h3 className="mt-3 text-2xl font-semibold leading-[1.08] tracking-[-0.04em] text-dark-cerulean">
             <Link
-              href={blog.href}
+              href={blog.slug}
               className="transition-colors duration-300 hover:text-greenish-blue"
             >
               {blog.title}
@@ -253,23 +200,9 @@ function SecondaryBlogCard({ blog }: { blog: Blog }) {
 
         {/* Bottom */}
         <div className="mt-6 flex items-center justify-between gap-4 border-t border-border pt-5">
-          <div className="flex items-center gap-3 text-[11px] font-medium text-muted">
-            <span>{blog.date}</span>
-
-            <span className="h-1 w-1 rounded-full bg-sea" />
-
-            <span className="flex items-center gap-1.5">
-              <Clock3
-                size={13}
-                className="text-sea"
-              />
-
-              {blog.readingTime}
-            </span>
-          </div>
 
           <Link
-            href={blog.href}
+            href={blog.slug}
             aria-label={`Read ${blog.title}`}
             className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-dark-cerulean transition-all duration-300 group-hover:border-sea group-hover:bg-sea group-hover:text-white"
           >

@@ -3,19 +3,17 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-import { FleetCategory } from "@/types/fleet.type";
-
 interface Props {
-    category: FleetCategory;
+  categoryName: string;
 }
 
 export default function CategoryFAQ({
-    category,
+    categoryName,
 }: Props) {
     const faqs = [
         {
-            question: `What makes ${category.name} a good choice?`,
-            answer: `Our ${category.name.toLowerCase()} fleet combines comfort, reliability and professional chauffeur service, making it ideal for both short and long-distance journeys across Kerala.`,
+            question: `What makes ${categoryName} a good choice?`,
+            answer: `Our ${categoryName.toLowerCase()} fleet combines comfort, reliability and professional chauffeur service, making it ideal for both short and long-distance journeys across Kerala.`,
         },
         {
             question: "Are all vehicles chauffeur-driven?",

@@ -115,11 +115,11 @@ export default function ContactOptions() {
                         </p>
 
                         <p className="mt-8 font-semibold text-dark-cerulean">
-                            +91 98765 43210
+                            +91 97465 88741
                         </p>
 
                         <Link
-                            href="tel:+919876543210"
+                            href="tel:+919746588741"
                             className="mt-8 inline-flex items-center gap-2 font-semibold text-sea"
                         >
                             Call Now
@@ -146,7 +146,7 @@ export default function ContactOptions() {
                         </p>
 
                         <Link
-                            href="https://wa.me/919876543210"
+                            href="https://wa.me/919037227941"
                             className="mt-8 inline-flex items-center gap-2 font-semibold text-light-sea-green"
                         >
                             Start Chat
@@ -172,9 +172,12 @@ export default function ContactOptions() {
                             response from our team.
                         </p>
 
-                        <p className="mt-8 font-semibold text-dark-cerulean">
-                            hello@ezoratours.com
-                        </p>
+                        <Link
+                            href="mailto:info@ezoratours.com"
+                            className="mt-8 inline-block font-semibold text-dark-cerulean transition-colors hover:text-sea"
+                        >
+                            info@ezoratours.com
+                        </Link>
 
                     </div>
 
@@ -199,9 +202,9 @@ export default function ContactOptions() {
                                 packages, vehicle rentals and corporate travel.
                             </p>
 
-                            <p className="mt-8 font-semibold">
+                            {/* <p className="mt-8 font-semibold">
                                 Kannur, Kerala
-                            </p>
+                            </p> */}
 
                         </div>
 

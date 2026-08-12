@@ -25,7 +25,7 @@ const tourCategories = [
     destinations: "Munnar · Thekkady · Alleppey",
     duration: "4–7 Days",
     image: "/images/home/rental-1.jpg",
-    href: "/kerala-tour-packages/honeymoon",
+    href: "/tourism/honeymoon",
     icon: Heart,
   },
   {
@@ -38,7 +38,7 @@ const tourCategories = [
     destinations: "Kochi · Munnar · Thekkady",
     duration: "5–8 Days",
     image: "/images/home/rental-2.jpg",
-    href: "/kerala-tour-packages/family",
+    href: "/tourism/family",
     icon: Users,
   },
   {
@@ -51,7 +51,7 @@ const tourCategories = [
     destinations: "Alleppey · Kumarakom",
     duration: "1–3 Days",
     image: "/images/home/rental-3.jpg",
-    href: "/kerala-tour-packages/houseboat",
+    href: "/tourism/houseboat",
     icon: Waves,
   },
 ];
@@ -121,7 +121,7 @@ export default function KeralaToursSection() {
             </p>
 
             <Link
-              href="/kerala-tour-packages"
+              href="/tourism"
               className="group mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white"
             >
               Explore all Kerala tours
@@ -170,11 +170,10 @@ export default function KeralaToursSection() {
               type="button"
               onClick={() => setActiveIndex(index)}
               aria-label={`Show ${tour.title}`}
-              className={`h-1.5 rounded-full transition-all duration-500 ${
-                activeIndex === index
-                  ? "w-10 bg-light-sea-green"
-                  : "w-4 bg-white/25 hover:bg-white/50"
-              }`}
+              className={`h-1.5 rounded-full transition-all duration-500 ${activeIndex === index
+                ? "w-10 bg-light-sea-green"
+                : "w-4 bg-white/25 hover:bg-white/50"
+                }`}
             />
           ))}
         </div>
@@ -199,7 +198,7 @@ export default function KeralaToursSection() {
           </div>
 
           <Link
-            href="/quick-quote"
+            href="/contact"
             className="group inline-flex h-14 w-full shrink-0 items-center justify-center gap-3 rounded-full bg-sea px-7 text-sm font-semibold text-white transition-colors duration-300 hover:bg-light-sea-green sm:w-auto"
           >
             Create My Itinerary
@@ -235,10 +234,10 @@ function AnimatedTourCard({
   };
 
   return (
-    <article
-      className={`group absolute overflow-hidden rounded-[28px] bg-dark-cerulean shadow-2xl transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        positionClasses[position as keyof typeof positionClasses]
-      }`}
+    <Link
+      href={`${tour.href}`}
+      className={`group absolute overflow-hidden rounded-[28px] bg-dark-cerulean shadow-2xl transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)] ${positionClasses[position as keyof typeof positionClasses]
+        }`}
     >
       {/* Card Image */}
       <Image
@@ -302,22 +301,20 @@ function AnimatedTourCard({
 
         {/* Title */}
         <h3
-          className={`font-semibold leading-[1.02] tracking-[-0.045em] text-white transition-all duration-700 ${
-            position === 1
-              ? "text-4xl xl:text-5xl"
-              : "text-2xl xl:text-3xl"
-          }`}
+          className={`font-semibold leading-[1.02] tracking-[-0.045em] text-white transition-all duration-700 ${position === 1
+            ? "text-4xl xl:text-5xl"
+            : "text-2xl xl:text-3xl"
+            }`}
         >
           {tour.title}
         </h3>
 
         {/* Description — Center Card Only */}
         <div
-          className={`grid transition-[grid-template-rows,opacity] duration-700 ${
-            position === 1
-              ? "grid-rows-[1fr] opacity-100"
-              : "grid-rows-[0fr] opacity-0"
-          }`}
+          className={`grid transition-[grid-template-rows,opacity] duration-700 ${position === 1
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0"
+            }`}
         >
           <div className="overflow-hidden">
             <p className="mt-4 max-w-xl text-sm leading-6 text-white/85">
@@ -327,8 +324,7 @@ function AnimatedTourCard({
         </div>
 
         {/* CTA */}
-        <Link
-          href={tour.href}
+        <span
           className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white"
         >
           Explore Package
@@ -336,12 +332,12 @@ function AnimatedTourCard({
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 transition-all duration-300 group-hover:bg-sea">
             <ArrowUpRight
               size={15}
-              className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              className="transition-transform duration-300"
             />
           </span>
-        </Link>
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }
 
@@ -349,7 +345,9 @@ function MobileTourCard({ tour }: { tour: Tour }) {
   const Icon = tour.icon;
 
   return (
-    <article className="group relative min-h-[480px] overflow-hidden rounded-[24px] bg-dark-cerulean sm:min-h-[520px]">
+    <Link
+      href={`${tour.href}`}
+      className="group relative min-h-[480px] overflow-hidden rounded-[24px] bg-dark-cerulean sm:min-h-[520px]">
       {/* Card Image */}
       <Image
         src={tour.image}
@@ -419,8 +417,7 @@ function MobileTourCard({ tour }: { tour: Tour }) {
         </p>
 
         {/* CTA */}
-        <Link
-          href={tour.href}
+        <span
           className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white"
         >
           Explore Package
@@ -431,8 +428,8 @@ function MobileTourCard({ tour }: { tour: Tour }) {
               className="text-light-sea-green"
             />
           </span>
-        </Link>
+        </span>
       </div>
-    </article>
+    </Link>
   );
 }

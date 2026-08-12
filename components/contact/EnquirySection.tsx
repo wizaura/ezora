@@ -279,20 +279,20 @@ export default function ContactEnquirySection() {
                                 <InfoItem
                                     icon={<Phone size={20} />}
                                     title="Phone"
-                                    value="+91 98765 43210"
+                                    value="+91 97465 88741"
                                 />
 
                                 <InfoItem
                                     icon={<Mail size={20} />}
                                     title="Email"
-                                    value="hello@ezoratours.com"
+                                    value="info@ezoratours.com"
                                 />
 
-                                <InfoItem
+                                {/* <InfoItem
                                     icon={<MapPin size={20} />}
                                     title="Office"
                                     value="Kannur, Kerala"
-                                />
+                                /> */}
 
                                 <InfoItem
                                     icon={<Clock3 size={20} />}

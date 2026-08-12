@@ -12,6 +12,7 @@ import {
     FaWhatsapp,
 } from "react-icons/fa";
 import Image from "next/image";
+import WhatsAppButton from "../common/WhatsappButton";
 
 const footerLinks = {
     explore: [
@@ -33,11 +34,11 @@ const footerLinks = {
         },
         {
             label: "Kerala Tour Packages",
-            href: "/kerala-tour-packages",
+            href: "/packages",
         },
         {
-            label: "Blog",
-            href: "/blog",
+            label: "Blogs",
+            href: "/blogs",
         },
         {
             label: "Contact Us",
@@ -58,44 +59,32 @@ const footerLinks = {
             label: "Executive Sedans",
             href: "/fleet/executive-sedans",
         },
-        {
-            label: "Airport Transfers",
-            href: "/rental-services/airport-transfers",
-        },
-        {
-            label: "Intercity Travel",
-            href: "/rental-services/intercity-travel",
-        },
-        {
-            label: "Hourly & Daily Rentals",
-            href: "/rental-services/hourly-daily-rentals",
-        },
     ],
 
     tours: [
         {
             label: "Kerala Honeymoon Packages",
-            href: "/kerala-tour-packages/honeymoon",
+            href: "/tourism/honeymoon",
         },
         {
             label: "Kerala Family Holidays",
-            href: "/kerala-tour-packages/family",
+            href: "/tourism/family",
         },
         {
             label: "Luxury Houseboat Escapes",
-            href: "/kerala-tour-packages/houseboat",
+            href: "/tourism/houseboat",
         },
         {
             label: "Munnar Tours",
-            href: "/kerala-tour-packages/munnar",
+            href: "/tourism/munnar",
         },
         {
             label: "Thekkady Tours",
-            href: "/kerala-tour-packages/thekkady",
+            href: "/tourism/thekkady",
         },
         {
             label: "Alleppey Tours",
-            href: "/kerala-tour-packages/alleppey",
+            href: "/tourism/alleppey",
         },
     ],
 };
@@ -152,18 +141,11 @@ export default function Footer() {
                             />
                         </Link>
 
-                        <a
-                            href="#"
-                            className="group inline-flex h-14 items-center justify-center gap-3 rounded-full border border-white/20 bg-white/5 px-7 text-sm font-semibold text-white transition-all duration-300 hover:border-white/35 hover:bg-white/10"
-                        >
-                            <FaWhatsapp
-                                size={18}
-                                strokeWidth={1.8}
-                                className="text-light-sea-green"
-                            />
-
-                            WhatsApp Us
-                        </a>
+                        <WhatsAppButton
+                            size={24}
+                            label="WhatsApp Us"
+                            className="h-14 rounded-full border border-white/20 bg-white/5 px-7 text-sm font-semibold text-accent transition-all duration-300 hover:border-white/35 hover:bg-white/10"
+                        />
                     </div>
                 </div>
 
@@ -191,7 +173,7 @@ export default function Footer() {
                         {/* Contact Details */}
                         <div className="mt-8 space-y-4">
                             <a
-                                href="tel:+910000000000"
+                                href="tel:+919746588741"
                                 className="group flex items-start gap-3 text-sm text-white/65 transition-colors hover:text-white"
                             >
                                 <Phone
@@ -200,7 +182,7 @@ export default function Footer() {
                                     className="mt-0.5 shrink-0 text-light-sea-green"
                                 />
 
-                                <span>+91 00000 00000</span>
+                                <span>+91 97465 88741</span>
                             </a>
 
                             <a
@@ -216,7 +198,7 @@ export default function Footer() {
                                 <span>info@ezoratours.com</span>
                             </a>
 
-                            <div className="flex items-start gap-3 text-sm leading-6 text-white/65">
+                            {/* <div className="flex items-start gap-3 text-sm leading-6 text-white/65">
                                 <MapPin
                                     size={17}
                                     strokeWidth={1.7}
@@ -226,7 +208,7 @@ export default function Footer() {
                                 <span>
                                     Kerala, India
                                 </span>
-                            </div>
+                            </div> */}
                         </div>
 
                         {/* Social Links */}

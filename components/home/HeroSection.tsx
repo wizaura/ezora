@@ -1,29 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import WhatsAppButton from "../common/WhatsappButton";
 
 export default function HeroSection() {
     return (
-        <section className="relative min-h-screen overflow-hidden bg-dark-cerulean">
+        <section className="relative min-h-screen overflow-hidde">
             {/* Static Background */}
             <Image
-                src="/images/home/hero.png"
+                src="/images/home/hero.webp"
                 alt="Premium chauffeur-driven fleet rental in Kerala"
                 fill
                 priority
                 className="object-cover"
                 sizes="100vw"
             />
-
-            {/* Animated Aurora */}
-            <AuroraAnimation />
-
-            {/* Dark overlays */}
-            <div className="pointer-events-none absolute inset-0 z-[2] bg-dark-cerulean/10" />
-
-            <div className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-r from-dark-cerulean/90 via-dark-cerulean/35 to-transparent" />
-
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-[45%] bg-gradient-to-t from-dark-cerulean/50 to-transparent" />
 
             {/* Hero Content */}
             <div className="relative z-10 mx-auto flex min-h-screen max-w-[1440px] items-center px-5 pb-16 pt-28 lg:px-8 lg:pt-32">
@@ -62,7 +54,7 @@ export default function HeroSection() {
                         </Link>
 
                         <Link
-                            href="/quick-quote"
+                            href="/contact"
                             className="group inline-flex h-14 items-center gap-3 rounded-full border border-white/25 bg-white/5 px-7 text-sm font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:border-white/40 hover:bg-white/10"
                         >
                             Get Quick Quote
@@ -97,32 +89,9 @@ export default function HeroSection() {
                         </span>
                     </div>
 
-                    <Link
-                        href="/contact"
-                        className="group flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
-                    >
-                        <MessageCircle size={16} />
-                        Speak with our travel team
-                    </Link>
+                    <WhatsAppButton label="Chat with our travel team" />
                 </div>
             </div>
         </section>
-    );
-}
-
-function AuroraAnimation() {
-    return (
-        <div
-            className="aurora-scene pointer-events-none absolute inset-0 z-[1] overflow-hidden"
-            aria-hidden="true"
-        >
-            <div className="aurora-curtain aurora-curtain-1" />
-            <div className="aurora-curtain aurora-curtain-2" />
-            <div className="aurora-curtain aurora-curtain-3" />
-            <div className="aurora-curtain aurora-curtain-4" />
-
-            <div className="aurora-pulse aurora-pulse-1" />
-            <div className="aurora-pulse aurora-pulse-2" />
-        </div>
     );
 }
