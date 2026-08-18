@@ -30,6 +30,18 @@ interface Props {
     distance: string;
     duration: string;
 
+    baseRate: number;
+    baseKm: number;
+
+    extraKm: number;
+    extraKmRate: number;
+    extraKmCharge: number;
+
+    driverAllowance: number;
+
+    subtotal: number;
+    tax: number;
+
     estimatedFare: number;
 }
 
@@ -48,6 +60,18 @@ export default function RentalCustomerEmail({
 
     distance,
     duration,
+
+    baseRate,
+    baseKm,
+
+    extraKm,
+    extraKmRate,
+    extraKmCharge,
+
+    driverAllowance,
+
+    subtotal,
+    tax,
 
     estimatedFare,
 }: Props) {
@@ -335,6 +359,125 @@ export default function RentalCustomerEmail({
                                 borderColor: "#E5E7EB",
                             }}
                         />
+
+                        <Section style={{ marginTop: "32px" }}>
+
+                            <Heading
+                                as="h3"
+                                style={{
+                                    color: "#0F3C5C",
+                                    fontSize: "20px",
+                                }}
+                            >
+                                Fare Breakdown
+                            </Heading>
+
+                            <table
+                                width="100%"
+                                cellPadding={10}
+                                style={{
+                                    borderCollapse: "collapse",
+                                    border: "1px solid #E5E7EB",
+                                }}
+                            >
+                                <tbody>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Base Vehicle Rate</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {baseRate.toLocaleString()}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Included Distance</strong>
+                                        </td>
+
+                                        <td>
+                                            {baseKm} km
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Extra Distance</strong>
+                                        </td>
+
+                                        <td>
+                                            {extraKm} km
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Extra KM Rate</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {extraKmRate.toLocaleString()} / km
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Extra KM Charge</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {extraKmCharge.toLocaleString()}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Driver Bata</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {driverAllowance.toLocaleString()}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Subtotal</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {subtotal.toLocaleString()}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Tax</strong>
+                                        </td>
+
+                                        <td>
+                                            Rs. {tax.toLocaleString()}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <strong>Total Estimated Fare</strong>
+                                        </td>
+
+                                        <td>
+                                            <strong>
+                                                Rs. {estimatedFare.toLocaleString()}
+                                            </strong>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </Section>
 
                         {/* Included */}
 

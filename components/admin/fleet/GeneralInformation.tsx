@@ -189,52 +189,6 @@ export default function GeneralInformation() {
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium">
-                        Standard Rate (₹ / Km)
-                    </label>
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        min={0}
-                        {...register("standardRate", {
-                            valueAsNumber: true,
-                        })}
-                        placeholder="18"
-                        className="w-full rounded-lg border px-4 py-3 outline-none focus:border-primary"
-                    />
-
-                    {errors.standardRate && (
-                        <p className="text-sm text-red-500">
-                            {errors.standardRate.message as string}
-                        </p>
-                    )}
-                </div>
-
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">
-                        Corporate Rate (₹ / Km)
-                    </label>
-
-                    <input
-                        type="number"
-                        step="0.01"
-                        min={0}
-                        {...register("corporateRate", {
-                            valueAsNumber: true,
-                        })}
-                        placeholder="16"
-                        className="w-full rounded-lg border px-4 py-3 outline-none focus:border-primary"
-                    />
-
-                    {errors.corporateRate && (
-                        <p className="text-sm text-red-500">
-                            {errors.corporateRate.message as string}
-                        </p>
-                    )}
-                </div>
-
-                <div className="space-y-2">
-                    <label className="text-sm font-medium">
                         Transmission
                     </label>
 

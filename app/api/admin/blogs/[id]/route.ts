@@ -70,6 +70,8 @@ export async function DELETE(
         const { id } =
             await params;
 
+        console.log(id,'id')
+
         await BlogService.delete(id);
 
         return ApiResponse.success(

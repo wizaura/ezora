@@ -37,6 +37,10 @@ const footerLinks = {
             href: "/packages",
         },
         {
+            label: "Kerala Tourism",
+            href: "/tourism",
+        },
+        {
             label: "Blogs",
             href: "/blogs",
         },
@@ -62,30 +66,30 @@ const footerLinks = {
     ],
 
     tours: [
-        {
-            label: "Kerala Honeymoon Packages",
-            href: "/tourism/honeymoon",
-        },
+        // {
+        //     label: "Kerala Honeymoon Packages",
+        //     href: "/tourism/honeymoon",
+        // },
         {
             label: "Kerala Family Holidays",
             href: "/tourism/family",
         },
-        {
-            label: "Luxury Houseboat Escapes",
-            href: "/tourism/houseboat",
-        },
+        // {
+        //     label: "Luxury Houseboat Escapes",
+        //     href: "/tourism/houseboat",
+        // },
         {
             label: "Munnar Tours",
             href: "/tourism/munnar",
         },
-        {
-            label: "Thekkady Tours",
-            href: "/tourism/thekkady",
-        },
-        {
-            label: "Alleppey Tours",
-            href: "/tourism/alleppey",
-        },
+        // {
+        //     label: "Thekkady Tours",
+        //     href: "/tourism/thekkady",
+        // },
+        // {
+        //     label: "Alleppey Tours",
+        //     href: "/tourism/alleppey",
+        // },
     ],
 };
 
@@ -260,7 +264,7 @@ export default function Footer() {
                         © {currentYear} Ezora Tours & Travels Kerala. All rights reserved.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    {/* <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
                         <Link
                             href="/privacy-policy"
                             className="text-xs text-white/40 transition-colors hover:text-white"
@@ -281,7 +285,7 @@ export default function Footer() {
                         >
                             Cancellation Policy
                         </Link>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Large Wordmark */}

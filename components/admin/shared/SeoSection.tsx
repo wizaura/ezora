@@ -82,30 +82,6 @@ export default function SeoSection() {
                     className="w-full resize-none rounded-lg border px-4 py-3 outline-none transition focus:border-primary"
                 />
             </div>
-
-            {/* Google Preview */}
-
-            <div className="rounded-xl border bg-gray-50 p-6">
-                <h3 className="mb-4 font-semibold">
-                    Google Search Preview
-                </h3>
-
-                <div className="space-y-1">
-                    <h4 className="text-lg font-medium text-blue-700">
-                        {seoTitle || "Vehicle SEO Title"}
-                    </h4>
-
-                    <p className="text-sm text-green-700">
-                        https://ezoratours.com/fleet/
-                        {slug || "vehicle"}
-                    </p>
-
-                    <p className="text-sm text-gray-600">
-                        {seoDescription ||
-                            "Your SEO description will appear here."}
-                    </p>
-                </div>
-            </div>
         </div>
     );
 }

@@ -82,8 +82,39 @@ model Vehicle {
 
   luggageCapacity    String
 
-  standardRate       Decimal? @db.Decimal(10,2)
-  corporateRate      Decimal? @db.Decimal(10,2)
+  customerBaseRate       Decimal @default(0) @db.Decimal(10, 2)
+
+  customerBaseKm         Int @default(100)
+
+  customerExtraKmRate    Decimal @default(0) @db.Decimal(10, 2)
+
+  customerDriverBata     Decimal @default(0) @db.Decimal(10, 2)
+
+  customerOvertimeRate   Decimal @default(350) @db.Decimal(10, 2)
+
+  b2bBaseRate            Decimal @default(0) @db.Decimal(10, 2)
+
+  b2bBaseKm              Int @default(100)
+
+  b2bExtraKmRate         Decimal @default(0) @db.Decimal(10, 2)
+
+  b2bDriverBata          Decimal @default(0) @db.Decimal(10, 2)
+
+  b2bOvertimeRate        Decimal @default(0) @db.Decimal(10, 2)
+
+  dutyStartTime          String @default("08:30")
+
+  dutyEndTime            String @default("19:00")
+
+  fuelIncluded           Boolean @default(true)
+
+  tollTreatment          CommercialTreatment @default(ACTUALS)
+
+  parkingTreatment       CommercialTreatment @default(ACTUALS)
+
+  ferryTreatment         CommercialTreatment @default(ACTUALS)
+
+  driverAccommodationTreatment CommercialTreatment @default(VENDOR)
 
   airConditioning    String?
 
@@ -222,6 +253,11 @@ model TourismCategory {
     featuredImage String?
     featuredImagePublicId String?
 
+    seoTitle String?
+    seoDescription String?
+
+    isFeatured Boolean @default(false)
+
     guides TourismGuide[]
 
     sortOrder Int @default(0)
@@ -350,4 +386,19 @@ enum PackageStatus {
   DRAFT
   PUBLISHED
   ARCHIVED
+}
+
+enum CommercialTreatment {
+
+  ACTUALS
+
+  INCLUDED
+
+  VENDOR
+
+  EZORA
+
+  CUSTOMER
+
+  NOT_APPLICABLE
 }

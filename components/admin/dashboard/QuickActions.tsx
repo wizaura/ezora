@@ -3,7 +3,6 @@ import {
   CarFront,
   Newspaper,
   Package,
-  ArrowUpRight,
 } from "lucide-react";
 
 const actions = [
@@ -22,11 +21,6 @@ const actions = [
     href: "/admin/blogs/new",
     icon: Newspaper,
   },
-  {
-    title: "View Website",
-    href: "/",
-    icon: ArrowUpRight,
-  },
 ];
 
 export default function QuickActions() {
@@ -36,7 +30,7 @@ export default function QuickActions() {
         Quick Actions
       </h3>
 
-      <div className="space-y-3">
+      <div className="space-y-3 grid grid-cols-4 gap-3">
         {actions.map((action) => {
           const Icon = action.icon;
 
@@ -44,7 +38,7 @@ export default function QuickActions() {
             <Link
               key={action.title}
               href={action.href}
-              className="flex items-center gap-4 rounded-xl border p-4 transition hover:bg-slate-50"
+              className="flex items-center gap-2 rounded-xl border p-4 transition hover:bg-slate-50"
             >
               <Icon
                 size={20}

@@ -23,6 +23,7 @@ import {
     RentalQuotationValidator,
 } from "@/validators/rental.validator";
 import { VehicleCategoryOption, VehicleOption } from "@/types/fleet.type";
+import GooglePlacesInput from "../common/GooglePlacesInput";
 
 type QuotePreview = {
     distance: string;
@@ -66,6 +67,7 @@ export default function RentalForm() {
         handleSubmit,
         reset,
         setValue,
+        watch,
         formState: { errors },
     } = useForm<RentalQuotationInput>({
         resolver: zodResolver(
@@ -74,7 +76,10 @@ export default function RentalForm() {
 
         defaultValues: {
             pickupLocation: "",
+            pickupPlaceId: "",
+
             dropLocation: "",
+            dropPlaceId: "",
 
             pickupDate: "",
             pickupTime: "",
@@ -147,6 +152,10 @@ export default function RentalForm() {
         }
     };
 
+    const pickupLocation = watch("pickupLocation");
+
+    const dropLocation = watch("dropLocation");
+
     return (
         <div className="overflow-hidden rounded-[32px] border border-border bg-white shadow-[0_30px_80px_rgba(7,48,66,0.08)]">
             <div className="border-b border-border bg-dark-cerulean px-8 py-8">
@@ -171,66 +180,129 @@ export default function RentalForm() {
             >
                 {/* Pickup */}
 
+                {/* Pickup Location */}
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-dark-cerulean">
                         Pickup Location
                     </label>
 
-                    <div className="relative">
-                        <MapPin
-                            size={20}
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
-                        />
+                    <GooglePlacesInput
+                        onChange={(value, placeId) => {
+                            console.log("PICKUP FROM GOOGLE:", {
+                                value,
+                                placeId,
+                            });
 
-                        <input
-                            {...register(
-                                "pickupLocation"
-                            )}
-                            placeholder="Enter pickup location"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
-                        />
-                    </div>
+                            setValue(
+                                "pickupLocation",
+                                value,
+                                {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            );
+
+                            setValue(
+                                "pickupPlaceId",
+                                placeId ?? "",
+                                {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            );
+                        }}
+                        placeholder="Search pickup location"
+                        error={errors.pickupLocation?.message}
+                    />
+
+                    {/* Selected Pickup */}
+                    {pickupLocation && (
+                        <div className="flex items-start gap-3 rounded-xl border border-sea/15 bg-sea/[0.04] px-4 py-3">
+                            <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sea/10 text-sea">
+                                <MapPin size={14} />
+                            </div>
+
+                            <div className="min-w-0">
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sea">
+                                    Selected pickup
+                                </p>
+
+                                <p className="mt-1 text-sm leading-6 text-dark-cerulean">
+                                    {pickupLocation}
+                                </p>
+                            </div>
+                        </div>
+                    )}
 
                     {errors.pickupLocation && (
                         <p className="text-sm text-red-500">
-                            {
-                                errors
-                                    .pickupLocation
-                                    .message
-                            }
+                            {errors.pickupLocation.message}
                         </p>
                     )}
                 </div>
 
-                {/* Drop */}
 
+                {/* Drop Location */}
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-dark-cerulean">
                         Drop Location
                     </label>
 
-                    <div className="relative">
-                        <MapPin
-                            size={20}
-                            className="absolute left-5 top-1/2 -translate-y-1/2 text-sea"
-                        />
+                    <GooglePlacesInput
+                        onChange={(value, placeId) => {
+                            console.log("DROP FROM GOOGLE:", {
+                                value,
+                                placeId,
+                            });
 
-                        <input
-                            {...register(
-                                "dropLocation"
-                            )}
-                            placeholder="Enter destination"
-                            className="h-14 w-full rounded-2xl border border-border bg-surface-soft pl-14 pr-5 outline-none transition-all focus:border-sea focus:bg-white focus:ring-4 focus:ring-sea/10"
-                        />
-                    </div>
+                            setValue(
+                                "dropLocation",
+                                value,
+                                {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            );
+
+                            setValue(
+                                "dropPlaceId",
+                                placeId ?? "",
+                                {
+                                    shouldValidate: true,
+                                    shouldDirty: true,
+                                    shouldTouch: true,
+                                }
+                            );
+                        }}
+                        placeholder="Search destination"
+                        error={errors.dropLocation?.message}
+                    />
+
+                    {/* Selected Drop */}
+                    {dropLocation && (
+                        <div className="flex items-start gap-3 rounded-xl border border-sea/15 bg-sea/[0.04] px-4 py-3">
+                            <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sea/10 text-sea">
+                                <MapPin size={14} />
+                            </div>
+
+                            <div className="min-w-0">
+                                <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-sea">
+                                    Selected destination
+                                </p>
+
+                                <p className="mt-1 text-sm leading-6 text-dark-cerulean">
+                                    {dropLocation}
+                                </p>
+                            </div>
+                        </div>
+                    )}
 
                     {errors.dropLocation && (
                         <p className="text-sm text-red-500">
-                            {
-                                errors
-                                    .dropLocation
-                                    .message
-                            }
+                            {errors.dropLocation.message}
                         </p>
                     )}
                 </div>

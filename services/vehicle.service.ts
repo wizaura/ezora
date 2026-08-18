@@ -63,60 +63,197 @@ export class VehicleService {
     }
 
     static async create(dto: VehicleDto) {
-        const slugExists = await VehicleRepository.findBySlug(dto.slug);
+        const slugExists =
+            await VehicleRepository.findBySlug(dto.slug);
 
         if (slugExists) {
             throw new Error("Slug already exists");
         }
 
-        const category = await FleetCategoryRepository.exists(dto.categoryId);
+        const category =
+            await FleetCategoryRepository.exists(
+                dto.categoryId
+            );
 
         if (!category) {
             throw new Error("Fleet category not found");
         }
 
         const data: Prisma.VehicleCreateInput = {
+            /* ------------------------------------------------------------------ */
+            /* General Information                                                */
+            /* ------------------------------------------------------------------ */
+
             name: dto.name,
             slug: dto.slug,
 
             tagline: dto.tagline,
 
-            shortDescription: dto.shortDescription,
-            description: dto.description,
+            shortDescription:
+                dto.shortDescription,
 
-            featuredImage: dto.featuredImage,
-            featuredImagePublicId: dto.featuredImagePublicId,
+            description:
+                dto.description,
 
-            heroImage: dto.heroImage,
-            heroImagePublicId: dto.heroImagePublicId,
 
-            seatingCapacity: dto.seatingCapacity,
-            luggageCapacity: dto.luggageCapacity,
+            /* ------------------------------------------------------------------ */
+            /* Images                                                              */
+            /* ------------------------------------------------------------------ */
 
-            standardRate: dto.standardRate,
-            corporateRate: dto.corporateRate,
+            featuredImage:
+                dto.featuredImage,
 
-            airConditioning: dto.airConditioning,
-            transmission: dto.transmission,
-            fuelType: dto.fuelType,
+            featuredImagePublicId:
+                dto.featuredImagePublicId,
 
-            chauffeurDriven: dto.chauffeurDriven,
+            heroImage:
+                dto.heroImage,
 
-            whatsappMessage: dto.whatsappMessage,
+            heroImagePublicId:
+                dto.heroImagePublicId,
 
-            isFeatured: dto.isFeatured,
-            isActive: dto.isActive,
 
-            sortOrder: dto.sortOrder,
+            /* ------------------------------------------------------------------ */
+            /* Capacity                                                            */
+            /* ------------------------------------------------------------------ */
 
-            seoTitle: dto.seoTitle,
-            seoDescription: dto.seoDescription,
+            seatingCapacity:
+                dto.seatingCapacity,
+
+            luggageCapacity:
+                dto.luggageCapacity,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Customer / Market Tariff                                            */
+            /* ------------------------------------------------------------------ */
+
+            customerBaseRate:
+                dto.customerBaseRate,
+
+            customerBaseKm:
+                dto.customerBaseKm,
+
+            customerExtraKmRate:
+                dto.customerExtraKmRate,
+
+            customerDriverBata:
+                dto.customerDriverBata,
+
+            customerOvertimeRate:
+                dto.customerOvertimeRate,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Ezora B2B / Procurement                                             */
+            /* ------------------------------------------------------------------ */
+
+            b2bBaseRate:
+                dto.b2bBaseRate,
+
+            b2bBaseKm:
+                dto.b2bBaseKm,
+
+            b2bExtraKmRate:
+                dto.b2bExtraKmRate,
+
+            b2bDriverBata:
+                dto.b2bDriverBata,
+
+            b2bOvertimeRate:
+                dto.b2bOvertimeRate,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Operating Rules                                                     */
+            /* ------------------------------------------------------------------ */
+
+            dutyStartTime:
+                dto.dutyStartTime,
+
+            dutyEndTime:
+                dto.dutyEndTime,
+
+            fuelIncluded:
+                dto.fuelIncluded,
+
+            tollTreatment:
+                dto.tollTreatment,
+
+            parkingTreatment:
+                dto.parkingTreatment,
+
+            ferryTreatment:
+                dto.ferryTreatment,
+
+            driverAccommodationTreatment:
+                dto.driverAccommodationTreatment,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Vehicle Specifications                                              */
+            /* ------------------------------------------------------------------ */
+
+            airConditioning:
+                dto.airConditioning,
+
+            transmission:
+                dto.transmission,
+
+            fuelType:
+                dto.fuelType,
+
+            chauffeurDriven:
+                dto.chauffeurDriven,
+
+
+            /* ------------------------------------------------------------------ */
+            /* WhatsApp                                                            */
+            /* ------------------------------------------------------------------ */
+
+            whatsappMessage:
+                dto.whatsappMessage,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Status                                                              */
+            /* ------------------------------------------------------------------ */
+
+            isFeatured:
+                dto.isFeatured,
+
+            isActive:
+                dto.isActive,
+
+            sortOrder:
+                dto.sortOrder,
+
+
+            /* ------------------------------------------------------------------ */
+            /* SEO                                                                 */
+            /* ------------------------------------------------------------------ */
+
+            seoTitle:
+                dto.seoTitle,
+
+            seoDescription:
+                dto.seoDescription,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Category                                                            */
+            /* ------------------------------------------------------------------ */
 
             category: {
                 connect: {
                     id: dto.categoryId,
                 },
             },
+
+
+            /* ------------------------------------------------------------------ */
+            /* Features                                                            */
+            /* ------------------------------------------------------------------ */
 
             features: {
                 create: dto.features.map((feature) => ({
@@ -125,6 +262,11 @@ export class VehicleService {
                 })),
             },
 
+
+            /* ------------------------------------------------------------------ */
+            /* Specifications                                                      */
+            /* ------------------------------------------------------------------ */
+
             specifications: {
                 create: dto.specifications.map((spec) => ({
                     label: spec.label,
@@ -132,6 +274,11 @@ export class VehicleService {
                     sortOrder: spec.sortOrder,
                 })),
             },
+
+
+            /* ------------------------------------------------------------------ */
+            /* Gallery                                                             */
+            /* ------------------------------------------------------------------ */
 
             gallery: {
                 create: dto.gallery.map((image) => ({
@@ -146,60 +293,214 @@ export class VehicleService {
         return VehicleRepository.create(data);
     }
 
-    static async update(id: string, dto: VehicleDto) {
-        const vehicle = await VehicleRepository.findById(id);
+
+    static async update(
+        id: string,
+        dto: VehicleDto
+    ) {
+        const vehicle =
+            await VehicleRepository.findById(id);
 
         if (!vehicle) {
             throw new Error("Vehicle not found");
         }
 
-        const category = await FleetCategoryRepository.exists(dto.categoryId);
+
+        /* ---------------------------------------------------------------------- */
+        /* Validate category                                                     */
+        /* ---------------------------------------------------------------------- */
+
+        const category =
+            await FleetCategoryRepository.exists(
+                dto.categoryId
+            );
 
         if (!category) {
             throw new Error("Fleet category not found");
         }
 
+
+        /* ---------------------------------------------------------------------- */
+        /* Validate slug                                                         */
+        /* ---------------------------------------------------------------------- */
+
         if (dto.slug !== vehicle.slug) {
-            const slugExists = await VehicleRepository.findBySlug(dto.slug);
+            const slugExists =
+                await VehicleRepository.findBySlug(
+                    dto.slug
+                );
 
             if (slugExists) {
                 throw new Error("Slug already exists");
             }
         }
 
+
         const data: Prisma.VehicleUpdateInput = {
+
+            /* ------------------------------------------------------------------ */
+            /* General Information                                                */
+            /* ------------------------------------------------------------------ */
+
             name: dto.name,
             slug: dto.slug,
 
             tagline: dto.tagline,
 
-            shortDescription: dto.shortDescription,
-            description: dto.description,
+            shortDescription:
+                dto.shortDescription,
 
-            featuredImage: dto.featuredImage,
-            heroImage: dto.heroImage,
+            description:
+                dto.description,
 
-            seatingCapacity: dto.seatingCapacity,
-            luggageCapacity: dto.luggageCapacity,
 
-            standardRate: dto.standardRate,
-            corporateRate: dto.corporateRate,
+            /* ------------------------------------------------------------------ */
+            /* Images                                                              */
+            /* ------------------------------------------------------------------ */
 
-            airConditioning: dto.airConditioning,
-            transmission: dto.transmission,
-            fuelType: dto.fuelType,
+            featuredImage:
+                dto.featuredImage,
 
-            chauffeurDriven: dto.chauffeurDriven,
+            featuredImagePublicId:
+                dto.featuredImagePublicId,
 
-            whatsappMessage: dto.whatsappMessage,
+            heroImage:
+                dto.heroImage,
 
-            isFeatured: dto.isFeatured,
-            isActive: dto.isActive,
+            heroImagePublicId:
+                dto.heroImagePublicId,
 
-            sortOrder: dto.sortOrder,
 
-            seoTitle: dto.seoTitle,
-            seoDescription: dto.seoDescription,
+            /* ------------------------------------------------------------------ */
+            /* Capacity                                                            */
+            /* ------------------------------------------------------------------ */
+
+            seatingCapacity:
+                dto.seatingCapacity,
+
+            luggageCapacity:
+                dto.luggageCapacity,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Customer / Market Tariff                                            */
+            /* ------------------------------------------------------------------ */
+
+            customerBaseRate:
+                dto.customerBaseRate,
+
+            customerBaseKm:
+                dto.customerBaseKm,
+
+            customerExtraKmRate:
+                dto.customerExtraKmRate,
+
+            customerDriverBata:
+                dto.customerDriverBata,
+
+            customerOvertimeRate:
+                dto.customerOvertimeRate,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Ezora B2B / Procurement                                             */
+            /* ------------------------------------------------------------------ */
+
+            b2bBaseRate:
+                dto.b2bBaseRate,
+
+            b2bBaseKm:
+                dto.b2bBaseKm,
+
+            b2bExtraKmRate:
+                dto.b2bExtraKmRate,
+
+            b2bDriverBata:
+                dto.b2bDriverBata,
+
+            b2bOvertimeRate:
+                dto.b2bOvertimeRate,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Operating Rules                                                     */
+            /* ------------------------------------------------------------------ */
+
+            dutyStartTime:
+                dto.dutyStartTime,
+
+            dutyEndTime:
+                dto.dutyEndTime,
+
+            fuelIncluded:
+                dto.fuelIncluded,
+
+            tollTreatment:
+                dto.tollTreatment,
+
+            parkingTreatment:
+                dto.parkingTreatment,
+
+            ferryTreatment:
+                dto.ferryTreatment,
+
+            driverAccommodationTreatment:
+                dto.driverAccommodationTreatment,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Vehicle Specifications                                              */
+            /* ------------------------------------------------------------------ */
+
+            airConditioning:
+                dto.airConditioning,
+
+            transmission:
+                dto.transmission,
+
+            fuelType:
+                dto.fuelType,
+
+            chauffeurDriven:
+                dto.chauffeurDriven,
+
+
+            /* ------------------------------------------------------------------ */
+            /* WhatsApp                                                            */
+            /* ------------------------------------------------------------------ */
+
+            whatsappMessage:
+                dto.whatsappMessage,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Status                                                              */
+            /* ------------------------------------------------------------------ */
+
+            isFeatured:
+                dto.isFeatured,
+
+            isActive:
+                dto.isActive,
+
+            sortOrder:
+                dto.sortOrder,
+
+
+            /* ------------------------------------------------------------------ */
+            /* SEO                                                                 */
+            /* ------------------------------------------------------------------ */
+
+            seoTitle:
+                dto.seoTitle,
+
+            seoDescription:
+                dto.seoDescription,
+
+
+            /* ------------------------------------------------------------------ */
+            /* Category                                                            */
+            /* ------------------------------------------------------------------ */
 
             category: {
                 connect: {
@@ -208,11 +509,20 @@ export class VehicleService {
             },
         };
 
-        return VehicleRepository.replaceRelations(id, data, {
-            features: dto.features,
-            specifications: dto.specifications,
-            gallery: dto.gallery,
-        });
+
+        return VehicleRepository.replaceRelations(
+            id,
+            data,
+            {
+                features: dto.features,
+
+                specifications:
+                    dto.specifications,
+
+                gallery:
+                    dto.gallery,
+            }
+        );
     }
 
     static async delete(id: string) {

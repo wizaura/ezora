@@ -59,6 +59,23 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+.google-places-container {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.google-places-container gmp-place-autocomplete {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color-scheme: light;
+    border-radius: 15px;
+}
+
 /* ========================================
    EZORA AURORA
 ======================================== */

@@ -7,6 +7,12 @@ import {
     StyleSheet,
     Link,
 } from "@react-pdf/renderer";
+import path from "path";
+
+
+/* ========================================================================== */
+/* DATA                                                                        */
+/* ========================================================================== */
 
 export interface RentalQuotationPdfData {
     quotationNo: string;
@@ -27,14 +33,36 @@ export interface RentalQuotationPdfData {
     distance: string;
     duration: string;
 
-    ratePerKm: number;
-    baseFare: number;
+    /* ---------------------------------------------------------------------- */
+    /* Pricing                                                                 */
+    /* ---------------------------------------------------------------------- */
+
+    baseRate: number;
+
+    baseKm: number;
+
+    extraKm: number;
+
+    extraKmRate: number;
+
+    extraKmCharge: number;
+
     driverAllowance: number;
+
+    subtotal: number;
+
     tax: number;
+
     estimatedFare: number;
 }
 
+
+/* ========================================================================== */
+/* STYLES                                                                      */
+/* ========================================================================== */
+
 const styles = StyleSheet.create({
+
     page: {
         padding: 35,
         fontSize: 11,
@@ -43,11 +71,19 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
     },
 
+
+    /* ---------------------------------------------------------------------- */
+    /* Header                                                                  */
+    /* ---------------------------------------------------------------------- */
+
     header: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        borderBottom: "2 solid #0F3C5C",
+
+        borderBottom:
+            "2 solid #0F3C5C",
+
         paddingBottom: 18,
         marginBottom: 25,
     },
@@ -74,6 +110,11 @@ const styles = StyleSheet.create({
         fontSize: 11,
     },
 
+
+    /* ---------------------------------------------------------------------- */
+    /* Information                                                             */
+    /* ---------------------------------------------------------------------- */
+
     infoRow: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -88,6 +129,11 @@ const styles = StyleSheet.create({
         padding: 14,
     },
 
+
+    /* ---------------------------------------------------------------------- */
+    /* Sections                                                                */
+    /* ---------------------------------------------------------------------- */
+
     section: {
         marginBottom: 22,
     },
@@ -98,6 +144,11 @@ const styles = StyleSheet.create({
         color: "#0F3C5C",
         marginBottom: 10,
     },
+
+
+    /* ---------------------------------------------------------------------- */
+    /* Table                                                                   */
+    /* ---------------------------------------------------------------------- */
 
     table: {
         border: "1 solid #E2E8F0",
@@ -114,7 +165,7 @@ const styles = StyleSheet.create({
     },
 
     label: {
-        width: "35%",
+        width: "40%",
         backgroundColor: "#F8FAFC",
         padding: 10,
         color: "#4A5568",
@@ -122,18 +173,40 @@ const styles = StyleSheet.create({
     },
 
     value: {
-        width: "65%",
+        width: "60%",
         padding: 10,
     },
+
 });
+
+
+/* ========================================================================== */
+/* PROPS                                                                       */
+/* ========================================================================== */
 
 interface Props {
     data: RentalQuotationPdfData;
 }
 
+
+/* ========================================================================== */
+/* PDF                                                                         */
+/* ========================================================================== */
+
 export default function RentalQuotationPdf({
     data,
 }: Props) {
+
+    const logoPath = path.join(
+        process.cwd(),
+        "public",
+        "images",
+        "logos",
+        "logo-1.png"
+    );
+
+    console.log(logoPath, 'ss')
+
     return (
         <Document>
 
@@ -142,12 +215,15 @@ export default function RentalQuotationPdf({
                 style={styles.page}
             >
 
-                {/* HEADER */}
+
+                {/* ========================================================== */}
+                {/* HEADER                                                       */}
+                {/* ========================================================== */}
 
                 <View style={styles.header}>
 
                     <Image
-                        src={`${process.cwd()}/public/images/logos/logo-1.png`}
+                        src={logoPath}
                         style={styles.logo}
                     />
 
@@ -165,7 +241,10 @@ export default function RentalQuotationPdf({
 
                 </View>
 
-                {/* QUOTATION DETAILS */}
+
+                {/* ========================================================== */}
+                {/* QUOTATION DETAILS                                            */}
+                {/* ========================================================== */}
 
                 <View style={styles.infoRow}>
 
@@ -191,6 +270,7 @@ export default function RentalQuotationPdf({
 
                     </View>
 
+
                     <View style={styles.quotationBox}>
 
                         <Text
@@ -203,11 +283,17 @@ export default function RentalQuotationPdf({
                             Contact
                         </Text>
 
-                        <Link  href="mailto:info@ezoratours.com" style={{ marginTop: 6 }}>
+                        <Link
+                            href="mailto:info@ezoratours.com"
+                            style={{ marginTop: 6 }}
+                        >
                             info@ezoratours.com
                         </Link>
 
-                        <Link href="https://ezoratours.com" style={{ marginTop: 6 }}>
+                        <Link
+                            href="https://ezoratours.com"
+                            style={{ marginTop: 6 }}
+                        >
                             ezoratours.com
                         </Link>
 
@@ -215,7 +301,10 @@ export default function RentalQuotationPdf({
 
                 </View>
 
-                {/* CUSTOMER */}
+
+                {/* ========================================================== */}
+                {/* CUSTOMER                                                     */}
+                {/* ========================================================== */}
 
                 <View style={styles.section}>
 
@@ -226,31 +315,51 @@ export default function RentalQuotationPdf({
                     <View style={styles.table}>
 
                         <View style={styles.row}>
-                            <Text style={styles.label}>Name</Text>
+
+                            <Text style={styles.label}>
+                                Name
+                            </Text>
+
                             <Text style={styles.value}>
                                 {data.customerName}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
-                            <Text style={styles.label}>Email</Text>
+
+                            <Text style={styles.label}>
+                                Email
+                            </Text>
+
                             <Text style={styles.value}>
                                 {data.email}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.lastRow}>
-                            <Text style={styles.label}>Phone</Text>
+
+                            <Text style={styles.label}>
+                                Phone
+                            </Text>
+
                             <Text style={styles.value}>
                                 {data.phone}
                             </Text>
+
                         </View>
 
                     </View>
 
                 </View>
 
-                {/* TRIP */}
+
+                {/* ========================================================== */}
+                {/* JOURNEY                                                      */}
+                {/* ========================================================== */}
 
                 <View style={styles.section}>
 
@@ -260,14 +369,22 @@ export default function RentalQuotationPdf({
 
                     <View style={styles.table}>
 
+
                         <View style={styles.row}>
-                            <Text style={styles.label}>Pickup</Text>
+
+                            <Text style={styles.label}>
+                                Pickup
+                            </Text>
+
                             <Text style={styles.value}>
                                 {data.pickupLocation}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
                                 Destination
                             </Text>
@@ -275,9 +392,12 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.dropLocation}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
                                 Vehicle
                             </Text>
@@ -285,9 +405,12 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.vehicleType}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
                                 Pickup Date
                             </Text>
@@ -295,9 +418,12 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.pickupDate}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
                                 Pickup Time
                             </Text>
@@ -305,9 +431,12 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.pickupTime}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
                                 Distance
                             </Text>
@@ -315,9 +444,12 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.distance}
                             </Text>
+
                         </View>
 
+
                         <View style={styles.lastRow}>
+
                             <Text style={styles.label}>
                                 Duration
                             </Text>
@@ -325,12 +457,17 @@ export default function RentalQuotationPdf({
                             <Text style={styles.value}>
                                 {data.duration}
                             </Text>
+
                         </View>
 
                     </View>
 
                 </View>
-                {/* FARE BREAKDOWN */}
+
+
+                {/* ========================================================== */}
+                {/* FARE BREAKDOWN                                               */}
+                {/* ========================================================== */}
 
                 <View style={styles.section}>
 
@@ -338,53 +475,153 @@ export default function RentalQuotationPdf({
                         Fare Breakdown
                     </Text>
 
+
                     <View style={styles.table}>
 
+
+                        {/* Base Rate */}
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
-                                Rate / Km
+                                Base Vehicle Rate
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.ratePerKm.toFixed(2)}
+                                Rs. {data.baseRate.toFixed(2)}
                             </Text>
+
                         </View>
 
+
+                        {/* Included KM */}
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
-                                Base Fare
+                                Included Distance
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.baseFare.toFixed(2)}
+                                {data.baseKm} km
                             </Text>
+
                         </View>
 
+
+                        {/* Total Distance */}
+
                         <View style={styles.row}>
+
                             <Text style={styles.label}>
-                                Driver Allowance
+                                Journey Distance
+                            </Text>
+
+                            <Text style={styles.value}>
+                                {data.distance}
+                            </Text>
+
+                        </View>
+
+
+                        {/* Extra KM */}
+
+                        <View style={styles.row}>
+
+                            <Text style={styles.label}>
+                                Extra Distance
+                            </Text>
+
+                            <Text style={styles.value}>
+                                {data.extraKm} km
+                            </Text>
+
+                        </View>
+
+
+                        {/* Extra KM Rate */}
+
+                        <View style={styles.row}>
+
+                            <Text style={styles.label}>
+                                Extra KM Rate
+                            </Text>
+
+                            <Text style={styles.value}>
+                                Rs. {data.extraKmRate.toFixed(2)} / km
+                            </Text>
+
+                        </View>
+
+
+                        {/* Extra KM Charge */}
+
+                        <View style={styles.row}>
+
+                            <Text style={styles.label}>
+                                Extra KM Charge
+                            </Text>
+
+                            <Text style={styles.value}>
+                                Rs. {data.extraKmCharge.toFixed(2)}
+                            </Text>
+
+                        </View>
+
+
+                        {/* Driver Bata */}
+
+                        <View style={styles.row}>
+
+                            <Text style={styles.label}>
+                                Driver Bata
                             </Text>
 
                             <Text style={styles.value}>
                                 Rs. {data.driverAllowance.toFixed(2)}
                             </Text>
+
                         </View>
 
-                        <View style={styles.lastRow}>
+
+                        {/* Subtotal */}
+
+                        <View style={styles.row}>
+
                             <Text style={styles.label}>
-                                GST (5%)
+                                Subtotal
+                            </Text>
+
+                            <Text style={styles.value}>
+                                Rs. {data.subtotal.toFixed(2)}
+                            </Text>
+
+                        </View>
+
+
+                        {/* Tax */}
+
+                        <View style={styles.lastRow}>
+
+                            <Text style={styles.label}>
+                                Tax
                             </Text>
 
                             <Text style={styles.value}>
                                 Rs. {data.tax.toFixed(2)}
                             </Text>
+
                         </View>
+
 
                     </View>
 
                 </View>
 
-                {/* TOTAL */}
+
+                {/* ========================================================== */}
+                {/* TOTAL                                                        */}
+                {/* ========================================================== */}
 
                 <View
                     style={{
@@ -408,6 +645,7 @@ export default function RentalQuotationPdf({
                         Total Estimated Fare
                     </Text>
 
+
                     <Text
                         style={{
                             color: "#ffffff",
@@ -420,7 +658,10 @@ export default function RentalQuotationPdf({
 
                 </View>
 
-                {/* TERMS */}
+
+                {/* ========================================================== */}
+                {/* TERMS                                                        */}
+                {/* ========================================================== */}
 
                 <View
                     style={{
@@ -443,34 +684,56 @@ export default function RentalQuotationPdf({
                         Terms & Conditions
                     </Text>
 
-                    <Text style={{ marginBottom: 6 }}>
-                        • This quotation is an estimated fare based on the
-                        information provided.
-                    </Text>
 
                     <Text style={{ marginBottom: 6 }}>
-                        • Toll charges, parking fees, interstate permits and
-                        entry fees are additional unless otherwise mentioned.
+                        • This quotation is an estimated fare based on
+                        the information provided.
                     </Text>
 
-                    <Text style={{ marginBottom: 6 }}>
-                        • Waiting charges may apply if the vehicle is held
-                        beyond the complimentary waiting period.
-                    </Text>
 
                     <Text style={{ marginBottom: 6 }}>
-                        • Final billing may vary depending on actual route,
-                        distance travelled and additional requests.
+                        • The base fare includes the stated base mileage
+                        of {data.baseKm} km.
                     </Text>
+
+
+                    <Text style={{ marginBottom: 6 }}>
+                        • Additional kilometres are charged at the
+                        applicable extra-kilometre rate.
+                    </Text>
+
+
+                    <Text style={{ marginBottom: 6 }}>
+                        • Toll charges, parking fees, interstate permits
+                        and entry fees are additional unless otherwise
+                        mentioned.
+                    </Text>
+
+
+                    <Text style={{ marginBottom: 6 }}>
+                        • Waiting or overtime charges may apply where
+                        applicable.
+                    </Text>
+
+
+                    <Text style={{ marginBottom: 6 }}>
+                        • Final billing may vary depending on actual
+                        route, distance travelled and additional
+                        requests.
+                    </Text>
+
 
                     <Text>
-                        • This quotation is valid for 7 days from the date of
-                        issue.
+                        • This quotation is valid for 7 days from the
+                        date of issue.
                     </Text>
 
                 </View>
 
-                {/* THANK YOU */}
+
+                {/* ========================================================== */}
+                {/* THANK YOU                                                    */}
+                {/* ========================================================== */}
 
                 <View
                     style={{
@@ -490,6 +753,7 @@ export default function RentalQuotationPdf({
                         Thank You for Choosing
                     </Text>
 
+
                     <Text
                         style={{
                             fontSize: 22,
@@ -499,6 +763,7 @@ export default function RentalQuotationPdf({
                     >
                         EZORA TOURS & TRAVELS
                     </Text>
+
 
                     <Text
                         style={{
@@ -514,7 +779,10 @@ export default function RentalQuotationPdf({
 
                 </View>
 
-                {/* FOOTER */}
+
+                {/* ========================================================== */}
+                {/* FOOTER                                                       */}
+                {/* ========================================================== */}
 
                 <View
                     style={{
@@ -535,6 +803,7 @@ export default function RentalQuotationPdf({
                     >
                         info@ezoratours.com
                     </Link>
+
 
                     <Link
                         href="https://ezoratours.com"

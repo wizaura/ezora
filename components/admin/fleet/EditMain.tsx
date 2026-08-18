@@ -32,6 +32,8 @@ export default function EditVehicle({
 
                 const result = await res.json();
 
+                console.log(result, 'res')
+
                 if (!res.ok) {
                     throw new Error(result.message);
                 }
@@ -150,42 +152,204 @@ export default function EditVehicle({
                         defaultValues={
                             vehicle
                                 ? {
-                                    categoryId: vehicle.categoryId,
-                                    name: vehicle.name,
-                                    slug: vehicle.slug,
-                                    tagline: vehicle.tagline,
-                                    shortDescription: vehicle.shortDescription,
-                                    description: vehicle.description,
+                                    /* ------------------------------------------------------ */
+                                    /* General Information                                    */
+                                    /* ------------------------------------------------------ */
 
-                                    featuredImage: vehicle.featuredImage ?? "",
+                                    categoryId: vehicle.categoryId,
+
+                                    name: vehicle.name,
+
+                                    slug: vehicle.slug,
+
+                                    tagline: vehicle.tagline ?? "",
+
+                                    shortDescription:
+                                        vehicle.shortDescription,
+
+                                    description:
+                                        vehicle.description,
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Images                                                 */
+                                    /* ------------------------------------------------------ */
+
+                                    featuredImage:
+                                        vehicle.featuredImage ?? "",
+
                                     featuredImagePublicId:
                                         vehicle.featuredImagePublicId ?? "",
 
-                                    heroImage: vehicle.heroImage ?? "",
+                                    heroImage:
+                                        vehicle.heroImage ?? "",
+
                                     heroImagePublicId:
                                         vehicle.heroImagePublicId ?? "",
 
-                                    seatingCapacity: vehicle.seatingCapacity,
-                                    luggageCapacity: vehicle.luggageCapacity,
 
-                                    airConditioning: vehicle.airConditioning,
-                                    transmission: vehicle.transmission,
-                                    fuelType: vehicle.fuelType,
+                                    /* ------------------------------------------------------ */
+                                    /* Capacity                                               */
+                                    /* ------------------------------------------------------ */
 
-                                    chauffeurDriven: vehicle.chauffeurDriven,
+                                    seatingCapacity:
+                                        vehicle.seatingCapacity,
 
-                                    whatsappMessage: vehicle.whatsappMessage,
+                                    luggageCapacity:
+                                        vehicle.luggageCapacity,
 
-                                    isFeatured: vehicle.isFeatured,
-                                    isActive: vehicle.isActive,
 
-                                    sortOrder: vehicle.sortOrder,
+                                    /* ------------------------------------------------------ */
+                                    /* Customer / Market Tariff                               */
+                                    /* ------------------------------------------------------ */
 
-                                    seoTitle: vehicle.seoTitle ?? "",
+                                    customerBaseRate:
+                                        Number(vehicle.customerBaseRate ?? 0),
+
+                                    customerBaseKm:
+                                        Number(vehicle.customerBaseKm ?? 100),
+
+                                    customerExtraKmRate:
+                                        Number(
+                                            vehicle.customerExtraKmRate ?? 0
+                                        ),
+
+                                    customerDriverBata:
+                                        Number(
+                                            vehicle.customerDriverBata ?? 0
+                                        ),
+
+                                    customerOvertimeRate:
+                                        Number(
+                                            vehicle.customerOvertimeRate ?? 350
+                                        ),
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Ezora B2B / Procurement                                */
+                                    /* ------------------------------------------------------ */
+
+                                    b2bBaseRate:
+                                        Number(vehicle.b2bBaseRate ?? 0),
+
+                                    b2bBaseKm:
+                                        Number(vehicle.b2bBaseKm ?? 100),
+
+                                    b2bExtraKmRate:
+                                        Number(
+                                            vehicle.b2bExtraKmRate ?? 0
+                                        ),
+
+                                    b2bDriverBata:
+                                        Number(
+                                            vehicle.b2bDriverBata ?? 0
+                                        ),
+
+                                    b2bOvertimeRate:
+                                        Number(
+                                            vehicle.b2bOvertimeRate ?? 0
+                                        ),
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Duty / Operating Rules                                 */
+                                    /* ------------------------------------------------------ */
+
+                                    dutyStartTime:
+                                        vehicle.dutyStartTime ?? "08:30",
+
+                                    dutyEndTime:
+                                        vehicle.dutyEndTime ?? "19:00",
+
+                                    fuelIncluded:
+                                        vehicle.fuelIncluded ?? true,
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Additional Charges                                     */
+                                    /* ------------------------------------------------------ */
+
+                                    tollTreatment:
+                                        vehicle.tollTreatment ?? "ACTUALS",
+
+                                    parkingTreatment:
+                                        vehicle.parkingTreatment ?? "ACTUALS",
+
+                                    ferryTreatment:
+                                        vehicle.ferryTreatment ?? "ACTUALS",
+
+                                    driverAccommodationTreatment:
+                                        vehicle.driverAccommodationTreatment ??
+                                        "VENDOR",
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Vehicle Specifications                                 */
+                                    /* ------------------------------------------------------ */
+
+                                    airConditioning:
+                                        vehicle.airConditioning ?? "",
+
+                                    transmission:
+                                        vehicle.transmission ?? "",
+
+                                    fuelType:
+                                        vehicle.fuelType ?? "",
+
+                                    chauffeurDriven:
+                                        vehicle.chauffeurDriven ?? true,
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* WhatsApp                                                */
+                                    /* ------------------------------------------------------ */
+
+                                    whatsappMessage:
+                                        vehicle.whatsappMessage ?? "",
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Status                                                  */
+                                    /* ------------------------------------------------------ */
+
+                                    isFeatured:
+                                        vehicle.isFeatured ?? false,
+
+                                    isActive:
+                                        vehicle.isActive ?? true,
+
+                                    sortOrder:
+                                        vehicle.sortOrder ?? 0,
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* SEO                                                     */
+                                    /* ------------------------------------------------------ */
+
+                                    seoTitle:
+                                        vehicle.seoTitle ?? "",
+
                                     seoDescription:
                                         vehicle.seoDescription ?? "",
 
-                                    features: vehicle.features,
+
+                                    /* ------------------------------------------------------ */
+                                    /* Features                                                */
+                                    /* ------------------------------------------------------ */
+
+                                    features:
+                                        vehicle.features.map(
+                                            (item) => ({
+                                                title: item.title,
+                                                sortOrder:
+                                                    item.sortOrder,
+                                            })
+                                        ),
+
+
+                                    /* ------------------------------------------------------ */
+                                    /* Specifications                                          */
+                                    /* ------------------------------------------------------ */
 
                                     specifications:
                                         vehicle.specifications.map(
@@ -197,16 +361,26 @@ export default function EditVehicle({
                                             })
                                         ),
 
-                                    gallery: vehicle.gallery.map(
-                                        (image) => ({
-                                            image: image.image,
-                                            publicId:
-                                                image.publicId,
-                                            alt: image.alt ?? "",
-                                            sortOrder:
-                                                image.sortOrder,
-                                        })
-                                    ),
+
+                                    /* ------------------------------------------------------ */
+                                    /* Gallery                                                 */
+                                    /* ------------------------------------------------------ */
+
+                                    gallery:
+                                        vehicle.gallery.map(
+                                            (image) => ({
+                                                image: image.image,
+
+                                                publicId:
+                                                    image.publicId,
+
+                                                alt:
+                                                    image.alt ?? "",
+
+                                                sortOrder:
+                                                    image.sortOrder,
+                                            })
+                                        ),
                                 }
                                 : undefined
                         }

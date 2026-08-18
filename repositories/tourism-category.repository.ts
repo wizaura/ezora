@@ -121,18 +121,36 @@ class TourismCategoryRepository {
         return prisma.tourismCategory.create({
             data: {
                 name: dto.name,
-                slug: dto.slug,
-                description: dto.description,
 
-                featuredImage: dto.featuredImage,
+                slug: dto.slug,
+
+                description:
+                    dto.description,
+
+                featuredImage:
+                    dto.featuredImage,
+
                 featuredImagePublicId:
                     dto.featuredImagePublicId,
 
-                sortOrder: dto.sortOrder,
-                isActive: dto.isActive,
+                seoTitle:
+                    dto.seoTitle,
+
+                seoDescription:
+                    dto.seoDescription,
+
+                isFeatured:
+                    dto.isFeatured,
+
+                isActive:
+                    dto.isActive,
+
+                sortOrder:
+                    dto.sortOrder,
             },
         });
     }
+
 
     async update(
         id: string,
@@ -142,20 +160,39 @@ class TourismCategoryRepository {
             where: {
                 id,
             },
+
             data: {
                 name: dto.name,
-                slug: dto.slug,
-                description: dto.description,
 
-                featuredImage: dto.featuredImage,
+                slug: dto.slug,
+
+                description:
+                    dto.description,
+
+                featuredImage:
+                    dto.featuredImage,
+
                 featuredImagePublicId:
                     dto.featuredImagePublicId,
 
-                sortOrder: dto.sortOrder,
-                isActive: dto.isActive,
+                seoTitle:
+                    dto.seoTitle,
+
+                seoDescription:
+                    dto.seoDescription,
+
+                isFeatured:
+                    dto.isFeatured,
+
+                isActive:
+                    dto.isActive,
+
+                sortOrder:
+                    dto.sortOrder,
             },
         });
     }
+
 
     async delete(id: string) {
         return prisma.tourismCategory.delete({

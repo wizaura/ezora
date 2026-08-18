@@ -173,17 +173,34 @@ export class VehicleRepository {
     ) {
         return prisma.vehicle.findFirst({
             where: {
-                isActive: true,
                 slug: vehicleSlug,
+
                 category: {
                     slug: categorySlug,
+                    isActive: true,
                 },
+
+                isActive: true,
             },
+
             select: {
                 id: true,
                 name: true,
-                standardRate: true,
-                corporateRate: true,
+                slug: true,
+
+                customerBaseRate: true,
+                customerBaseKm: true,
+                customerExtraKmRate: true,
+                customerDriverBata: true,
+                customerOvertimeRate: true,
+
+                category: {
+                    select: {
+                        id: true,
+                        name: true,
+                        slug: true,
+                    },
+                },
             },
         });
     }

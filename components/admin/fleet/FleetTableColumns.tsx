@@ -16,119 +16,181 @@ import { Button } from "@/components/ui/button";
 
 import { VehicleTableItem } from "./types";
 
-export const FleetColumns: ColumnDef<VehicleTableItem>[] = [
-    {
-        accessorKey: "featuredImage",
-        header: "",
-        cell: ({ row }) => (
-            <div className="relative h-16 w-24 overflow-hidden rounded-lg border bg-muted">
-                {row.original.featuredImage ? (
-                    <Image
-                        src={row.original.featuredImage}
-                        alt={row.original.name}
-                        fill
-                        className="object-cover"
-                    />
-                ) : (
-                    <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
-                        No Image
-                    </div>
-                )}
-            </div>
-        ),
-    },
+interface FleetColumnsProps {
+    onDelete: (
+        vehicle: VehicleTableItem
+    ) => void;
+}
 
-    {
-        accessorKey: "name",
-        header: "Vehicle",
+export function FleetColumns({
+    onDelete,
+}: FleetColumnsProps): ColumnDef<VehicleTableItem>[] {
+    return [
+        {
+            accessorKey: "featuredImage",
 
-        cell: ({ row }) => (
-            <div>
-                <p className="font-semibold">
-                    {row.original.name}
-                </p>
+            header: "",
 
-                <p className="text-sm text-muted-foreground">
-                    {row.original.slug}
-                </p>
-            </div>
-        ),
-    },
+            cell: ({ row }) => (
+                <div className="relative h-16 w-24 overflow-hidden rounded-lg border bg-muted">
+                    {row.original.featuredImage ? (
+                        <Image
+                            src={
+                                row.original.featuredImage
+                            }
+                            alt={
+                                row.original.name
+                            }
+                            fill
+                            className="object-cover"
+                        />
+                    ) : (
+                        <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+                            No Image
+                        </div>
+                    )}
+                </div>
+            ),
+        },
 
-    {
-        accessorKey: "category.name",
-        header: "Category",
+        {
+            accessorKey: "name",
 
-        cell: ({ row }) => (
-            <Badge variant="secondary">
-                {row.original.category.name}
-            </Badge>
-        ),
-    },
+            header: "Vehicle",
 
-    {
-        accessorKey: "seatingCapacity",
-        header: "Seats",
-    },
+            cell: ({ row }) => (
+                <div>
+                    <p className="font-semibold">
+                        {row.original.name}
+                    </p>
 
-    {
-        accessorKey: "luggageCapacity",
-        header: "Luggage",
-    },
+                    <p className="text-sm text-muted-foreground">
+                        {row.original.slug}
+                    </p>
+                </div>
+            ),
+        },
 
-    {
-        accessorKey: "isFeatured",
-        header: "Featured",
+        {
+            accessorKey: "category.name",
 
-        cell: ({ row }) =>
-            row.original.isFeatured ? (
-                <Badge>Featured</Badge>
-            ) : (
+            header: "Category",
+
+            cell: ({ row }) => (
                 <Badge variant="secondary">
-                    No
+                    {
+                        row.original
+                            .category.name
+                    }
                 </Badge>
             ),
-    },
+        },
 
-    {
-        accessorKey: "isActive",
-        header: "Status",
+        {
+            accessorKey: "seatingCapacity",
 
-        cell: ({ row }) =>
-            row.original.isActive ? (
-                <Badge className="gap-1">
-                    <BadgeCheck size={14} />
-                    Active
-                </Badge>
-            ) : (
-                <Badge variant="destructive" className="gap-1">
-                    <BadgeX size={14} />
-                    Inactive
-                </Badge>
-            ),
-    },
+            header: "Seats",
+        },
 
-    {
-        id: "actions",
+        {
+            accessorKey: "luggageCapacity",
 
-        cell: ({ row }) => (
-            <div className="flex justify-end gap-2">
-                <Link href={`/admin/fleet/${row.original.id}`}>
-                    <Button
-                        size="icon"
-                        variant="outline"
+            header: "Luggage",
+        },
+
+        {
+            accessorKey: "isFeatured",
+
+            header: "Featured",
+
+            cell: ({ row }) =>
+                row.original.isFeatured ? (
+                    <Badge>
+                        Featured
+                    </Badge>
+                ) : (
+                    <Badge variant="secondary">
+                        No
+                    </Badge>
+                ),
+        },
+
+        {
+            accessorKey: "isActive",
+
+            header: "Status",
+
+            cell: ({ row }) =>
+                row.original.isActive ? (
+                    <Badge className="gap-1">
+                        <BadgeCheck
+                            size={14}
+                        />
+                        Active
+                    </Badge>
+                ) : (
+                    <Badge
+                        variant="destructive"
+                        className="gap-1"
                     >
-                        <Pencil size={16} />
-                    </Button>
-                </Link>
+                        <BadgeX
+                            size={14}
+                        />
+                        Inactive
+                    </Badge>
+                ),
+        },
 
-                <Button
-                    size="icon"
-                    variant="destructive"
-                >
-                    <Trash2 size={16} />
-                </Button>
-            </div>
-        ),
-    },
-];
+        {
+            id: "actions",
+
+            header: "Actions",
+
+            cell: ({ row }) => {
+
+                const vehicle =
+                    row.original;
+
+                return (
+                    <div className="flex justify-end gap-2">
+
+                        {/* Edit */}
+
+                        <Link
+                            href={`/admin/fleet/${vehicle.id}`}
+                        >
+                            <Button
+                                type="button"
+                                size="icon"
+                                variant="outline"
+                            >
+                                <Pencil
+                                    size={16}
+                                />
+                            </Button>
+                        </Link>
+
+
+                        {/* Delete */}
+
+                        <Button
+                            type="button"
+                            size="icon"
+                            variant="destructive"
+                            onClick={() =>
+                                onDelete(
+                                    vehicle
+                                )
+                            }
+                        >
+                            <Trash2
+                                size={16}
+                            />
+                        </Button>
+
+                    </div>
+                );
+            },
+        },
+    ];
+}

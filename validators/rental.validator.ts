@@ -11,6 +11,9 @@ export const RentalQuotationValidator = z.object({
         .trim()
         .min(3, "Drop location is required"),
 
+    pickupPlaceId: z.string().optional(),
+    dropPlaceId: z.string().optional(),
+
     pickupDate: z
         .string()
         .min(1, "Pickup date is required"),
