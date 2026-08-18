@@ -98,28 +98,34 @@ export class FleetCategoryRepository {
             where: {
                 isActive: true,
             },
+
             orderBy: {
                 sortOrder: "asc",
             },
+
             include: {
                 vehicles: {
                     where: {
                         isActive: true,
                     },
+
                     orderBy: {
                         sortOrder: "asc",
                     },
+
                     include: {
                         features: {
                             orderBy: {
                                 sortOrder: "asc",
                             },
                         },
+
                         specifications: {
                             orderBy: {
                                 sortOrder: "asc",
                             },
                         },
+
                         gallery: {
                             orderBy: {
                                 sortOrder: "asc",

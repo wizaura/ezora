@@ -131,6 +131,7 @@ export class VehicleRepository {
             include: {
                 category: {
                     select: {
+                        id: true,
                         name: true,
                         slug: true,
                     }

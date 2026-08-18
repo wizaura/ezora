@@ -12,23 +12,275 @@ export default async function FleetPage() {
     const activeCategories =
         await FleetCategoryService.getPublicCategories();
 
-    const serializedCategories = activeCategories.map((category) => ({
-        ...category,
+    /*
+     * Prisma Decimal values cannot be passed directly
+     * from Server Components to Client Components.
+     *
+     * The public fleet page uses CUSTOMER pricing.
+     *
+     * B2B/vendor pricing is intentionally NOT exposed
+     * to the public website.
+     */
 
-        vehicles: category.vehicles.map((vehicle) => ({
-            ...vehicle,
+    const serializedCategories =
+        activeCategories.map((category) => ({
+            id: category.id,
 
-            standardRate:
-                vehicle.standardRate != null
-                    ? Number(vehicle.standardRate)
-                    : null,
+            name: category.name,
 
-            corporateRate:
-                vehicle.corporateRate != null
-                    ? Number(vehicle.corporateRate)
-                    : null,
-        })),
-    }));
+            slug: category.slug,
+
+            eyebrow:
+                category.eyebrow,
+
+            shortDescription:
+                category.shortDescription,
+
+            description:
+                category.description,
+
+            featuredImage:
+                category.featuredImage,
+
+            featuredImagePublicId:
+                category.featuredImagePublicId,
+
+            isFeatured:
+                category.isFeatured,
+
+            isActive:
+                category.isActive,
+
+            sortOrder:
+                category.sortOrder,
+
+            seoTitle:
+                category.seoTitle,
+
+            seoDescription:
+                category.seoDescription,
+
+            vehicles:
+                category.vehicles.map(
+                    (vehicle) => ({
+                        id: vehicle.id,
+
+                        categoryId:
+                            vehicle.categoryId,
+
+                        name:
+                            vehicle.name,
+
+                        slug:
+                            vehicle.slug,
+
+                        tagline:
+                            vehicle.tagline,
+
+                        shortDescription:
+                            vehicle.shortDescription,
+
+                        description:
+                            vehicle.description,
+
+                        featuredImage:
+                            vehicle.featuredImage,
+
+                        featuredImagePublicId:
+                            vehicle.featuredImagePublicId,
+
+                        heroImage:
+                            vehicle.heroImage,
+
+                        heroImagePublicId:
+                            vehicle.heroImagePublicId,
+
+                        seatingCapacity:
+                            vehicle.seatingCapacity,
+
+                        luggageCapacity:
+                            vehicle.luggageCapacity,
+
+
+                        /*
+                         * CUSTOMER TARIFF
+                         *
+                         * These are the rates displayed/used
+                         * for normal customer quotations.
+                         */
+
+                        customerBaseRate:
+                            Number(
+                                vehicle.customerBaseRate
+                            ),
+
+                        customerBaseKm:
+                            vehicle.customerBaseKm,
+
+                        customerExtraKmRate:
+                            Number(
+                                vehicle.customerExtraKmRate
+                            ),
+
+                        customerDriverBata:
+                            Number(
+                                vehicle.customerDriverBata
+                            ),
+
+                        customerOvertimeRate:
+                            Number(
+                                vehicle.customerOvertimeRate
+                            ),
+
+
+                        /*
+                         * DUTY INFORMATION
+                         */
+
+                        dutyStartTime:
+                            vehicle.dutyStartTime,
+
+                        dutyEndTime:
+                            vehicle.dutyEndTime,
+
+
+                        /*
+                         * COMMERCIAL CONDITIONS
+                         */
+
+                        fuelIncluded:
+                            vehicle.fuelIncluded,
+
+                        tollTreatment:
+                            vehicle.tollTreatment,
+
+                        parkingTreatment:
+                            vehicle.parkingTreatment,
+
+                        ferryTreatment:
+                            vehicle.ferryTreatment,
+
+                        driverAccommodationTreatment:
+                            vehicle.driverAccommodationTreatment,
+
+
+                        /*
+                         * VEHICLE INFORMATION
+                         */
+
+                        airConditioning:
+                            vehicle.airConditioning,
+
+                        transmission:
+                            vehicle.transmission,
+
+                        fuelType:
+                            vehicle.fuelType,
+
+                        chauffeurDriven:
+                            vehicle.chauffeurDriven,
+
+                        whatsappMessage:
+                            vehicle.whatsappMessage,
+
+                        isFeatured:
+                            vehicle.isFeatured,
+
+                        isActive:
+                            vehicle.isActive,
+
+                        sortOrder:
+                            vehicle.sortOrder,
+
+                        seoTitle:
+                            vehicle.seoTitle,
+
+                        seoDescription:
+                            vehicle.seoDescription,
+
+
+                        /*
+                         * Relations
+                         */
+
+                        features:
+                            vehicle.features.map(
+                                (feature) => ({
+                                    id:
+                                        feature.id,
+
+                                    vehicleId:
+                                        feature.vehicleId,
+
+                                    title:
+                                        feature.title,
+
+                                    sortOrder:
+                                        feature.sortOrder,
+                                })
+                            ),
+
+                        specifications:
+                            vehicle.specifications.map(
+                                (specification) => ({
+                                    id:
+                                        specification.id,
+
+                                    vehicleId:
+                                        specification.vehicleId,
+
+                                    label:
+                                        specification.label,
+
+                                    value:
+                                        specification.value,
+
+                                    sortOrder:
+                                        specification.sortOrder,
+                                })
+                            ),
+
+                        gallery:
+                            vehicle.gallery.map(
+                                (image) => ({
+                                    id:
+                                        image.id,
+
+                                    vehicleId:
+                                        image.vehicleId,
+
+                                    image:
+                                        image.image,
+
+                                    publicId:
+                                        image.publicId,
+
+                                    alt:
+                                        image.alt,
+
+                                    sortOrder:
+                                        image.sortOrder,
+                                })
+                            ),
+
+
+                        /*
+                         * Dates
+                         *
+                         * Convert Date objects because
+                         * they also cannot be passed directly
+                         * to Client Components.
+                         */
+
+                        createdAt:
+                            vehicle.createdAt.toISOString(),
+
+                        updatedAt:
+                            vehicle.updatedAt.toISOString(),
+                    })
+                ),
+        }));
+
 
     return (
         <>
@@ -46,19 +298,30 @@ export default async function FleetPage() {
                 ]}
             />
 
+
             <FleetIntroductionSection
-                categories={serializedCategories}
+                categories={
+                    serializedCategories
+                }
             />
+
 
             <FleetVehiclesSection
-                categories={serializedCategories}
+                categories={
+                    serializedCategories
+                }
             />
+
 
             <FleetRecommendationSection
-                categories={serializedCategories}
+                categories={
+                    serializedCategories
+                }
             />
 
+
             <WhyChooseFleetSection />
+
 
             <FleetFAQSection
                 faqs={fleetFAQs}
