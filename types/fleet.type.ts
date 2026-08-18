@@ -15,7 +15,7 @@ export interface VehicleSpecification {
 
 export interface VehicleImage {
     id: string;
-    vehicleId: string;
+    vehicleId?: string;
     image: string;
     publicId: string;
     alt: string | null;

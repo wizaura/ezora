@@ -1,33 +1,51 @@
 import Image from "next/image";
 
-import { Vehicle } from "@/types/fleet.type";
+import {
+    FleetCategoryVehicle,
+} from "@/types/fleet.type";
 
 interface Props {
-    vehicles: Vehicle[];
+    vehicles: FleetCategoryVehicle[];
+}
+
+interface GalleryItem {
+    id: string;
+    image: string;
+    publicId: string;
+    alt: string | null;
+    sortOrder: number;
 }
 
 export default function CategoryGallery({
     vehicles,
 }: Props) {
-    const images = vehicles.flatMap((vehicle) => {
-        if (vehicle.gallery.length > 0) {
-            return [...vehicle.gallery].sort(
-                (a, b) => a.sortOrder - b.sortOrder
-            );
-        }
 
-        return [
-            {
-                id: vehicle.id,
-                image:
-                    vehicle.featuredImage ??
-                    "/images/placeholders/fleet-category.jpg",
-                publicId: "",
-                alt: vehicle.name,
-                sortOrder: 0,
-            },
-        ];
-    });
+    const images: GalleryItem[] =
+        vehicles.flatMap((vehicle) => {
+
+            if (vehicle.gallery.length > 0) {
+                return [...vehicle.gallery].sort(
+                    (a, b) =>
+                        a.sortOrder - b.sortOrder
+                );
+            }
+
+            return [
+                {
+                    id: vehicle.id,
+
+                    image:
+                        vehicle.featuredImage ??
+                        "/images/placeholders/fleet-category.jpg",
+
+                    publicId: "",
+
+                    alt: vehicle.name,
+
+                    sortOrder: 0,
+                },
+            ];
+        });
 
     return (
         <section className="bg-background py-16">
@@ -55,28 +73,25 @@ export default function CategoryGallery({
                 <div className="grid grid-cols-2 gap-5 lg:grid-cols-4">
 
                     {images.map((image, index) => (
-
                         <div
                             key={`${image.id}-${index}`}
-                            className={`overflow-hidden rounded-[28px] ${index % 5 === 0
+                            className={`overflow-hidden rounded-[28px] ${
+                                index % 5 === 0
                                     ? "lg:col-span-2 lg:row-span-2"
                                     : ""
-                                }`}
+                            }`}
                         >
-
                             <Image
-                                src={
-                                    image.image ??
-                                    "/images/placeholders/fleet-category.jpg"
+                                src={image.image}
+                                alt={
+                                    image.alt ||
+                                    "Ezora Tours vehicle"
                                 }
-                                alt={image.alt || "Ezora Tours vehicle"}
                                 width={900}
                                 height={900}
                                 className="h-full min-h-[250px] w-full object-cover transition duration-700 hover:scale-105"
                             />
-
                         </div>
-
                     ))}
 
                 </div>
