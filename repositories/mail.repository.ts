@@ -3,26 +3,92 @@ import RentalCustomerEmail from "@/emails/RentalCustomerEmail";
 import { Resend } from "resend";
 
 
+/* ==========================================================================
+   ITINERARY TYPES
+============================================================================ */
+
+export interface RentalItineraryDay {
+
+    day: number;
+
+    date: string;
+
+    pickupTime: string;
+
+    pickup: {
+        place: string;
+        placeId: string;
+    };
+
+    drop: {
+        place: string;
+        placeId: string;
+    };
+
+    stops: {
+        place: string;
+        placeId: string;
+        type: string;
+    }[];
+
+    distance: string;
+
+    duration: string;
+
+    distanceMeters: number;
+
+    durationSeconds: number;
+}
+
+
+/* ==========================================================================
+   RENTAL MAIL DATA
+============================================================================ */
+
 export interface RentalMailData {
+
+    /* ---------------------------------------------------------------------- */
+    /* Customer                                                               */
+    /* ---------------------------------------------------------------------- */
+
     customerName: string;
+
     email: string;
+
     phone: string;
 
 
     /* ---------------------------------------------------------------------- */
-    /* Journey                                                                 */
+    /* Trip                                                                    */
     /* ---------------------------------------------------------------------- */
 
-    pickupLocation: string;
-    dropLocation: string;
+    tripType: string;
+
+    passengers: number;
+
+
+    /* ---------------------------------------------------------------------- */
+    /* Vehicle                                                                 */
+    /* ---------------------------------------------------------------------- */
 
     vehicleCategory: string;
+
     vehicleType: string;
 
-    pickupDate: string;
-    pickupTime: string;
+
+    /* ---------------------------------------------------------------------- */
+    /* Itinerary                                                               */
+    /* ---------------------------------------------------------------------- */
+
+    itinerary: RentalItineraryDay[];
+
+
+    /* ---------------------------------------------------------------------- */
+    /* Overall Route                                                           */
+    /* ---------------------------------------------------------------------- */
 
     distance: string;
+
     duration: string;
 
 
@@ -57,6 +123,10 @@ export interface RentalMailData {
 }
 
 
+/* ==========================================================================
+   MAIL REPOSITORY
+============================================================================ */
+
 export class MailRepository {
 
     private readonly resend =
@@ -65,9 +135,9 @@ export class MailRepository {
         );
 
 
-    /* ====================================================================== */
-    /* CUSTOMER EMAIL                                                         */
-    /* ====================================================================== */
+    /* ======================================================================
+       CUSTOMER EMAIL
+    ====================================================================== */
 
     async sendCustomerQuotation(
         data: RentalMailData,
@@ -101,9 +171,9 @@ export class MailRepository {
     }
 
 
-    /* ====================================================================== */
-    /* ADMIN EMAIL                                                            */
-    /* ====================================================================== */
+    /* ======================================================================
+       ADMIN EMAIL
+    ====================================================================== */
 
     async sendAdminNotification(
         data: RentalMailData,

@@ -7,14 +7,16 @@ import {
     StyleSheet,
     Link,
 } from "@react-pdf/renderer";
+
 import path from "path";
 
 
-/* ========================================================================== */
-/* DATA                                                                        */
-/* ========================================================================== */
+/* ==========================================================================
+   DATA
+============================================================================ */
 
 export interface RentalQuotationPdfData {
+
     quotationNo: string;
     quotationDate: string;
 
@@ -22,44 +24,62 @@ export interface RentalQuotationPdfData {
     email: string;
     phone: string;
 
-    pickupLocation: string;
-    dropLocation: string;
+    tripType: string;
+    passengers: number;
 
+    vehicleCategory: string;
     vehicleType: string;
 
-    pickupDate: string;
-    pickupTime: string;
+    itinerary: {
+        day: number;
+        date: string;
+        pickupTime: string;
+
+        pickup: {
+            place: string;
+            placeId: string;
+        };
+
+        drop: {
+            place: string;
+            placeId: string;
+        };
+
+        stops: {
+            place: string;
+            placeId: string;
+            type: string;
+        }[];
+
+        distance: string;
+        duration: string;
+
+        distanceMeters: number;
+        durationSeconds: number;
+    }[];
 
     distance: string;
     duration: string;
 
-    /* ---------------------------------------------------------------------- */
-    /* Pricing                                                                 */
-    /* ---------------------------------------------------------------------- */
-
     baseRate: number;
-
     baseKm: number;
 
     extraKm: number;
-
     extraKmRate: number;
-
     extraKmCharge: number;
 
     driverAllowance: number;
 
     subtotal: number;
-
     tax: number;
 
     estimatedFare: number;
 }
 
 
-/* ========================================================================== */
-/* STYLES                                                                      */
-/* ========================================================================== */
+/* ==========================================================================
+   STYLES
+============================================================================ */
 
 const styles = StyleSheet.create({
 
@@ -72,9 +92,9 @@ const styles = StyleSheet.create({
     },
 
 
-    /* ---------------------------------------------------------------------- */
-    /* Header                                                                  */
-    /* ---------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------
+       Header
+    ---------------------------------------------------------------------- */
 
     header: {
         flexDirection: "row",
@@ -88,21 +108,25 @@ const styles = StyleSheet.create({
         marginBottom: 25,
     },
 
+
     logo: {
         width: 150,
         height: 55,
         objectFit: "contain",
     },
 
+
     company: {
         alignItems: "flex-end",
     },
+
 
     title: {
         fontSize: 24,
         color: "#0F3C5C",
         fontWeight: "bold",
     },
+
 
     subtitle: {
         marginTop: 4,
@@ -111,15 +135,16 @@ const styles = StyleSheet.create({
     },
 
 
-    /* ---------------------------------------------------------------------- */
-    /* Information                                                             */
-    /* ---------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------
+       Information
+    ---------------------------------------------------------------------- */
 
     infoRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         marginBottom: 25,
     },
+
 
     quotationBox: {
         width: "48%",
@@ -130,13 +155,14 @@ const styles = StyleSheet.create({
     },
 
 
-    /* ---------------------------------------------------------------------- */
-    /* Sections                                                                */
-    /* ---------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------
+       Sections
+    ---------------------------------------------------------------------- */
 
     section: {
         marginBottom: 22,
     },
+
 
     sectionTitle: {
         fontSize: 13,
@@ -146,23 +172,26 @@ const styles = StyleSheet.create({
     },
 
 
-    /* ---------------------------------------------------------------------- */
-    /* Table                                                                   */
-    /* ---------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------
+       Table
+    ---------------------------------------------------------------------- */
 
     table: {
         border: "1 solid #E2E8F0",
         borderRadius: 6,
     },
 
+
     row: {
         flexDirection: "row",
         borderBottom: "1 solid #EDF2F7",
     },
 
+
     lastRow: {
         flexDirection: "row",
     },
+
 
     label: {
         width: "40%",
@@ -172,26 +201,148 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 
+
     value: {
         width: "60%",
         padding: 10,
     },
 
+
+    /* ----------------------------------------------------------------------
+       Day Journey
+    ---------------------------------------------------------------------- */
+
+    dayContainer: {
+        marginBottom: 18,
+        border: "1 solid #E2E8F0",
+        borderRadius: 8,
+        padding: 12,
+    },
+
+
+    dayHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 10,
+        paddingBottom: 8,
+        borderBottom: "1 solid #E2E8F0",
+    },
+
+
+    dayTitle: {
+        fontSize: 13,
+        fontWeight: "bold",
+        color: "#0F3C5C",
+    },
+
+
+    dayDate: {
+        fontSize: 10,
+        color: "#718096",
+    },
+
+
+    stopRow: {
+        marginBottom: 7,
+    },
+
+
+    stopType: {
+        fontSize: 9,
+        color: "#2AB7A9",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+    },
+
+
+    stopPlace: {
+        marginTop: 2,
+        fontSize: 10,
+        color: "#2D3748",
+    },
+
+
+    routeSummary: {
+        marginTop: 10,
+        paddingTop: 9,
+        borderTop: "1 solid #EDF2F7",
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+
+
+    routeSummaryText: {
+        fontSize: 10,
+        color: "#4A5568",
+    },
+
 });
 
 
-/* ========================================================================== */
-/* PROPS                                                                       */
-/* ========================================================================== */
+/* ==========================================================================
+   PROPS
+============================================================================ */
 
 interface Props {
     data: RentalQuotationPdfData;
 }
 
 
-/* ========================================================================== */
-/* PDF                                                                         */
-/* ========================================================================== */
+/* ==========================================================================
+   HELPERS
+============================================================================ */
+
+function formatDate(
+    date: string
+) {
+
+    const parsed =
+        new Date(date);
+
+    if (
+        Number.isNaN(
+            parsed.getTime()
+        )
+    ) {
+        return date;
+    }
+
+    return parsed.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+        }
+    );
+}
+
+
+function getStopLabel(
+    type: string
+) {
+
+    switch (type) {
+
+        case "PICKUP":
+            return "Pickup";
+
+        case "DROP":
+            return "Destination";
+
+        case "STOP":
+            return "Stop";
+
+        default:
+            return "Stop";
+    }
+}
+
+
+/* ==========================================================================
+   PDF
+============================================================================ */
 
 export default function RentalQuotationPdf({
     data,
@@ -205,7 +356,6 @@ export default function RentalQuotationPdf({
         "logo-1.png"
     );
 
-    console.log(logoPath, 'ss')
 
     return (
         <Document>
@@ -216,9 +366,9 @@ export default function RentalQuotationPdf({
             >
 
 
-                {/* ========================================================== */}
-                {/* HEADER                                                       */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   HEADER
+                ========================================================== */}
 
                 <View style={styles.header}>
 
@@ -226,6 +376,7 @@ export default function RentalQuotationPdf({
                         src={logoPath}
                         style={styles.logo}
                     />
+
 
                     <View style={styles.company}>
 
@@ -242,9 +393,9 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* QUOTATION DETAILS                                            */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   QUOTATION DETAILS
+                ========================================================== */}
 
                 <View style={styles.infoRow}>
 
@@ -260,12 +411,24 @@ export default function RentalQuotationPdf({
                             Quotation Details
                         </Text>
 
+
                         <Text>
                             Quotation No: {data.quotationNo}
                         </Text>
 
+
                         <Text style={{ marginTop: 6 }}>
                             Date: {data.quotationDate}
+                        </Text>
+
+
+                        <Text style={{ marginTop: 6 }}>
+                            Trip Type: {data.tripType}
+                        </Text>
+
+
+                        <Text style={{ marginTop: 6 }}>
+                            Passengers: {data.passengers}
                         </Text>
 
                     </View>
@@ -283,12 +446,14 @@ export default function RentalQuotationPdf({
                             Contact
                         </Text>
 
+
                         <Link
                             href="mailto:info@ezoratours.com"
                             style={{ marginTop: 6 }}
                         >
                             info@ezoratours.com
                         </Link>
+
 
                         <Link
                             href="https://ezoratours.com"
@@ -302,15 +467,16 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* CUSTOMER                                                     */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   CUSTOMER
+                ========================================================== */}
 
                 <View style={styles.section}>
 
                     <Text style={styles.sectionTitle}>
                         Customer Information
                     </Text>
+
 
                     <View style={styles.table}>
 
@@ -357,46 +523,33 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* JOURNEY                                                      */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   VEHICLE
+                ========================================================== */}
 
                 <View style={styles.section}>
 
                     <Text style={styles.sectionTitle}>
-                        Journey Details
+                        Vehicle Details
                     </Text>
+
 
                     <View style={styles.table}>
 
-
                         <View style={styles.row}>
 
                             <Text style={styles.label}>
-                                Pickup
+                                Category
                             </Text>
 
                             <Text style={styles.value}>
-                                {data.pickupLocation}
+                                {data.vehicleCategory}
                             </Text>
 
                         </View>
 
 
-                        <View style={styles.row}>
-
-                            <Text style={styles.label}>
-                                Destination
-                            </Text>
-
-                            <Text style={styles.value}>
-                                {data.dropLocation}
-                            </Text>
-
-                        </View>
-
-
-                        <View style={styles.row}>
+                        <View style={styles.lastRow}>
 
                             <Text style={styles.label}>
                                 Vehicle
@@ -408,37 +561,30 @@ export default function RentalQuotationPdf({
 
                         </View>
 
+                    </View>
+
+                </View>
+
+
+                {/* ==========================================================
+                   JOURNEY
+                ========================================================== */}
+
+                <View style={styles.section}>
+
+                    <Text style={styles.sectionTitle}>
+                        Journey Details
+                    </Text>
+
+
+                    {/* Overall journey summary */}
+
+                    <View style={styles.table}>
 
                         <View style={styles.row}>
 
                             <Text style={styles.label}>
-                                Pickup Date
-                            </Text>
-
-                            <Text style={styles.value}>
-                                {data.pickupDate}
-                            </Text>
-
-                        </View>
-
-
-                        <View style={styles.row}>
-
-                            <Text style={styles.label}>
-                                Pickup Time
-                            </Text>
-
-                            <Text style={styles.value}>
-                                {data.pickupTime}
-                            </Text>
-
-                        </View>
-
-
-                        <View style={styles.row}>
-
-                            <Text style={styles.label}>
-                                Distance
+                                Total Distance
                             </Text>
 
                             <Text style={styles.value}>
@@ -451,7 +597,7 @@ export default function RentalQuotationPdf({
                         <View style={styles.lastRow}>
 
                             <Text style={styles.label}>
-                                Duration
+                                Total Duration
                             </Text>
 
                             <Text style={styles.value}>
@@ -462,12 +608,120 @@ export default function RentalQuotationPdf({
 
                     </View>
 
+
+                    {/* Individual days */}
+
+                    <View style={{ marginTop: 14 }}>
+
+                        {data.itinerary.map(
+                            (day) => (
+
+                                <View
+                                    key={`${day.day}-${day.date}`}
+                                    style={styles.dayContainer}
+                                    wrap={false}
+                                >
+
+                                    <View style={styles.dayHeader}>
+
+                                        <Text
+                                            style={styles.dayTitle}
+                                        >
+                                            Day {day.day}
+                                        </Text>
+
+
+                                        <Text
+                                            style={styles.dayDate}
+                                        >
+                                            {formatDate(day.date)}
+                                            {" • "}
+                                            {day.pickupTime}
+                                        </Text>
+
+                                    </View>
+
+
+                                    {/* Stops */}
+
+                                    {day.stops.map(
+                                        (
+                                            stop,
+                                            index
+                                        ) => (
+
+                                            <View
+                                                key={`${stop.placeId}-${index}`}
+                                                style={styles.stopRow}
+                                            >
+
+                                                <Text
+                                                    style={
+                                                        styles.stopType
+                                                    }
+                                                >
+                                                    {getStopLabel(
+                                                        stop.type
+                                                    )}
+                                                </Text>
+
+
+                                                <Text
+                                                    style={
+                                                        styles.stopPlace
+                                                    }
+                                                >
+                                                    {stop.place}
+                                                </Text>
+
+                                            </View>
+
+                                        )
+                                    )}
+
+
+                                    {/* Day route summary */}
+
+                                    <View
+                                        style={
+                                            styles.routeSummary
+                                        }
+                                    >
+
+                                        <Text
+                                            style={
+                                                styles.routeSummaryText
+                                            }
+                                        >
+                                            Distance:{" "}
+                                            {day.distance}
+                                        </Text>
+
+
+                                        <Text
+                                            style={
+                                                styles.routeSummaryText
+                                            }
+                                        >
+                                            Duration:{" "}
+                                            {day.duration}
+                                        </Text>
+
+                                    </View>
+
+                                </View>
+
+                            )
+                        )}
+
+                    </View>
+
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* FARE BREAKDOWN                                               */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   FARE BREAKDOWN
+                ========================================================== */}
 
                 <View style={styles.section}>
 
@@ -488,7 +742,8 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.baseRate.toFixed(2)}
+                                Rs.{" "}
+                                {data.baseRate.toFixed(2)}
                             </Text>
 
                         </View>
@@ -503,7 +758,7 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                {data.baseKm} km
+                                {data.baseKm} km / day
                             </Text>
 
                         </View>
@@ -514,7 +769,7 @@ export default function RentalQuotationPdf({
                         <View style={styles.row}>
 
                             <Text style={styles.label}>
-                                Journey Distance
+                                Total Journey Distance
                             </Text>
 
                             <Text style={styles.value}>
@@ -529,7 +784,7 @@ export default function RentalQuotationPdf({
                         <View style={styles.row}>
 
                             <Text style={styles.label}>
-                                Extra Distance
+                                Total Extra Distance
                             </Text>
 
                             <Text style={styles.value}>
@@ -548,7 +803,9 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.extraKmRate.toFixed(2)} / km
+                                Rs.{" "}
+                                {data.extraKmRate.toFixed(2)}
+                                {" / km"}
                             </Text>
 
                         </View>
@@ -563,7 +820,8 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.extraKmCharge.toFixed(2)}
+                                Rs.{" "}
+                                {data.extraKmCharge.toFixed(2)}
                             </Text>
 
                         </View>
@@ -578,7 +836,8 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.driverAllowance.toFixed(2)}
+                                Rs.{" "}
+                                {data.driverAllowance.toFixed(2)}
                             </Text>
 
                         </View>
@@ -593,7 +852,8 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.subtotal.toFixed(2)}
+                                Rs.{" "}
+                                {data.subtotal.toFixed(2)}
                             </Text>
 
                         </View>
@@ -608,7 +868,8 @@ export default function RentalQuotationPdf({
                             </Text>
 
                             <Text style={styles.value}>
-                                Rs. {data.tax.toFixed(2)}
+                                Rs.{" "}
+                                {data.tax.toFixed(2)}
                             </Text>
 
                         </View>
@@ -619,9 +880,9 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* TOTAL                                                        */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   TOTAL
+                ========================================================== */}
 
                 <View
                     style={{
@@ -653,15 +914,16 @@ export default function RentalQuotationPdf({
                             fontWeight: "bold",
                         }}
                     >
-                        Rs. {data.estimatedFare.toFixed(2)}
+                        Rs.{" "}
+                        {data.estimatedFare.toFixed(2)}
                     </Text>
 
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* TERMS                                                        */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   TERMS
+                ========================================================== */}
 
                 <View
                     style={{
@@ -687,13 +949,13 @@ export default function RentalQuotationPdf({
 
                     <Text style={{ marginBottom: 6 }}>
                         • This quotation is an estimated fare based on
-                        the information provided.
+                        the itinerary and information provided.
                     </Text>
 
 
                     <Text style={{ marginBottom: 6 }}>
                         • The base fare includes the stated base mileage
-                        of {data.baseKm} km.
+                        of {data.baseKm} km per travel day.
                     </Text>
 
 
@@ -731,9 +993,9 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* THANK YOU                                                    */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   THANK YOU
+                ========================================================== */}
 
                 <View
                     style={{
@@ -780,9 +1042,9 @@ export default function RentalQuotationPdf({
                 </View>
 
 
-                {/* ========================================================== */}
-                {/* FOOTER                                                       */}
-                {/* ========================================================== */}
+                {/* ==========================================================
+                   FOOTER
+                ========================================================== */}
 
                 <View
                     style={{

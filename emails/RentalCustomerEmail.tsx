@@ -18,17 +18,69 @@ interface Props {
 
     quotationNo: string;
 
-    pickupLocation: string;
-    dropLocation: string;
+    /* ---------------------------------------------------------------------- */
+    /* Customer                                                               */
+    /* ---------------------------------------------------------------------- */
+
+    email: string;
+    phone: string;
+
+    /* ---------------------------------------------------------------------- */
+    /* Trip                                                                    */
+    /* ---------------------------------------------------------------------- */
+
+    tripType: string;
+    passengers: number;
+
+    /* ---------------------------------------------------------------------- */
+    /* Vehicle                                                                 */
+    /* ---------------------------------------------------------------------- */
 
     vehicleCategory: string;
     vehicleType: string;
 
-    pickupDate: string;
-    pickupTime: string;
+    /* ---------------------------------------------------------------------- */
+    /* Itinerary                                                               */
+    /* ---------------------------------------------------------------------- */
+
+    itinerary: {
+        day: number;
+        date: string;
+        pickupTime: string;
+
+        pickup: {
+            place: string;
+            placeId: string;
+        };
+
+        drop: {
+            place: string;
+            placeId: string;
+        };
+
+        stops: {
+            place: string;
+            placeId: string;
+            type: string;
+        }[];
+
+        distance: string;
+        duration: string;
+
+        distanceMeters: number;
+        durationSeconds: number;
+    }[];
+
+    /* ---------------------------------------------------------------------- */
+    /* Overall Route                                                           */
+    /* ---------------------------------------------------------------------- */
 
     distance: string;
     duration: string;
+
+    /* ---------------------------------------------------------------------- */
+    /* Pricing                                                                 */
+    /* ---------------------------------------------------------------------- */
 
     baseRate: number;
     baseKm: number;
@@ -49,14 +101,16 @@ export default function RentalCustomerEmail({
     customerName,
     quotationNo,
 
-    pickupLocation,
-    dropLocation,
+    email,
+    phone,
+
+    tripType,
+    passengers,
 
     vehicleCategory,
     vehicleType,
 
-    pickupDate,
-    pickupTime,
+    itinerary,
 
     distance,
     duration,
@@ -99,11 +153,14 @@ export default function RentalCustomerEmail({
                         backgroundColor: "#ffffff",
                         borderRadius: "18px",
                         overflow: "hidden",
-                        border: "1px solid #E5E7EB",
+                        border:
+                            "1px solid #E5E7EB",
                     }}
                 >
 
-                    {/* Header */}
+                    {/* ====================================================== */}
+                    {/* HEADER */}
+                    {/* ====================================================== */}
 
                     <Section
                         style={{
@@ -135,11 +192,16 @@ export default function RentalCustomerEmail({
 
                     </Section>
 
+
                     <Section
                         style={{
                             padding: "40px",
                         }}
                     >
+
+                        {/* ================================================== */}
+                        {/* INTRO */}
+                        {/* ================================================== */}
 
                         <Heading
                             style={{
@@ -151,6 +213,7 @@ export default function RentalCustomerEmail({
                         >
                             Hello {customerName},
                         </Heading>
+
 
                         <Text
                             style={{
@@ -165,6 +228,7 @@ export default function RentalCustomerEmail({
                             </strong>.
                         </Text>
 
+
                         <Text
                             style={{
                                 color: "#4B5563",
@@ -172,18 +236,23 @@ export default function RentalCustomerEmail({
                                 lineHeight: "28px",
                             }}
                         >
-                            We've prepared your rental quotation based on
-                            the information you submitted.
-                            Please find the quotation PDF attached to
-                            this email.
+                            We've prepared your rental
+                            quotation based on the
+                            information you submitted.
+                            Please find the quotation PDF
+                            attached to this email.
                         </Text>
 
-                        {/* Quotation */}
+
+                        {/* ================================================== */}
+                        {/* QUOTATION SUMMARY */}
+                        {/* ================================================== */}
 
                         <Section
                             style={{
                                 backgroundColor: "#F7FBFC",
-                                border: "1px solid #D6EEF0",
+                                border:
+                                    "1px solid #D6EEF0",
                                 borderRadius: "12px",
                                 padding: "24px",
                                 marginTop: "30px",
@@ -201,13 +270,36 @@ export default function RentalCustomerEmail({
                                 Quotation Summary
                             </Heading>
 
+
                             <Text>
-                                <strong>Quotation No:</strong>{" "}
+                                <strong>
+                                    Quotation No:
+                                </strong>{" "}
                                 {quotationNo}
                             </Text>
 
+
                             <Text>
-                                <strong>Estimated Fare:</strong>{" "}
+                                <strong>
+                                    Trip Type:
+                                </strong>{" "}
+                                {tripType}
+                            </Text>
+
+
+                            <Text>
+                                <strong>
+                                    Passengers:
+                                </strong>{" "}
+                                {passengers}
+                            </Text>
+
+
+                            <Text>
+                                <strong>
+                                    Estimated Fare:
+                                </strong>{" "}
+
                                 <span
                                     style={{
                                         color: "#12A594",
@@ -215,13 +307,19 @@ export default function RentalCustomerEmail({
                                         fontSize: "18px",
                                     }}
                                 >
-                                    Rs. {estimatedFare.toLocaleString()}
+                                    Rs.{" "}
+                                    {estimatedFare.toLocaleString(
+                                        "en-IN"
+                                    )}
                                 </span>
                             </Text>
 
                         </Section>
 
-                        {/* Journey */}
+
+                        {/* ================================================== */}
+                        {/* VEHICLE */}
+                        {/* ================================================== */}
 
                         <Section
                             style={{
@@ -236,8 +334,9 @@ export default function RentalCustomerEmail({
                                     fontSize: "20px",
                                 }}
                             >
-                                Journey Details
+                                Vehicle Details
                             </Heading>
+
 
                             <table
                                 width="100%"
@@ -255,30 +354,6 @@ export default function RentalCustomerEmail({
                                     <tr>
                                         <td>
                                             <strong>
-                                                Pickup
-                                            </strong>
-                                        </td>
-
-                                        <td>
-                                            {pickupLocation}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>
-                                                Destination
-                                            </strong>
-                                        </td>
-
-                                        <td>
-                                            {dropLocation}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>
                                                 Vehicle Category
                                             </strong>
                                         </td>
@@ -287,6 +362,7 @@ export default function RentalCustomerEmail({
                                             {vehicleCategory}
                                         </td>
                                     </tr>
+
 
                                     <tr>
                                         <td>
@@ -300,34 +376,283 @@ export default function RentalCustomerEmail({
                                         </td>
                                     </tr>
 
+                                </tbody>
+
+                            </table>
+
+                        </Section>
+
+
+                        {/* ================================================== */}
+                        {/* ITINERARY */}
+                        {/* ================================================== */}
+
+                        <Section
+                            style={{
+                                marginTop: "32px",
+                            }}
+                        >
+
+                            <Heading
+                                as="h3"
+                                style={{
+                                    color: "#0F3C5C",
+                                    fontSize: "20px",
+                                }}
+                            >
+                                Journey Details
+                            </Heading>
+
+
+                            {itinerary.map((day) => (
+
+                                <Section
+                                    key={`${day.day}-${day.date}`}
+                                    style={{
+                                        marginTop: "20px",
+                                        backgroundColor:
+                                            "#F7FBFC",
+                                        border:
+                                            "1px solid #E5E7EB",
+                                        borderRadius:
+                                            "12px",
+                                        padding: "20px",
+                                    }}
+                                >
+
+                                    <Heading
+                                        as="h4"
+                                        style={{
+                                            color:
+                                                "#0F3C5C",
+                                            fontSize:
+                                                "18px",
+                                            marginTop: 0,
+                                            marginBottom:
+                                                "8px",
+                                        }}
+                                    >
+                                        Day {day.day}
+                                    </Heading>
+
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                "#6B7280",
+                                            marginTop: 0,
+                                        }}
+                                    >
+                                        {day.date}
+                                        {" • "}
+                                        {day.pickupTime}
+                                    </Text>
+
+
+                                    {/* Pickup */}
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                "#4B5563",
+                                            lineHeight:
+                                                "24px",
+                                        }}
+                                    >
+                                        <strong>
+                                            Pickup:
+                                        </strong>{" "}
+                                        {day.pickup.place}
+                                    </Text>
+
+
+                                    {/* Intermediate Places */}
+
+                                    {day.stops.length > 0 && (
+
+                                        <Section
+                                            style={{
+                                                marginTop:
+                                                    "15px",
+                                                marginBottom:
+                                                    "15px",
+                                                padding:
+                                                    "14px 16px",
+                                                backgroundColor:
+                                                    "#ffffff",
+                                                border:
+                                                    "1px solid #E5E7EB",
+                                                borderRadius:
+                                                    "8px",
+                                            }}
+                                        >
+
+                                            <Text
+                                                style={{
+                                                    marginTop:
+                                                        0,
+                                                    marginBottom:
+                                                        "10px",
+                                                    color:
+                                                        "#0F3C5C",
+                                                    fontWeight:
+                                                        "bold",
+                                                }}
+                                            >
+                                                Places Between
+                                            </Text>
+
+
+                                            {day.stops.map(
+                                                (
+                                                    stop,
+                                                    index
+                                                ) => (
+
+                                                    <Text
+                                                        key={`${stop.placeId}-${index}`}
+                                                        style={{
+                                                            color:
+                                                                "#4B5563",
+                                                            margin:
+                                                                "6px 0",
+                                                            fontSize:
+                                                                "14px",
+                                                        }}
+                                                    >
+                                                        {index +
+                                                            1}
+                                                        .{" "}
+                                                        {
+                                                            stop.place
+                                                        }
+
+                                                        {stop.type && (
+                                                            <span
+                                                                style={{
+                                                                    color:
+                                                                        "#6B7280",
+                                                                    fontSize:
+                                                                        "12px",
+                                                                }}
+                                                            >
+                                                                {" "}
+                                                                (
+                                                                {
+                                                                    stop.type
+                                                                }
+                                                                )
+                                                            </span>
+                                                        )}
+                                                    </Text>
+
+                                                )
+                                            )}
+
+                                        </Section>
+
+                                    )}
+
+
+                                    {/* Drop */}
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                "#4B5563",
+                                            lineHeight:
+                                                "24px",
+                                        }}
+                                    >
+                                        <strong>
+                                            Drop:
+                                        </strong>{" "}
+                                        {day.drop.place}
+                                    </Text>
+
+
+                                    {/* Day Distance */}
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                "#4B5563",
+                                            marginBottom:
+                                                "6px",
+                                        }}
+                                    >
+                                        <strong>
+                                            Distance:
+                                        </strong>{" "}
+                                        {day.distance}
+                                    </Text>
+
+
+                                    {/* Day Duration */}
+
+                                    <Text
+                                        style={{
+                                            color:
+                                                "#4B5563",
+                                            marginTop: 0,
+                                        }}
+                                    >
+                                        <strong>
+                                            Duration:
+                                        </strong>{" "}
+                                        {day.duration}
+                                    </Text>
+
+                                </Section>
+
+                            ))}
+
+                        </Section>
+
+
+                        <Hr
+                            style={{
+                                margin: "35px 0",
+                                borderColor:
+                                    "#E5E7EB",
+                            }}
+                        />
+
+
+                        {/* ================================================== */}
+                        {/* OVERALL JOURNEY */}
+                        {/* ================================================== */}
+
+                        <Section>
+
+                            <Heading
+                                as="h3"
+                                style={{
+                                    color: "#0F3C5C",
+                                    fontSize: "20px",
+                                }}
+                            >
+                                Overall Journey
+                            </Heading>
+
+
+                            <table
+                                width="100%"
+                                cellPadding={10}
+                                style={{
+                                    borderCollapse:
+                                        "collapse",
+                                    border:
+                                        "1px solid #E5E7EB",
+                                }}
+                            >
+
+                                <tbody>
+
                                     <tr>
                                         <td>
                                             <strong>
-                                                Pickup Date
-                                            </strong>
-                                        </td>
-
-                                        <td>
-                                            {pickupDate}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>
-                                                Pickup Time
-                                            </strong>
-                                        </td>
-
-                                        <td>
-                                            {pickupTime}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>
-                                                Distance
+                                                Total Distance
                                             </strong>
                                         </td>
 
@@ -336,10 +661,11 @@ export default function RentalCustomerEmail({
                                         </td>
                                     </tr>
 
+
                                     <tr>
                                         <td>
                                             <strong>
-                                                Estimated Duration
+                                                Total Duration
                                             </strong>
                                         </td>
 
@@ -353,14 +679,17 @@ export default function RentalCustomerEmail({
                             </table>
 
                         </Section>
-                        <Hr
-                            style={{
-                                margin: "35px 0",
-                                borderColor: "#E5E7EB",
-                            }}
-                        />
 
-                        <Section style={{ marginTop: "32px" }}>
+
+                        {/* ================================================== */}
+                        {/* FARE BREAKDOWN */}
+                        {/* ================================================== */}
+
+                        <Section
+                            style={{
+                                marginTop: "32px",
+                            }}
+                        >
 
                             <Heading
                                 as="h3"
@@ -372,29 +701,41 @@ export default function RentalCustomerEmail({
                                 Fare Breakdown
                             </Heading>
 
+
                             <table
                                 width="100%"
                                 cellPadding={10}
                                 style={{
-                                    borderCollapse: "collapse",
-                                    border: "1px solid #E5E7EB",
+                                    borderCollapse:
+                                        "collapse",
+                                    border:
+                                        "1px solid #E5E7EB",
                                 }}
                             >
+
                                 <tbody>
 
                                     <tr>
                                         <td>
-                                            <strong>Base Vehicle Rate</strong>
+                                            <strong>
+                                                Base Vehicle Rate
+                                            </strong>
                                         </td>
 
                                         <td>
-                                            Rs. {baseRate.toLocaleString()}
+                                            Rs.{" "}
+                                            {baseRate.toLocaleString(
+                                                "en-IN"
+                                            )}
                                         </td>
                                     </tr>
 
+
                                     <tr>
                                         <td>
-                                            <strong>Included Distance</strong>
+                                            <strong>
+                                                Included Distance
+                                            </strong>
                                         </td>
 
                                         <td>
@@ -402,9 +743,12 @@ export default function RentalCustomerEmail({
                                         </td>
                                     </tr>
 
+
                                     <tr>
                                         <td>
-                                            <strong>Extra Distance</strong>
+                                            <strong>
+                                                Extra Distance
+                                            </strong>
                                         </td>
 
                                         <td>
@@ -412,134 +756,204 @@ export default function RentalCustomerEmail({
                                         </td>
                                     </tr>
 
-                                    <tr>
-                                        <td>
-                                            <strong>Extra KM Rate</strong>
-                                        </td>
-
-                                        <td>
-                                            Rs. {extraKmRate.toLocaleString()} / km
-                                        </td>
-                                    </tr>
 
                                     <tr>
-                                        <td>
-                                            <strong>Extra KM Charge</strong>
-                                        </td>
-
-                                        <td>
-                                            Rs. {extraKmCharge.toLocaleString()}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>Driver Bata</strong>
-                                        </td>
-
-                                        <td>
-                                            Rs. {driverAllowance.toLocaleString()}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>Subtotal</strong>
-                                        </td>
-
-                                        <td>
-                                            Rs. {subtotal.toLocaleString()}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>Tax</strong>
-                                        </td>
-
-                                        <td>
-                                            Rs. {tax.toLocaleString()}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <strong>Total Estimated Fare</strong>
-                                        </td>
-
                                         <td>
                                             <strong>
-                                                Rs. {estimatedFare.toLocaleString()}
+                                                Extra KM Rate
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Rs.{" "}
+                                            {extraKmRate.toLocaleString(
+                                                "en-IN"
+                                            )}
+                                            {" "}/ km
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Extra KM Charge
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Rs.{" "}
+                                            {extraKmCharge.toLocaleString(
+                                                "en-IN"
+                                            )}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Driver Bata
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Rs.{" "}
+                                            {driverAllowance.toLocaleString(
+                                                "en-IN"
+                                            )}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Subtotal
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Rs.{" "}
+                                            {subtotal.toLocaleString(
+                                                "en-IN"
+                                            )}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Tax
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            Rs.{" "}
+                                            {tax.toLocaleString(
+                                                "en-IN"
+                                            )}
+                                        </td>
+                                    </tr>
+
+
+                                    <tr>
+                                        <td>
+                                            <strong>
+                                                Total Estimated Fare
+                                            </strong>
+                                        </td>
+
+                                        <td>
+                                            <strong
+                                                style={{
+                                                    color:
+                                                        "#12A594",
+                                                    fontSize:
+                                                        "18px",
+                                                }}
+                                            >
+                                                Rs.{" "}
+                                                {estimatedFare.toLocaleString(
+                                                    "en-IN"
+                                                )}
                                             </strong>
                                         </td>
                                     </tr>
 
                                 </tbody>
+
                             </table>
 
                         </Section>
 
-                        {/* Included */}
 
-                        <Heading
-                            as="h3"
+                        {/* ================================================== */}
+                        {/* INCLUDED */}
+                        {/* ================================================== */}
+
+                        <Section
                             style={{
-                                color: "#0F3C5C",
-                                fontSize: "20px",
+                                marginTop: "32px",
                             }}
                         >
-                            What's Included
-                        </Heading>
 
-                        <Text
-                            style={{
-                                color: "#4B5563",
-                                lineHeight: "28px",
-                            }}
-                        >
-                            ✓ Professional chauffeur-driven service
-                        </Text>
+                            <Heading
+                                as="h3"
+                                style={{
+                                    color: "#0F3C5C",
+                                    fontSize: "20px",
+                                }}
+                            >
+                                What's Included
+                            </Heading>
 
-                        <Text
-                            style={{
-                                color: "#4B5563",
-                                lineHeight: "28px",
-                            }}
-                        >
-                            ✓ Well-maintained and sanitized vehicle
-                        </Text>
 
-                        <Text
-                            style={{
-                                color: "#4B5563",
-                                lineHeight: "28px",
-                            }}
-                        >
-                            ✓ Transparent pricing
-                        </Text>
+                            <Text
+                                style={{
+                                    color: "#4B5563",
+                                    lineHeight: "28px",
+                                }}
+                            >
+                                ✓ Professional
+                                chauffeur-driven service
+                            </Text>
 
-                        <Text
-                            style={{
-                                color: "#4B5563",
-                                lineHeight: "28px",
-                            }}
-                        >
-                            ✓ Dedicated customer support
-                        </Text>
+
+                            <Text
+                                style={{
+                                    color: "#4B5563",
+                                    lineHeight: "28px",
+                                }}
+                            >
+                                ✓ Well-maintained and
+                                sanitized vehicle
+                            </Text>
+
+
+                            <Text
+                                style={{
+                                    color: "#4B5563",
+                                    lineHeight: "28px",
+                                }}
+                            >
+                                ✓ Transparent pricing
+                            </Text>
+
+
+                            <Text
+                                style={{
+                                    color: "#4B5563",
+                                    lineHeight: "28px",
+                                }}
+                            >
+                                ✓ Dedicated customer
+                                support
+                            </Text>
+
+                        </Section>
+
 
                         <Hr
                             style={{
                                 margin: "35px 0",
-                                borderColor: "#E5E7EB",
+                                borderColor:
+                                    "#E5E7EB",
                             }}
                         />
 
-                        {/* PDF Notice */}
+
+                        {/* ================================================== */}
+                        {/* PDF */}
+                        {/* ================================================== */}
 
                         <Section
                             style={{
-                                backgroundColor: "#ECFDF5",
-                                border: "1px solid #A7F3D0",
+                                backgroundColor:
+                                    "#ECFDF5",
+                                border:
+                                    "1px solid #A7F3D0",
                                 borderRadius: "12px",
                                 padding: "24px",
                             }}
@@ -556,18 +970,27 @@ export default function RentalCustomerEmail({
                                 Your quotation is attached
                             </Heading>
 
+
                             <Text
                                 style={{
                                     color: "#065F46",
                                     lineHeight: "28px",
                                 }}
                             >
-                                We've attached a professionally prepared PDF
-                                quotation containing your complete fare
-                                breakdown and trip details.
+                                We've attached a
+                                professionally prepared
+                                PDF quotation containing
+                                your complete fare
+                                breakdown and trip
+                                details.
                             </Text>
 
                         </Section>
+
+
+                        {/* ================================================== */}
+                        {/* WHATSAPP */}
+                        {/* ================================================== */}
 
                         <Section
                             style={{
@@ -579,12 +1002,17 @@ export default function RentalCustomerEmail({
                             <Button
                                 href="https://wa.me/919747827371"
                                 style={{
-                                    backgroundColor: "#2AB7A9",
+                                    backgroundColor:
+                                        "#2AB7A9",
                                     color: "#ffffff",
-                                    padding: "14px 30px",
-                                    borderRadius: "999px",
-                                    textDecoration: "none",
-                                    fontWeight: "bold",
+                                    padding:
+                                        "14px 30px",
+                                    borderRadius:
+                                        "999px",
+                                    textDecoration:
+                                        "none",
+                                    fontWeight:
+                                        "bold",
                                 }}
                             >
                                 Chat on WhatsApp
@@ -592,14 +1020,19 @@ export default function RentalCustomerEmail({
 
                         </Section>
 
+
                         <Hr
                             style={{
                                 margin: "40px 0",
-                                borderColor: "#E5E7EB",
+                                borderColor:
+                                    "#E5E7EB",
                             }}
                         />
 
-                        {/* Contact */}
+
+                        {/* ================================================== */}
+                        {/* CONTACT */}
+                        {/* ================================================== */}
 
                         <Heading
                             as="h3"
@@ -611,16 +1044,20 @@ export default function RentalCustomerEmail({
                             Need Assistance?
                         </Heading>
 
+
                         <Text
                             style={{
                                 color: "#4B5563",
                                 lineHeight: "28px",
                             }}
                         >
-                            Our travel consultants are happy to help you
-                            customise your journey or answer any questions
-                            regarding your quotation.
+                            Our travel consultants are
+                            happy to help you customise
+                            your journey or answer any
+                            questions regarding your
+                            quotation.
                         </Text>
+
 
                         <Text
                             style={{
@@ -631,6 +1068,7 @@ export default function RentalCustomerEmail({
                             +91 97478 27371
                         </Text>
 
+
                         <Text
                             style={{
                                 color: "#4B5563",
@@ -639,22 +1077,31 @@ export default function RentalCustomerEmail({
                             info@ezoratours.com
                         </Text>
 
-                        <Text
+
+                        <Link
+                            href="https://ezoratours.com"
                             style={{
-                                color: "#4B5563",
+                                color: "#0EA5A4",
+                                textDecoration: "none",
                             }}
                         >
-                            https://ezoratours.com
-                        </Text>
+                            ezoratours.com
+                        </Link>
+
 
                         <Hr
                             style={{
-                                margin: "40px 0 25px",
-                                borderColor: "#E5E7EB",
+                                margin:
+                                    "40px 0 25px",
+                                borderColor:
+                                    "#E5E7EB",
                             }}
                         />
 
-                        {/* Footer */}
+
+                        {/* ================================================== */}
+                        {/* FOOTER */}
+                        {/* ================================================== */}
 
                         <Text
                             style={{
@@ -664,8 +1111,11 @@ export default function RentalCustomerEmail({
                             }}
                         >
                             Thank you for choosing
-                            <strong> Ezora Tours & Travels.</strong>
+                            <strong>
+                                {" "}Ezora Tours & Travels.
+                            </strong>
                         </Text>
+
 
                         <Text
                             style={{
@@ -673,7 +1123,8 @@ export default function RentalCustomerEmail({
                                 color: "#6B7280",
                             }}
                         >
-                            We look forward to making your journey comfortable,
+                            We look forward to making
+                            your journey comfortable,
                             safe and memorable.
                         </Text>
 
