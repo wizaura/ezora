@@ -665,7 +665,7 @@ export default function RentalForm() {
                 onSubmit={handleSubmit(
                     onSubmit
                 )}
-                className="space-y-8 p-8"
+                className="space-y-8 py-8 px-4 md:px-8"
             >
 
                 {/* =================================================
@@ -706,12 +706,11 @@ export default function RentalForm() {
                                     key={
                                         option.value
                                     }
-                                    className={`cursor-pointer rounded-2xl border p-4 transition ${
-                                        tripType ===
-                                        option.value
+                                    className={`cursor-pointer rounded-2xl border p-4 transition ${tripType ===
+                                            option.value
                                             ? "border-sea bg-sea/5 ring-2 ring-sea/10"
                                             : "border-border hover:bg-surface-soft"
-                                    }`}
+                                        }`}
                                 >
 
                                     <input
@@ -756,33 +755,16 @@ export default function RentalForm() {
 
                 <div className="space-y-6">
 
-                    <div className="flex items-center justify-between">
 
-                        <div>
+                    <div>
 
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-greenish-blue">
-                                Journey
-                            </p>
+                        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-greenish-blue">
+                            Journey
+                        </p>
 
-                            <h4 className="mt-1 text-xl font-semibold text-dark-cerulean">
-                                Travel itinerary
-                            </h4>
-
-                        </div>
-
-                        {tripType ===
-                            "MULTI_DAY" && (
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={
-                                    handleAddDay
-                                }
-                            >
-                                <Plus className="mr-2 h-4 w-4" />
-                                Add Day
-                            </Button>
-                        )}
+                        <h4 className="mt-1 text-xl font-semibold text-dark-cerulean">
+                            Travel itinerary
+                        </h4>
 
                     </div>
 
@@ -795,7 +777,7 @@ export default function RentalForm() {
 
                             const dayData =
                                 itinerary[
-                                    dayIndex
+                                dayIndex
                                 ];
 
                             return (
@@ -804,7 +786,7 @@ export default function RentalForm() {
                                     key={
                                         day.id
                                     }
-                                    className="rounded-3xl border border-border bg-surface-soft/40 p-6"
+                                    className="rounded-3xl border border-border bg-surface-soft/40 py-6 px-3 md:px-6"
                                 >
 
                                     {/* Day Header */}
@@ -828,7 +810,7 @@ export default function RentalForm() {
                                         {tripType ===
                                             "MULTI_DAY" &&
                                             itinerary.length >
-                                                1 && (
+                                            1 && (
                                                 <Button
                                                     type="button"
                                                     variant="ghost"
@@ -879,16 +861,16 @@ export default function RentalForm() {
                                                 dayIndex
                                             ]
                                                 ?.date && (
-                                                <p className="text-sm text-red-500">
-                                                    {
-                                                        errors
-                                                            .itinerary[
-                                                            dayIndex
-                                                        ]?.date
-                                                            ?.message
-                                                    }
-                                                </p>
-                                            )}
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            errors
+                                                                .itinerary[
+                                                                dayIndex
+                                                            ]?.date
+                                                                ?.message
+                                                        }
+                                                    </p>
+                                                )}
 
                                         </div>
 
@@ -921,16 +903,16 @@ export default function RentalForm() {
                                                 dayIndex
                                             ]
                                                 ?.pickupTime && (
-                                                <p className="text-sm text-red-500">
-                                                    {
-                                                        errors
-                                                            .itinerary[
-                                                            dayIndex
-                                                        ]?.pickupTime
-                                                            ?.message
-                                                    }
-                                                </p>
-                                            )}
+                                                    <p className="text-sm text-red-500">
+                                                        {
+                                                            errors
+                                                                .itinerary[
+                                                                dayIndex
+                                                            ]?.pickupTime
+                                                                ?.message
+                                                        }
+                                                    </p>
+                                                )}
 
                                         </div>
 
@@ -988,7 +970,7 @@ export default function RentalForm() {
                                                         dayIndex
                                                     ]
                                                         ?.stops?.[
-                                                        stopIndex
+                                                    stopIndex
                                                     ];
 
                                                 return (
@@ -1016,12 +998,12 @@ export default function RentalForm() {
 
                                                                     <p className="text-xs font-semibold uppercase tracking-[0.12em] text-sea">
                                                                         {stop.type ===
-                                                                        "PICKUP"
+                                                                            "PICKUP"
                                                                             ? "Pickup"
                                                                             : stop.type ===
                                                                                 "DROP"
-                                                                              ? "Destination"
-                                                                              : `Stop ${stopIndex}`}
+                                                                                ? "Destination"
+                                                                                : `Stop ${stopIndex}`}
                                                                     </p>
 
                                                                 </div>
@@ -1031,21 +1013,21 @@ export default function RentalForm() {
 
                                                             {stop.type ===
                                                                 "STOP" && (
-                                                                <Button
-                                                                    type="button"
-                                                                    variant="ghost"
-                                                                    size="icon"
-                                                                    className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
-                                                                    onClick={() =>
-                                                                        handleRemoveStop(
-                                                                            dayIndex,
-                                                                            stopIndex
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    <Trash2 className="h-4 w-4" />
-                                                                </Button>
-                                                            )}
+                                                                    <Button
+                                                                        type="button"
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600"
+                                                                        onClick={() =>
+                                                                            handleRemoveStop(
+                                                                                dayIndex,
+                                                                                stopIndex
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <Trash2 className="h-4 w-4" />
+                                                                    </Button>
+                                                                )}
 
                                                         </div>
 
@@ -1064,12 +1046,12 @@ export default function RentalForm() {
                                                             }
                                                             placeholder={
                                                                 stop.type ===
-                                                                "PICKUP"
+                                                                    "PICKUP"
                                                                     ? "Search pickup location"
                                                                     : stop.type ===
                                                                         "DROP"
-                                                                      ? "Search destination"
-                                                                      : "Search stop"
+                                                                        ? "Search destination"
+                                                                        : "Search stop"
                                                             }
                                                             error={
                                                                 stopError?.place
@@ -1120,23 +1102,39 @@ export default function RentalForm() {
                                         dayIndex
                                     ]
                                         ?.stops && (
-                                        <p className="mt-3 text-sm text-red-500">
-                                            {
-                                                errors
-                                                    .itinerary[
-                                                    dayIndex
-                                                ]
-                                                    ?.stops
-                                                    ?.message
-                                            }
-                                        </p>
-                                    )}
+                                            <p className="mt-3 text-sm text-red-500">
+                                                {
+                                                    errors
+                                                        .itinerary[
+                                                        dayIndex
+                                                    ]
+                                                        ?.stops
+                                                        ?.message
+                                                }
+                                            </p>
+                                        )}
 
                                 </div>
                             );
                         }
                     )}
 
+                </div>
+
+                <div className="text-end">
+                    {tripType ===
+                        "MULTI_DAY" && (
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={
+                                    handleAddDay
+                                }
+                            >
+                                <Plus className="mr-2 h-4 w-4" />
+                                Add Day
+                            </Button>
+                        )}
                 </div>
 
 
@@ -1529,8 +1527,8 @@ export default function RentalForm() {
                             <p className="mt-2 text-xl font-semibold text-light-sea-green">
                                 {quotation
                                     ? `₹ ${quotation.total.toLocaleString(
-                                          "en-IN"
-                                      )}`
+                                        "en-IN"
+                                    )}`
                                     : "—"}
                             </p>
 
@@ -1558,7 +1556,7 @@ export default function RentalForm() {
                         </>
                     ) : (
                         <>
-                            Calculate My Quote
+                            Generate My Quote
 
                             <ArrowRight
                                 size={18}
